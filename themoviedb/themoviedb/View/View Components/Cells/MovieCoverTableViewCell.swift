@@ -11,14 +11,19 @@ class MovieCoverTableViewCell: UITableViewCell {
     private lazy var movieImageView: UIImageView = UIImageView()
     private lazy var movieTitleLabel: UILabel = UILabel()
     
-    func populate() {
-        contentView.backgroundColor = .black
-        setMovieImage()
-        setTitleConfig()
+    func populate(movieTitle: String?, imagePath: String?) {
+        setMovieImage(imagePath: imagePath)
+        setTitleConfig(movieTitle: movieTitle)
     }
     
-    private func setMovieImage() {
-        setMovieImage(image: UIImage(systemName: "camera"))
+    private func setMovieImage(imagePath: String?) {
+        movieImageView.image = nil
+        let imageLoader = LoaderImageHelper()
+        let url = ApiUrlHelper.makeURL(for: .getImage, url: imagePath ?? "")
+        imageLoader.loadImage(with: url, completion: { [weak self] movieImage in
+            self?.setMovieImage(image: movieImage)
+        })
+
         movieImageView.translatesAutoresizingMaskIntoConstraints = false
         contentView.addSubview(movieImageView)
         movieImageView.contentMode = .scaleAspectFill
@@ -29,19 +34,36 @@ class MovieCoverTableViewCell: UITableViewCell {
     }
     
     private func setMovieImage(image: UIImage?) {
-        guard let image = image else { return }
+        guard let image = image else {
+            setGenericImage()
+            return
+        }
         
+        set(image: image)
+    }
+    
+    private func setGenericImage() {
+        DispatchQueue.main.async { [weak self] in
+            guard let image = UIImage(systemName: "camera.fill")?.withRenderingMode(.alwaysTemplate) else { return }
+            self?.set(image: image)
+            self?.movieImageView.tintColor = .lightGray
+            self?.movieImageView.contentMode = .scaleAspectFit
+        }
+    }
+    
+    private func set(image: UIImage) {
         DispatchQueue.main.async {
             self.movieImageView.image = image
         }
     }
     
-    func setTitleConfig() {
-        let title =  ""
-        movieTitleLabel.text = title.capitalized
+    func setTitleConfig(movieTitle: String?) {
+        guard let movieTitle else { return }
+        movieTitleLabel.text = movieTitle.capitalized
         movieTitleLabel.translatesAutoresizingMaskIntoConstraints = false
         contentView.addSubview(movieTitleLabel)
-        movieTitleLabel.font = UIFont(name: "Noto Sans Myanmar Bold", size: 24)
+        movieTitleLabel.font = UIFont(name: "Noto Sans Myanmar Bold", size: 20)
+        movieTitleLabel.numberOfLines = 2
         movieTitleLabel.textColor = .white
         movieTitleLabel.textAlignment = .left
         layoutMovieTitleLabel()

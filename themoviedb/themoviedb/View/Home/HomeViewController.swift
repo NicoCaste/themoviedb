@@ -24,9 +24,7 @@ class HomeViewController: BasicViewController {
         super.viewDidLoad()
         setSearchTextField()
         setTableView()
-        Task.detached {
-            await self.viewModel.getMovies() 
-        }
+        getMoviesAndReload(for: .discover)
     }
     
     private func setSearchTextField() {
@@ -45,6 +43,13 @@ class HomeViewController: BasicViewController {
         tableView.translatesAutoresizingMaskIntoConstraints = false
         setTableViewLayout()
     }
+    
+    func getMoviesAndReload(for path: TheMovieRepository.PathForMovies) {
+        Task.detached { [weak self] in
+            await self?.viewModel.getMovies(for: path)
+            await self?.tableView?.reloadTableView()
+        }
+    }
 }
 
 //MARK: - TableView Delegate
@@ -54,8 +59,9 @@ extension HomeViewController: GenericTableViewDelegate {
     }
     
     func cellForRowAt(tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell? {
+        guard let movie = viewModel.discoverMovies?.results[indexPath.row] else { return nil }
         let cell = tableView.dequeueReusableCell(withIdentifier: AllowedCells.movieCover.rawValue) as? MovieCoverTableViewCell
-        cell?.populate()
+        cell?.populate(movieTitle: movie.originalTitle, imagePath: movie.backdropPath)
         return cell
     }
     
@@ -67,9 +73,10 @@ extension HomeViewController: GenericTableViewDelegate {
 
 //MARK: - SearchTextField Delegate
 extension HomeViewController: GenericSearchTextFieldDelegate {
-    
     func userInput(text: String) {
-        viewModel.handleUserInput(text: text)
+        let textUrlAllowed = text.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)
+        let path: TheMovieRepository.PathForMovies = (textUrlAllowed?.isEmpty ?? true || text.isEmpty) ? .discover :  .search(forText: textUrlAllowed ?? text)
+        getMoviesAndReload(for: path)
     }
 }
 

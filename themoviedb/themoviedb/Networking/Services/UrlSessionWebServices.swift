@@ -12,6 +12,7 @@ enum NetWorkingError: Error {
     case serverError
     case unknowError
     case needRefreshToken
+    case decodingError
 }
 
 struct UrlSessionWebService: WebService {
