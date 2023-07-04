@@ -20,15 +20,6 @@ final class TheMovieRepository {
         let request = URLRequest(url: url)
         return request
     }
-    
-//    func getComponents() -> URLComponents {
-//        var components = URLComponents()
-//        components.queryItems = [
-//            URLQueryItem(name: "redirect_uri", value: Constant.redirectUri)
-//        ]
-//
-//        return components
-//    }
 }
 
 extension TheMovieRepository {
@@ -44,19 +35,7 @@ extension TheMovieRepository {
         }
     }
     
-    func getMovies(for path: PathForMovies, page: Int, includeVideo: Bool, includeAdult: Bool) async throws -> Result<Data, Error> {
-        let path = getDiscoverMoviesPath(for: path, page: page, includeVideo: includeVideo, includeAdult: includeAdult)
-        let url = ApiUrlHelper.makeURL(for: .theMovieApi, url: path)
-        guard let url =  NSURL(string: url) as? URL else { throw NetWorkingError.badURL }
-        var request = URLRequest(url: url, cachePolicy: .useProtocolCachePolicy, timeoutInterval: 10.0)
-        request.allHTTPHeaderFields = headers
-        return try await getFromWebServices(request: request)
-    }
-    
-    private func getDiscoverMoviesPath(for path: PathForMovies, page: Int, includeVideo: Bool, includeAdult: Bool) -> String {
-        "\(path.stringValue)discover/movie?include_adult=\(includeAdult)&include_video=\(includeVideo)&language=en-US&page=\(page)&sort_by=popularity.desc"
-    }
-    
+    //MARK: - Get From Web Services
     private func getFromWebServices(request: URLRequest) async throws -> Result<Data, Error> {
         try await withCheckedThrowingContinuation({ continuation in
             webService.get(from: request, completion: { result in
@@ -68,5 +47,38 @@ extension TheMovieRepository {
                 }
             })
         })
+    }
+    
+    func getMovies(for path: PathForMovies, page: Int, includeVideo: Bool, includeAdult: Bool) async throws -> Result<Data, Error> {
+        let path = path.stringValue
+        let url = ApiUrlHelper.makeURL(for: .theMovieApi, url: path)
+        let queryItems = getQueryItemsForMovies(page: page, includeVideo: includeVideo, includeAdult: includeAdult)
+        var nsurl = NSURL(string: url) as? URL
+        nsurl?.append(queryItems: queryItems)
+        guard let url =  nsurl else { throw NetWorkingError.badURL }
+        
+        var request = URLRequest(url: url, cachePolicy: .useProtocolCachePolicy, timeoutInterval: 10.0)
+        request.allHTTPHeaderFields = headers
+        return try await getFromWebServices(request: request)
+    }
+    
+    private func getMoviesPath(for path: PathForMovies) -> String {
+        "\(path.stringValue)"
+    }
+    
+    private func getQueryItemsForMovies(page: Int, includeVideo: Bool, includeAdult: Bool) -> [URLQueryItem] {
+        var queryItems: [URLQueryItem] = []
+        let includeAdult = URLQueryItem(name: "include_adult", value: "\(includeAdult)")
+        let includeVideo = URLQueryItem(name: "include_video", value: "\(includeVideo)")
+        let language =  URLQueryItem(name: "language", value: "en-US)")
+        let page = URLQueryItem(name: "page", value: "\(page)")
+        let sortBy = URLQueryItem(name: "sort_by", value: "popularity.desc")
+        
+        queryItems.append(includeAdult)
+        queryItems.append(includeVideo)
+        queryItems.append(language)
+        queryItems.append(page)
+        queryItems.append(sortBy)
+        return queryItems
     }
 }
