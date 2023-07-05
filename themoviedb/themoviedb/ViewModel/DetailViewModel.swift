@@ -12,6 +12,7 @@ class DetailViewModel: BasicViewModel {
     private let movieInfo: MovieInfo
     private var movieGenders: String = ""
     private var basicFontSize: CGFloat = 16
+    let allowedCells: [AllowedCells] =  [.movieCover, .centerTitleTableViewCell,  .titleAndDescriptionTableViewCell]
     
     enum DetailTableCases: Int, CaseIterable {
         case posterImage
@@ -29,14 +30,6 @@ class DetailViewModel: BasicViewModel {
     
     func getNumbersOfCells() -> Int {
         DetailTableCases.allCases.count
-    }
-    
-    func getMovieImage(completion: @escaping(_ image: UIImage?) -> Void) {
-        let imageHelper = LoaderImageHelper()
-        let url = ApiUrlHelper.makeURL(for: .getImage, url: .image(path: movieInfo.posterPath))
-        imageHelper.loadImage(with: url, completion: { image in
-            completion(image)
-        })
     }
     
     func setMovieGenders(genderList: [GenresDetail]?) {
@@ -85,6 +78,7 @@ class DetailViewModel: BasicViewModel {
         return cell
     }
     
+    //MARK: - Poster
     func getPosterImageCell(for tableView: UITableView) -> UITableViewCell? {
         let cell = tableView.dequeueReusableCell(withIdentifier: AllowedCells.movieCover.rawValue) as? MovieCoverTableViewCell
         let imagePath = getMovieImagePath()
@@ -93,6 +87,7 @@ class DetailViewModel: BasicViewModel {
         return cell
     }
     
+    //MARK: - Title
     func getMovieNameCell(for tableView: UITableView) -> UITableViewCell? {
         let cell = tableView.dequeueReusableCell(withIdentifier: AllowedCells.centerTitleTableViewCell.rawValue) as? CenterTitleTableViewCell
         cell?.populate(title: movieInfo.originalTitle)

@@ -6,11 +6,13 @@
 //
 
 import Foundation
+import UIKit
 
 class HomeViewModel: BasicViewModel {
     var discoverMovies: DiscoverMovies?
     private var genders: Genre?
     private var getGendersPossibleRetries: Int = 3
+    let allowedCells: [AllowedCells] =  [.movieCover]
     
     override init() {
         super.init()
@@ -58,5 +60,21 @@ class HomeViewModel: BasicViewModel {
         } catch {
             print(NetWorkingError.serverError)
         }
+    }
+    
+    func getPathForUserInput(text: String) -> ApiUrlHelper.PathForMovies {
+        let textUrlAllowed = text.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)
+        let path: ApiUrlHelper.PathForMovies = (textUrlAllowed?.isEmpty ?? true || text.isEmpty) ? .discover :  .search(forText: textUrlAllowed ?? text)
+        return path 
+    }
+    
+    func getCell(for tableView: UITableView, in row: Int) -> UITableViewCell? {
+        guard let movie = discoverMovies?.results[row] else { return nil }
+        let cell = tableView.dequeueReusableCell(withIdentifier: AllowedCells.movieCover.rawValue) as? MovieCoverTableViewCell
+        let height: CGFloat? = 200
+        let imageSetting = MovieCoverTableViewCell.ImageSetting(imagePath: movie.backdropPath, width: nil, height: height, corner: 10)
+        
+        cell?.populate(movieTitle: movie.originalTitle, imageSetting: imageSetting)
+        return cell
     }
 }
