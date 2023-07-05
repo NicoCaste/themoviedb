@@ -7,63 +7,47 @@
 
 import UIKit
 
-class MovieCoverTableViewCell: UITableViewCell {
-    private lazy var movieImageView: UIImageView = UIImageView()
+class MovieCoverTableViewCell: UITableViewCell, ImageFromPathExtensionProtocol {
+    var movieImageView: UIImageView?
     private lazy var movieTitleLabel: UILabel = UILabel()
     private lazy var blurview: UIView = UIView()
     
-    func populate(movieTitle: String?, imagePath: String?) {
-        setMovieImage(imagePath: imagePath)
-        setBlurView()
+    struct ImageSetting {
+        var imagePath: String?
+        var width: CGFloat?
+        var height: CGFloat?
+        var corner: CGFloat?
+    }
+    
+    func populate(movieTitle: String?, imageSetting: ImageSetting) {
+        movieImageView = UIImageView()
+        setMovieImage(imageSetting: imageSetting)
+        setBlurView(movieTitle: movieTitle)
         setTitleConfig(movieTitle: movieTitle)
     }
-    
-    private func setMovieImage(imagePath: String?) {
+
+    private func setMovieImage(imageSetting: ImageSetting) {
+        guard let imageView = movieImageView else { return }
         setMovieImage(from: nil)
-        setMovieImage(from: imagePath)
-        movieImageView.translatesAutoresizingMaskIntoConstraints = false
-        contentView.addSubview(movieImageView)
-        layoutMovieImageView()
-        movieImageView.contentMode = .scaleAspectFill
-        movieImageView.clipsToBounds = true
-        movieImageView.layer.masksToBounds = true
-        movieImageView.layer.cornerRadius = 10
-    }
-    
-    private func setMovieImage(from path: String?) {
-        if path == nil {
-            set(image: nil)
-        } else {
-            let imageLoader = LoaderImageHelper()
-            let url = ApiUrlHelper.makeURL(for: .getImage, url: .image(path: path))
-            imageLoader.loadImage(with: url, completion: { [weak self] movieImage in
-                self?.set(image: movieImage)
-            })
+        setMovieImage(from: imageSetting.imagePath)
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        contentView.addSubview(imageView)
+        imageView.clipsToBounds = true
+        imageView.contentMode = .scaleToFill
+
+        if let corner = imageSetting.corner {
+            imageView.layer.masksToBounds = true 
+            imageView.layer.cornerRadius = corner
         }
+        layoutMovieImageView(imageSetting: imageSetting)
     }
 
-    private func set(image: UIImage?) {
-        var newImage = image
-        
-        DispatchQueue.main.async {
-            if newImage == nil {
-                newImage = UIImage(systemName: "camera.fill")?.withRenderingMode(.alwaysTemplate)
-                self.movieImageView.tintColor = .lightGray
-                self.movieImageView.contentMode = .scaleAspectFit
-            }
-            self.movieImageView.image = newImage
-        }
-    }
-    
     func setTitleConfig(movieTitle: String?) {
         guard let movieTitle else { return }
-        movieTitleLabel.text = movieTitle.capitalized
         movieTitleLabel.translatesAutoresizingMaskIntoConstraints = false
         contentView.addSubview(movieTitleLabel)
-        movieTitleLabel.font = UIFont(name: "Noto Sans Myanmar Bold", size: 20)
-        movieTitleLabel.numberOfLines = 2
-        movieTitleLabel.textColor = .white
-        movieTitleLabel.textAlignment = .left
+        let textValues = UILabel.TextValues(text: movieTitle.capitalized, fontSize: 20, font: .NotoSansMyanmarBold, numberOfLines: 2, aligment: .left, textColor: .white)
+        movieTitleLabel.set(with: textValues)
         movieTitleLabel.sizeToFit()
         movieTitleLabel.setContentHuggingPriority(.required, for: .vertical)
         movieTitleLabel.setContentCompressionResistancePriority(.required, for: .vertical)
@@ -72,9 +56,10 @@ class MovieCoverTableViewCell: UITableViewCell {
         layoutMovieTitleLabel()
     }
     
-    func setBlurView() {
+    func setBlurView(movieTitle: String?) {
+        guard movieTitle != nil else { return }
         blurview.translatesAutoresizingMaskIntoConstraints = false
-        movieImageView.addSubview(blurview)
+        movieImageView?.addSubview(blurview)
         blurview.backgroundColor = UIColor(red: 0.2, green: 0.2, blue: 0.2, alpha: 0.7)
         blurview.clipsToBounds = true
         blurview.layer.cornerRadius = 8
@@ -95,21 +80,34 @@ extension MovieCoverTableViewCell {
     }
     
     func layoutBlurview() {
+        guard let imageView = movieImageView else { return }
         NSLayoutConstraint.activate([
-            blurview.leadingAnchor.constraint(equalTo: movieImageView.leadingAnchor, constant: 15),
-            blurview.bottomAnchor.constraint(equalTo: movieImageView.bottomAnchor, constant: -15),
-            blurview.trailingAnchor.constraint(lessThanOrEqualTo: movieImageView.trailingAnchor, constant: -15)
+            blurview.leadingAnchor.constraint(equalTo: imageView.leadingAnchor, constant: 15),
+            blurview.bottomAnchor.constraint(equalTo: imageView.bottomAnchor, constant: -15),
+            blurview.trailingAnchor.constraint(lessThanOrEqualTo: imageView.trailingAnchor, constant: -15)
         ])
     }
     
     //MARK: - Layout MovieImageView
-    private func layoutMovieImageView() {
+    private func layoutMovieImageView(imageSetting: ImageSetting) {
+        guard let movieImageView else { return }
         NSLayoutConstraint.activate([
             movieImageView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 10),
+            movieImageView.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
             movieImageView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -10),
-            movieImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
-            movieImageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20),
-            movieImageView.heightAnchor.constraint(equalToConstant: 200)
         ])
+        setSize(imageSetting: imageSetting)
+    }
+    
+    func setSize(imageSetting: ImageSetting) {
+        guard let movieImageView else { return }
+        movieImageView.heightAnchor.constraint(equalToConstant: imageSetting.height ?? 200).isActive = true
+        
+        if let width = imageSetting.width {
+            movieImageView.widthAnchor.constraint(equalToConstant: width).isActive = true
+        } else {
+            movieImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20).isActive = true
+            movieImageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20).isActive = true
+        }
     }
 }

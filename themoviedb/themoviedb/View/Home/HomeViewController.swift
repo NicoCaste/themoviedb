@@ -61,7 +61,10 @@ extension HomeViewController: GenericTableViewDelegate {
     func cellForRowAt(tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell? {
         guard let movie = viewModel.discoverMovies?.results[indexPath.row] else { return nil }
         let cell = tableView.dequeueReusableCell(withIdentifier: AllowedCells.movieCover.rawValue) as? MovieCoverTableViewCell
-        cell?.populate(movieTitle: movie.originalTitle, imagePath: movie.backdropPath)
+        let height: CGFloat? = 200
+        let imageSetting = MovieCoverTableViewCell.ImageSetting(imagePath: movie.backdropPath, width: nil, height: height, corner: 10)
+        
+        cell?.populate(movieTitle: movie.originalTitle, imageSetting: imageSetting)
         return cell
     }
     
@@ -69,7 +72,6 @@ extension HomeViewController: GenericTableViewDelegate {
     func didSelectRow(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         guard let viewController = viewModel.getDetailInfo(movie: indexPath.row) else { return }
         navigationController?.pushViewController(viewController, animated: true)
-        print(indexPath.row)
     }
 }
 
@@ -100,7 +102,8 @@ extension HomeViewController {
         NSLayoutConstraint.activate([
             tableView.topAnchor.constraint(equalTo: searchTextField.bottomAnchor, constant: 10),
             tableView.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor, constant: -10),
-            tableView.widthAnchor.constraint(equalToConstant: self.view.frame.width)
+            tableView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor),
+            tableView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor)
         ])
     }
 }

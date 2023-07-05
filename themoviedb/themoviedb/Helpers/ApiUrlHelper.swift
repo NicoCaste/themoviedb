@@ -15,6 +15,7 @@ class ApiUrlHelper {
     
     enum PathForMovies {
         case discover
+        case genre
         case search(forText: String)
         case image(path: String?)
         
@@ -23,6 +24,7 @@ class ApiUrlHelper {
             case .discover: return "discover/movie?"
             case .search(forText: let query): return "search/movie?query=\(query)&"
             case .image(path: let path): return path ?? ""
+            case .genre: return "genre/movie/list?"
             }
         }
     }

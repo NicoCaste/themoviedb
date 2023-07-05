@@ -27,3 +27,12 @@ struct MovieInfo: Codable {
     var releaseDate: String 
     var video: Bool?
 }
+
+struct Genre: Codable {
+    var genres: [GenresDetail]?
+}
+
+struct GenresDetail: Codable {
+    var id: Int?
+    var name: String?
+}
