@@ -23,18 +23,7 @@ final class TheMovieRepository {
 }
 
 extension TheMovieRepository {
-    enum PathForMovies {
-        case discover
-        case search(forText: String)
-        
-        var stringValue: String {
-            switch self {
-            case .discover: return "discover/movie?"
-            case .search(forText: let query): return "search/movie?query=\(query)&"
-            }
-        }
-    }
-    
+
     //MARK: - Get From Web Services
     private func getFromWebServices(request: URLRequest) async throws -> Result<Data, Error> {
         try await withCheckedThrowingContinuation({ continuation in
@@ -49,8 +38,7 @@ extension TheMovieRepository {
         })
     }
     
-    func getMovies(for path: PathForMovies, page: Int, includeVideo: Bool, includeAdult: Bool) async throws -> Result<Data, Error> {
-        let path = path.stringValue
+    func getMovies(for path: ApiUrlHelper.PathForMovies, page: Int, includeVideo: Bool, includeAdult: Bool) async throws -> Result<Data, Error> {
         let url = ApiUrlHelper.makeURL(for: .theMovieApi, url: path)
         let queryItems = getQueryItemsForMovies(page: page, includeVideo: includeVideo, includeAdult: includeAdult)
         var nsurl = NSURL(string: url) as? URL
@@ -60,10 +48,6 @@ extension TheMovieRepository {
         var request = URLRequest(url: url, cachePolicy: .useProtocolCachePolicy, timeoutInterval: 10.0)
         request.allHTTPHeaderFields = headers
         return try await getFromWebServices(request: request)
-    }
-    
-    private func getMoviesPath(for path: PathForMovies) -> String {
-        "\(path.stringValue)"
     }
     
     private func getQueryItemsForMovies(page: Int, includeVideo: Bool, includeAdult: Bool) -> [URLQueryItem] {

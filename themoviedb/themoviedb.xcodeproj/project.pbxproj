@@ -30,6 +30,7 @@
 		0E39A05A2A5410A600B4193C /* DiscoverMovies.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E39A0592A5410A600B4193C /* DiscoverMovies.swift */; };
 		0E39A05C2A541F3300B4193C /* LoaderImageHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E39A05B2A541F3300B4193C /* LoaderImageHelper.swift */; };
 		0E39A05E2A5434E900B4193C /* BasicViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E39A05D2A5434E900B4193C /* BasicViewModel.swift */; };
+		0E39A0602A54EAFF00B4193C /* DetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E39A05F2A54EAFF00B4193C /* DetailViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -77,6 +78,7 @@
 		0E39A0592A5410A600B4193C /* DiscoverMovies.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiscoverMovies.swift; sourceTree = "<group>"; };
 		0E39A05B2A541F3300B4193C /* LoaderImageHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoaderImageHelper.swift; sourceTree = "<group>"; };
 		0E39A05D2A5434E900B4193C /* BasicViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BasicViewModel.swift; sourceTree = "<group>"; };
+		0E39A05F2A54EAFF00B4193C /* DetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -172,6 +174,7 @@
 		0E39A0352A52926B00B4193C /* Detail */ = {
 			isa = PBXGroup;
 			children = (
+				0E39A05F2A54EAFF00B4193C /* DetailViewController.swift */,
 			);
 			path = Detail;
 			sourceTree = "<group>";
@@ -413,6 +416,7 @@
 				0E39A04E2A53F57E00B4193C /* UrlSessionWebServices.swift in Sources */,
 				0E39A0472A53E96100B4193C /* GenericSearchTextField.swift in Sources */,
 				0E39A05E2A5434E900B4193C /* BasicViewModel.swift in Sources */,
+				0E39A0602A54EAFF00B4193C /* DetailViewController.swift in Sources */,
 				0E39A0502A53F5FA00B4193C /* ExtensionDictionary+JsonPrint.swift in Sources */,
 				0E39A0432A52CD9B00B4193C /* MovieCoverTableViewCell.swift in Sources */,
 				0E39A00C2A5290CE00B4193C /* themoviedb.xcdatamodeld in Sources */,

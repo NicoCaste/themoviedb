@@ -65,6 +65,10 @@ class GenericTableView: UIView {
     func reloadTableView() {
         tableView.reloadData()
     }
+    
+    func backToTop() {
+        tableView.setContentOffset(.zero, animated: true)
+    }
 }
 
 extension GenericTableView:  UITableViewDelegate, UITableViewDataSource {

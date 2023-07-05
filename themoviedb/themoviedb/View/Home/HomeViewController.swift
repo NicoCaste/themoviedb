@@ -44,7 +44,7 @@ class HomeViewController: BasicViewController {
         setTableViewLayout()
     }
     
-    func getMoviesAndReload(for path: TheMovieRepository.PathForMovies) {
+    func getMoviesAndReload(for path: ApiUrlHelper.PathForMovies) {
         Task.detached { [weak self] in
             await self?.viewModel.getMovies(for: path)
             await self?.tableView?.reloadTableView()
@@ -67,6 +67,8 @@ extension HomeViewController: GenericTableViewDelegate {
     
     //MARK: Action Delegate
     func didSelectRow(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        guard let viewController = viewModel.getDetailInfo(movie: indexPath.row) else { return }
+        navigationController?.pushViewController(viewController, animated: true)
         print(indexPath.row)
     }
 }
@@ -74,8 +76,9 @@ extension HomeViewController: GenericTableViewDelegate {
 //MARK: - SearchTextField Delegate
 extension HomeViewController: GenericSearchTextFieldDelegate {
     func userInput(text: String) {
+        self.tableView?.backToTop()
         let textUrlAllowed = text.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)
-        let path: TheMovieRepository.PathForMovies = (textUrlAllowed?.isEmpty ?? true || text.isEmpty) ? .discover :  .search(forText: textUrlAllowed ?? text)
+        let path: ApiUrlHelper.PathForMovies = (textUrlAllowed?.isEmpty ?? true || text.isEmpty) ? .discover :  .search(forText: textUrlAllowed ?? text)
         getMoviesAndReload(for: path)
     }
 }
