@@ -9,8 +9,9 @@ import Foundation
 import UIKit
 
 class DetailViewModel: BasicViewModel {
-    let movieInfo: MovieInfo
-    var movieGenders: [GenresDetail] = []
+    private let movieInfo: MovieInfo
+    private var movieGenders: String = ""
+    private var basicFontSize: CGFloat = 16
     
     enum DetailTableCases: Int, CaseIterable {
         case posterImage
@@ -40,9 +41,21 @@ class DetailViewModel: BasicViewModel {
     
     func setMovieGenders(genderList: [GenresDetail]?) {
         guard let genderList else { return }
+        var newMovieGendersList: [GenresDetail] = []
+        
         for genre in movieInfo.genreIds ?? [] {
-            movieGenders += genderList.filter({$0.id == genre})
+            newMovieGendersList += genderList.filter({$0.id == genre})
         }
+        
+        var index = 0
+        newMovieGendersList.forEach({ gender in
+            guard let name = gender.name else { return }
+            movieGenders.append(name)
+            index += 1
+            if index < newMovieGendersList.count {
+                movieGenders.append(", ")
+            }
+        })
     }
     
     func getMovieTitle() -> String {
@@ -61,11 +74,11 @@ class DetailViewModel: BasicViewModel {
         case .movieName:
             cell = getMovieNameCell(for: tableView)
         case .voteAverage:
-            break
+            cell = getVoteAverageCell(for: tableView)
         case .categorie:
-            break
+            cell = getCategoryCell(for: tableView)
         case .overview:
-            break
+            cell = getOverviewCell(for: tableView)
         default:
             return nil
         }
@@ -83,6 +96,35 @@ class DetailViewModel: BasicViewModel {
     func getMovieNameCell(for tableView: UITableView) -> UITableViewCell? {
         let cell = tableView.dequeueReusableCell(withIdentifier: AllowedCells.centerTitleTableViewCell.rawValue) as? CenterTitleTableViewCell
         cell?.populate(title: movieInfo.originalTitle)
+        return cell
+    }
+    
+    //MARK: - Category
+    private func getCategoryCell(for tableView: UITableView) -> UITableViewCell? {
+        let title = UILabel.TextValues(text: "Categories: ", fontSize: basicFontSize, font: .NotoSansMyanmarBold, numberOfLines: 1, aligment: .left, textColor: .black)
+        let description = UILabel.TextValues(text: movieGenders, fontSize: basicFontSize, font: .NotoSansMyanmar, numberOfLines: 0, aligment: .left, textColor: .black)
+        return getTitleAndDescriptionRow(for: tableView, title: title, description: description, position: .next)
+    }
+    
+    //MARK: Average
+    private func getVoteAverageCell(for tableView: UITableView) -> UITableViewCell? {
+        let title = UILabel.TextValues(text: "Vote average: ", fontSize: basicFontSize, font: .NotoSansMyanmarBold, numberOfLines: 1, aligment: .left, textColor: .black)
+        let voteAverage = movieInfo.voteAverage ?? 0
+        let description = UILabel.TextValues(text: String(voteAverage), fontSize: basicFontSize, font: .NotoSansMyanmar, numberOfLines: 1, aligment: .left, textColor: .black)
+        return getTitleAndDescriptionRow(for: tableView, title: title, description: description, position: .next)
+    }
+    
+    //MARK: Overview
+    private func getOverviewCell(for tableView: UITableView) -> UITableViewCell? {
+        let title = UILabel.TextValues(text: "Overview: ", fontSize: basicFontSize, font: .NotoSansMyanmarBold, numberOfLines: 1, aligment: .left, textColor: .black)
+        let description = UILabel.TextValues(text: movieInfo.overview ?? "", fontSize: basicFontSize, font: .NotoSansMyanmar, numberOfLines: 0, aligment: .justified, textColor: .black)
+        
+        return getTitleAndDescriptionRow(for: tableView, title: title, description: description, position: .below)
+    }
+    
+    func getTitleAndDescriptionRow(for tableView: UITableView, title: UILabel.TextValues, description: UILabel.TextValues, position: TitleAndDescriptionTableViewCell.DescriptionPosition) -> UITableViewCell? {
+        let cell = tableView.dequeueReusableCell(withIdentifier: AllowedCells.titleAndDescriptionTableViewCell.rawValue) as? TitleAndDescriptionTableViewCell
+        cell?.populate(title: title, description: description, descriptionPosition: position)
         return cell
     }
 }

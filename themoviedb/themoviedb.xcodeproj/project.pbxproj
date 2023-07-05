@@ -33,7 +33,6 @@
 		0E39A0602A54EAFF00B4193C /* DetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E39A05F2A54EAFF00B4193C /* DetailViewController.swift */; };
 		0E39A0622A54F3A100B4193C /* DetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E39A0612A54F3A100B4193C /* DetailViewModel.swift */; };
 		0E39A0642A54F40000B4193C /* ExtensionUIImage+GrayScale.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E39A0632A54F40000B4193C /* ExtensionUIImage+GrayScale.swift */; };
-		0E39A0662A5511B200B4193C /* ImageCardTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E39A0652A5511B200B4193C /* ImageCardTableViewCell.swift */; };
 		0E39A0682A55170200B4193C /* ImageFromPathProtocolExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E39A0672A55170200B4193C /* ImageFromPathProtocolExtension.swift */; };
 		0E39A06A2A55173500B4193C /* CenterTitleTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E39A0692A55173500B4193C /* CenterTitleTableViewCell.swift */; };
 		0E39A06C2A551B4B00B4193C /* TitleAndDescriptionTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E39A06B2A551B4B00B4193C /* TitleAndDescriptionTableViewCell.swift */; };
@@ -87,7 +86,6 @@
 		0E39A05F2A54EAFF00B4193C /* DetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailViewController.swift; sourceTree = "<group>"; };
 		0E39A0612A54F3A100B4193C /* DetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailViewModel.swift; sourceTree = "<group>"; };
 		0E39A0632A54F40000B4193C /* ExtensionUIImage+GrayScale.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ExtensionUIImage+GrayScale.swift"; sourceTree = "<group>"; };
-		0E39A0652A5511B200B4193C /* ImageCardTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageCardTableViewCell.swift; sourceTree = "<group>"; };
 		0E39A0672A55170200B4193C /* ImageFromPathProtocolExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageFromPathProtocolExtension.swift; sourceTree = "<group>"; };
 		0E39A0692A55173500B4193C /* CenterTitleTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CenterTitleTableViewCell.swift; sourceTree = "<group>"; };
 		0E39A06B2A551B4B00B4193C /* TitleAndDescriptionTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TitleAndDescriptionTableViewCell.swift; sourceTree = "<group>"; };
@@ -261,7 +259,6 @@
 			isa = PBXGroup;
 			children = (
 				0E39A0422A52CD9B00B4193C /* MovieCoverTableViewCell.swift */,
-				0E39A0652A5511B200B4193C /* ImageCardTableViewCell.swift */,
 				0E39A0692A55173500B4193C /* CenterTitleTableViewCell.swift */,
 				0E39A06B2A551B4B00B4193C /* TitleAndDescriptionTableViewCell.swift */,
 			);
@@ -430,7 +427,6 @@
 				0E39A05A2A5410A600B4193C /* DiscoverMovies.swift in Sources */,
 				0E39A0622A54F3A100B4193C /* DetailViewModel.swift in Sources */,
 				0E39A0492A53F35F00B4193C /* BasicViewController.swift in Sources */,
-				0E39A0662A5511B200B4193C /* ImageCardTableViewCell.swift in Sources */,
 				0E39A06A2A55173500B4193C /* CenterTitleTableViewCell.swift in Sources */,
 				0E39A0642A54F40000B4193C /* ExtensionUIImage+GrayScale.swift in Sources */,
 				0E39A0402A52B07E00B4193C /* GenericTableView.swift in Sources */,

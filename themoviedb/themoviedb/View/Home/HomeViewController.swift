@@ -102,7 +102,8 @@ extension HomeViewController {
         NSLayoutConstraint.activate([
             tableView.topAnchor.constraint(equalTo: searchTextField.bottomAnchor, constant: 10),
             tableView.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor, constant: -10),
-            tableView.widthAnchor.constraint(equalToConstant: self.view.frame.width)
+            tableView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor),
+            tableView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor)
         ])
     }
 }

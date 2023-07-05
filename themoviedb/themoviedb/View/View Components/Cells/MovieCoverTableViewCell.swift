@@ -25,21 +25,21 @@ class MovieCoverTableViewCell: UITableViewCell, ImageFromPathExtensionProtocol {
         setBlurView(movieTitle: movieTitle)
         setTitleConfig(movieTitle: movieTitle)
     }
-    
+
     private func setMovieImage(imageSetting: ImageSetting) {
         guard let imageView = movieImageView else { return }
         setMovieImage(from: nil)
         setMovieImage(from: imageSetting.imagePath)
         imageView.translatesAutoresizingMaskIntoConstraints = false
         contentView.addSubview(imageView)
-        layoutMovieImageView(imageSetting: imageSetting)
-        imageView.contentMode = .scaleAspectFit
-        imageView.layer.masksToBounds = false
-        
+        imageView.clipsToBounds = true
+        imageView.contentMode = .scaleToFill
+
         if let corner = imageSetting.corner {
             imageView.layer.masksToBounds = true 
             imageView.layer.cornerRadius = corner
         }
+        layoutMovieImageView(imageSetting: imageSetting)
     }
 
     func setTitleConfig(movieTitle: String?) {
@@ -91,12 +91,12 @@ extension MovieCoverTableViewCell {
     //MARK: - Layout MovieImageView
     private func layoutMovieImageView(imageSetting: ImageSetting) {
         guard let movieImageView else { return }
-        setSize(imageSetting: imageSetting)
         NSLayoutConstraint.activate([
             movieImageView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 10),
             movieImageView.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
             movieImageView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -10),
         ])
+        setSize(imageSetting: imageSetting)
     }
     
     func setSize(imageSetting: ImageSetting) {

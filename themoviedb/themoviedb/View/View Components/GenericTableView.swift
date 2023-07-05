@@ -10,7 +10,6 @@ import UIKit
 
 enum AllowedCells: String {
     case movieCover
-    case imageCardTableViewCell
     case centerTitleTableViewCell
     case titleAndDescriptionTableViewCell
 }
@@ -43,7 +42,7 @@ class GenericTableView: UIView {
         tableView.delegate = self
         tableView.dataSource = self
         tableView.separatorStyle = .none
-        tableView.isUserInteractionEnabled = delegate.didSelectRow != nil ? true : false
+        tableView.allowsSelection =  delegate.didSelectRow != nil ? true : false
         cellsNeeded(with: cellsTypeList)
         tableView.translatesAutoresizingMaskIntoConstraints = false
         self.addSubview(tableView)
@@ -62,8 +61,6 @@ class GenericTableView: UIView {
         switch cell {
         case .movieCover:
             tableView.register(MovieCoverTableViewCell.self, forCellReuseIdentifier: cell.rawValue)
-        case .imageCardTableViewCell:
-            tableView.register(ImageCardTableViewCell.self, forCellReuseIdentifier: cell.rawValue)
         case .titleAndDescriptionTableViewCell:
             tableView.register(TitleAndDescriptionTableViewCell.self, forCellReuseIdentifier: cell.rawValue)
         case .centerTitleTableViewCell:
