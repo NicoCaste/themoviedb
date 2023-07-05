@@ -9,6 +9,7 @@ import UIKit
 class HomeViewController: BasicViewController {
     private var searchTextField: GenericSearchTextField?
     private var tableView: GenericTableView?
+   
     private var viewModel: HomeViewModel
     
     required init(viewModel: HomeViewModel) {
@@ -37,7 +38,7 @@ class HomeViewController: BasicViewController {
     }
     
     private func setTableView() {
-        tableView = GenericTableView(cellsTypeList: [.movieCover], delegate: self)
+        tableView = GenericTableView(cellsTypeList: viewModel.allowedCells, delegate: self)
         guard let tableView  else { return }
         self.view.addSubview(tableView)
         tableView.translatesAutoresizingMaskIntoConstraints = false
@@ -59,13 +60,7 @@ extension HomeViewController: GenericTableViewDelegate {
     }
     
     func cellForRowAt(tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell? {
-        guard let movie = viewModel.discoverMovies?.results[indexPath.row] else { return nil }
-        let cell = tableView.dequeueReusableCell(withIdentifier: AllowedCells.movieCover.rawValue) as? MovieCoverTableViewCell
-        let height: CGFloat? = 200
-        let imageSetting = MovieCoverTableViewCell.ImageSetting(imagePath: movie.backdropPath, width: nil, height: height, corner: 10)
-        
-        cell?.populate(movieTitle: movie.originalTitle, imageSetting: imageSetting)
-        return cell
+        viewModel.getCell(for: tableView, in: indexPath.row)
     }
     
     //MARK: Action Delegate
@@ -79,8 +74,7 @@ extension HomeViewController: GenericTableViewDelegate {
 extension HomeViewController: GenericSearchTextFieldDelegate {
     func userInput(text: String) {
         self.tableView?.backToTop()
-        let textUrlAllowed = text.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)
-        let path: ApiUrlHelper.PathForMovies = (textUrlAllowed?.isEmpty ?? true || text.isEmpty) ? .discover :  .search(forText: textUrlAllowed ?? text)
+        let path = viewModel.getPathForUserInput(text: text)
         getMoviesAndReload(for: path)
     }
 }
