@@ -10,6 +10,9 @@ import UIKit
 
 enum AllowedCells: String {
     case movieCover
+    case imageCardTableViewCell
+    case centerTitleTableViewCell
+    case titleAndDescriptionTableViewCell
 }
 
 @objc protocol GenericTableViewDelegate {
@@ -59,6 +62,12 @@ class GenericTableView: UIView {
         switch cell {
         case .movieCover:
             tableView.register(MovieCoverTableViewCell.self, forCellReuseIdentifier: cell.rawValue)
+        case .imageCardTableViewCell:
+            tableView.register(ImageCardTableViewCell.self, forCellReuseIdentifier: cell.rawValue)
+        case .titleAndDescriptionTableViewCell:
+            tableView.register(TitleAndDescriptionTableViewCell.self, forCellReuseIdentifier: cell.rawValue)
+        case .centerTitleTableViewCell:
+            tableView.register(CenterTitleTableViewCell.self, forCellReuseIdentifier: cell.rawValue)
         }
     }
     

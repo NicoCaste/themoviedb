@@ -38,7 +38,7 @@ extension TheMovieRepository {
         })
     }
     
-    func getMovies(for path: ApiUrlHelper.PathForMovies, page: Int, includeVideo: Bool, includeAdult: Bool) async throws -> Result<Data, Error> {
+    func getDataFromMoviesApi(for path: ApiUrlHelper.PathForMovies, page: Int? = nil, includeVideo: Bool? = nil, includeAdult: Bool? = nil) async throws -> Result<Data, Error> {
         let url = ApiUrlHelper.makeURL(for: .theMovieApi, url: path)
         let queryItems = getQueryItemsForMovies(page: page, includeVideo: includeVideo, includeAdult: includeAdult)
         var nsurl = NSURL(string: url) as? URL
@@ -50,19 +50,23 @@ extension TheMovieRepository {
         return try await getFromWebServices(request: request)
     }
     
-    private func getQueryItemsForMovies(page: Int, includeVideo: Bool, includeAdult: Bool) -> [URLQueryItem] {
+    private func getQueryItemsForMovies(page: Int?, includeVideo: Bool?, includeAdult: Bool?) -> [URLQueryItem] {
         var queryItems: [URLQueryItem] = []
-        let includeAdult = URLQueryItem(name: "include_adult", value: "\(includeAdult)")
-        let includeVideo = URLQueryItem(name: "include_video", value: "\(includeVideo)")
+        if let page, let includeAdult, let includeVideo {
+            let includeAdult = URLQueryItem(name: "include_adult", value: "\(includeAdult)")
+            let includeVideo = URLQueryItem(name: "include_video", value: "\(includeVideo)")
+            let page = URLQueryItem(name: "page", value: "\(page)")
+            let sortBy = URLQueryItem(name: "sort_by", value: "popularity.desc")
+            queryItems.append(sortBy)
+            queryItems.append(includeAdult)
+            queryItems.append(includeVideo)
+            queryItems.append(page)
+        }
+
         let language =  URLQueryItem(name: "language", value: "en-US)")
-        let page = URLQueryItem(name: "page", value: "\(page)")
-        let sortBy = URLQueryItem(name: "sort_by", value: "popularity.desc")
-        
-        queryItems.append(includeAdult)
-        queryItems.append(includeVideo)
         queryItems.append(language)
-        queryItems.append(page)
-        queryItems.append(sortBy)
+
+
         return queryItems
     }
 }
