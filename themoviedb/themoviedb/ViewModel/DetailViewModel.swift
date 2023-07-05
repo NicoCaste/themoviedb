@@ -22,19 +22,19 @@ class DetailViewModel: BasicViewModel {
         case overview
     }
     
-    init(movieInfo: MovieInfo, gendersList: [GenresDetail]?) {
+    init(movieInfo: MovieInfo, gendersList: [GenreDetail]?) {
         self.movieInfo = movieInfo
         super.init()
-        setMovieGenders(genderList: gendersList)
+        self.setMovieGenders(genderList: gendersList)
     }
     
     func getNumbersOfCells() -> Int {
         DetailTableCases.allCases.count
     }
     
-    func setMovieGenders(genderList: [GenresDetail]?) {
+    func setMovieGenders(genderList: [GenreDetail]?) {
         guard let genderList else { return }
-        var newMovieGendersList: [GenresDetail] = []
+        var newMovieGendersList: [GenreDetail] = []
         
         for genre in movieInfo.genreIds ?? [] {
             newMovieGendersList += genderList.filter({$0.id == genre})

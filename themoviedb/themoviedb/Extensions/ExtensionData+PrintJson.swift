@@ -8,8 +8,11 @@
 import Foundation
 
 extension Data {
-    func decodedObject<T: Decodable>() throws -> T {
-        let decoder = JSONDecoder()
+    @MainActor func decodedObject<T: Decodable>() throws -> T {
+        guard let context = PersistenceController.shared.context
+        else { throw NetWorkingError.unknowError }
+        
+        let decoder = JSONDecoder(context: context)
         decoder.keyDecodingStrategy = .convertFromSnakeCase
         return try decoder.decode(T.self, from: self)
     }

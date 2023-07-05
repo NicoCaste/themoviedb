@@ -36,7 +36,7 @@ class HomeViewModel: BasicViewModel {
             let response = try await repository.getDataFromMoviesApi(for: .genre)
             switch response {
             case .success(let data):
-                self.genders = try data.decodedObject()
+                self.genders = try await data.decodedObject()
             case .failure(let error):
                 print(error)
             }
@@ -44,16 +44,27 @@ class HomeViewModel: BasicViewModel {
             if getGendersPossibleRetries > 0 {
                 getGendersPossibleRetries -= 1
                 await getGenreList()
+            } else {
+                let gendreList = getGendreListFromCoreData()
+                self.genders = Genre(genres: gendreList)
             }
         }
     }
-
+    
+    func getGendreListFromCoreData() -> [GenreDetail] {
+        var list: [GenreDetail] = []
+        DispatchQueue.main.sync {
+            list = PersistenceController.shared.getGenreList() ?? []
+        }
+        return list
+    }
+    
     func getMovies(for path: ApiUrlHelper.PathForMovies) async {
         do {
             let response = try await repository.getDataFromMoviesApi(for: path, page: 3, includeVideo: true, includeAdult: false)
            switch response {
            case .success(let data):
-                discoverMovies = try data.decodedObject()
+               discoverMovies = try await data.decodedObject()
             case .failure(let error):
                 print(error)
             }

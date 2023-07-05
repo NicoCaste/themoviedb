@@ -17,7 +17,6 @@ class BasicViewController: UIViewController {
     }
     
     private func configNavBar() {
-        navigationController?.navigationBar.barTintColor = UIColor.black
         let logo = UIImage(systemName: "video")?.withRenderingMode(.alwaysTemplate)
         let imageView = UIImageView(image: logo)
         imageView.tintColor = .black
