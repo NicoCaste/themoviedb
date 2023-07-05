@@ -36,7 +36,7 @@ class GenericTableView: UIView {
     }
     
     // MARK: - TableView
-    func setTableView(with cellsTypeList: [AllowedCells]) {
+    private func setTableView(with cellsTypeList: [AllowedCells]) {
         tableView.delegate = self
         tableView.dataSource = self
         tableView.separatorStyle = .none
@@ -60,6 +60,14 @@ class GenericTableView: UIView {
         case .movieCover:
             tableView.register(MovieCoverTableViewCell.self, forCellReuseIdentifier: cell.rawValue)
         }
+    }
+    
+    func reloadTableView() {
+        tableView.reloadData()
+    }
+    
+    func backToTop() {
+        tableView.setContentOffset(.zero, animated: true)
     }
 }
 

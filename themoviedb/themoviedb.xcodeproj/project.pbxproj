@@ -18,6 +18,19 @@
 		0E39A0372A52934400B4193C /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E39A0362A52934400B4193C /* HomeViewController.swift */; };
 		0E39A0402A52B07E00B4193C /* GenericTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E39A03F2A52B07E00B4193C /* GenericTableView.swift */; };
 		0E39A0432A52CD9B00B4193C /* MovieCoverTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E39A0422A52CD9B00B4193C /* MovieCoverTableViewCell.swift */; };
+		0E39A0452A53E68900B4193C /* HomeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E39A0442A53E68900B4193C /* HomeViewModel.swift */; };
+		0E39A0472A53E96100B4193C /* GenericSearchTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E39A0462A53E96100B4193C /* GenericSearchTextField.swift */; };
+		0E39A0492A53F35F00B4193C /* BasicViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E39A0482A53F35F00B4193C /* BasicViewController.swift */; };
+		0E39A04C2A53F53900B4193C /* WebServicesProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E39A04B2A53F53900B4193C /* WebServicesProtocol.swift */; };
+		0E39A04E2A53F57E00B4193C /* UrlSessionWebServices.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E39A04D2A53F57E00B4193C /* UrlSessionWebServices.swift */; };
+		0E39A0502A53F5FA00B4193C /* ExtensionDictionary+JsonPrint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E39A04F2A53F5FA00B4193C /* ExtensionDictionary+JsonPrint.swift */; };
+		0E39A0522A53F63500B4193C /* ExtensionData+PrintJson.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E39A0512A53F63500B4193C /* ExtensionData+PrintJson.swift */; };
+		0E39A0552A53F68C00B4193C /* TheMovieRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E39A0542A53F68C00B4193C /* TheMovieRepository.swift */; };
+		0E39A0582A54040F00B4193C /* ApiUrlHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E39A0572A54040F00B4193C /* ApiUrlHelper.swift */; };
+		0E39A05A2A5410A600B4193C /* DiscoverMovies.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E39A0592A5410A600B4193C /* DiscoverMovies.swift */; };
+		0E39A05C2A541F3300B4193C /* LoaderImageHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E39A05B2A541F3300B4193C /* LoaderImageHelper.swift */; };
+		0E39A05E2A5434E900B4193C /* BasicViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E39A05D2A5434E900B4193C /* BasicViewModel.swift */; };
+		0E39A0602A54EAFF00B4193C /* DetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E39A05F2A54EAFF00B4193C /* DetailViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -53,6 +66,19 @@
 		0E39A0362A52934400B4193C /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
 		0E39A03F2A52B07E00B4193C /* GenericTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GenericTableView.swift; sourceTree = "<group>"; };
 		0E39A0422A52CD9B00B4193C /* MovieCoverTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieCoverTableViewCell.swift; sourceTree = "<group>"; };
+		0E39A0442A53E68900B4193C /* HomeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewModel.swift; sourceTree = "<group>"; };
+		0E39A0462A53E96100B4193C /* GenericSearchTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GenericSearchTextField.swift; sourceTree = "<group>"; };
+		0E39A0482A53F35F00B4193C /* BasicViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BasicViewController.swift; sourceTree = "<group>"; };
+		0E39A04B2A53F53900B4193C /* WebServicesProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebServicesProtocol.swift; sourceTree = "<group>"; };
+		0E39A04D2A53F57E00B4193C /* UrlSessionWebServices.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UrlSessionWebServices.swift; sourceTree = "<group>"; };
+		0E39A04F2A53F5FA00B4193C /* ExtensionDictionary+JsonPrint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ExtensionDictionary+JsonPrint.swift"; sourceTree = "<group>"; };
+		0E39A0512A53F63500B4193C /* ExtensionData+PrintJson.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ExtensionData+PrintJson.swift"; sourceTree = "<group>"; };
+		0E39A0542A53F68C00B4193C /* TheMovieRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TheMovieRepository.swift; sourceTree = "<group>"; };
+		0E39A0572A54040F00B4193C /* ApiUrlHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApiUrlHelper.swift; sourceTree = "<group>"; };
+		0E39A0592A5410A600B4193C /* DiscoverMovies.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiscoverMovies.swift; sourceTree = "<group>"; };
+		0E39A05B2A541F3300B4193C /* LoaderImageHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoaderImageHelper.swift; sourceTree = "<group>"; };
+		0E39A05D2A5434E900B4193C /* BasicViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BasicViewModel.swift; sourceTree = "<group>"; };
+		0E39A05F2A54EAFF00B4193C /* DetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -103,6 +129,7 @@
 		0E39A0002A5290CE00B4193C /* themoviedb */ = {
 			isa = PBXGroup;
 			children = (
+				0E39A0562A53FF5600B4193C /* Helpers */,
 				0E39A03D2A52957600B4193C /* Managers */,
 				0E39A03C2A52954900B4193C /* Extensions */,
 				0E39A03B2A52953A00B4193C /* Networking */,
@@ -147,6 +174,7 @@
 		0E39A0352A52926B00B4193C /* Detail */ = {
 			isa = PBXGroup;
 			children = (
+				0E39A05F2A54EAFF00B4193C /* DetailViewController.swift */,
 			);
 			path = Detail;
 			sourceTree = "<group>";
@@ -157,6 +185,7 @@
 				0E39A03E2A52B03000B4193C /* View Components */,
 				0E39A0342A52925800B4193C /* Home */,
 				0E39A0352A52926B00B4193C /* Detail */,
+				0E39A0482A53F35F00B4193C /* BasicViewController.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -164,6 +193,7 @@
 		0E39A0392A5294A500B4193C /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				0E39A0592A5410A600B4193C /* DiscoverMovies.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -171,6 +201,8 @@
 		0E39A03A2A5294B200B4193C /* ViewModel */ = {
 			isa = PBXGroup;
 			children = (
+				0E39A0442A53E68900B4193C /* HomeViewModel.swift */,
+				0E39A05D2A5434E900B4193C /* BasicViewModel.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -178,6 +210,8 @@
 		0E39A03B2A52953A00B4193C /* Networking */ = {
 			isa = PBXGroup;
 			children = (
+				0E39A0532A53F67C00B4193C /* Repository */,
+				0E39A04A2A53F51B00B4193C /* Services */,
 			);
 			path = Networking;
 			sourceTree = "<group>";
@@ -185,6 +219,8 @@
 		0E39A03C2A52954900B4193C /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
+				0E39A04F2A53F5FA00B4193C /* ExtensionDictionary+JsonPrint.swift */,
+				0E39A0512A53F63500B4193C /* ExtensionData+PrintJson.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -201,6 +237,7 @@
 			children = (
 				0E39A0412A52CC3500B4193C /* Cells */,
 				0E39A03F2A52B07E00B4193C /* GenericTableView.swift */,
+				0E39A0462A53E96100B4193C /* GenericSearchTextField.swift */,
 			);
 			path = "View Components";
 			sourceTree = "<group>";
@@ -211,6 +248,32 @@
 				0E39A0422A52CD9B00B4193C /* MovieCoverTableViewCell.swift */,
 			);
 			path = Cells;
+			sourceTree = "<group>";
+		};
+		0E39A04A2A53F51B00B4193C /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				0E39A04B2A53F53900B4193C /* WebServicesProtocol.swift */,
+				0E39A04D2A53F57E00B4193C /* UrlSessionWebServices.swift */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+		0E39A0532A53F67C00B4193C /* Repository */ = {
+			isa = PBXGroup;
+			children = (
+				0E39A0542A53F68C00B4193C /* TheMovieRepository.swift */,
+			);
+			path = Repository;
+			sourceTree = "<group>";
+		};
+		0E39A0562A53FF5600B4193C /* Helpers */ = {
+			isa = PBXGroup;
+			children = (
+				0E39A0572A54040F00B4193C /* ApiUrlHelper.swift */,
+				0E39A05B2A541F3300B4193C /* LoaderImageHelper.swift */,
+			);
+			path = Helpers;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -343,11 +406,24 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0E39A05C2A541F3300B4193C /* LoaderImageHelper.swift in Sources */,
 				0E39A0022A5290CE00B4193C /* AppDelegate.swift in Sources */,
+				0E39A05A2A5410A600B4193C /* DiscoverMovies.swift in Sources */,
+				0E39A0492A53F35F00B4193C /* BasicViewController.swift in Sources */,
 				0E39A0402A52B07E00B4193C /* GenericTableView.swift in Sources */,
+				0E39A0452A53E68900B4193C /* HomeViewModel.swift in Sources */,
+				0E39A04C2A53F53900B4193C /* WebServicesProtocol.swift in Sources */,
+				0E39A04E2A53F57E00B4193C /* UrlSessionWebServices.swift in Sources */,
+				0E39A0472A53E96100B4193C /* GenericSearchTextField.swift in Sources */,
+				0E39A05E2A5434E900B4193C /* BasicViewModel.swift in Sources */,
+				0E39A0602A54EAFF00B4193C /* DetailViewController.swift in Sources */,
+				0E39A0502A53F5FA00B4193C /* ExtensionDictionary+JsonPrint.swift in Sources */,
 				0E39A0432A52CD9B00B4193C /* MovieCoverTableViewCell.swift in Sources */,
 				0E39A00C2A5290CE00B4193C /* themoviedb.xcdatamodeld in Sources */,
+				0E39A0522A53F63500B4193C /* ExtensionData+PrintJson.swift in Sources */,
+				0E39A0582A54040F00B4193C /* ApiUrlHelper.swift in Sources */,
 				0E39A0042A5290CE00B4193C /* SceneDelegate.swift in Sources */,
+				0E39A0552A53F68C00B4193C /* TheMovieRepository.swift in Sources */,
 				0E39A0372A52934400B4193C /* HomeViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
