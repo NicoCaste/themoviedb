@@ -74,6 +74,7 @@ extension HomeViewController: GenericTableViewDelegate {
 extension HomeViewController: GenericSearchTextFieldDelegate {
     func userInput(text: String) {
         self.tableView?.backToTop()
+        viewModel.restarMovieList()
         let path = viewModel.getPathForUserInput(text: text)
         getMoviesAndReload(for: path)
     }

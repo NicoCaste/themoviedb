@@ -29,7 +29,7 @@ public class GenreDetail: NSManagedObject, Decodable {
         saveGenreDetail(id: id, name: name)
     }
     
-    func saveGenreDetail(id: Int64, name: String?) {
+    private func saveGenreDetail(id: Int64, name: String?) {
         guard let name else { return }
         DispatchQueue.main.async {
             PersistenceController.shared.saveGenreDetail(id: id, name: name)

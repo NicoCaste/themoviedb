@@ -8,7 +8,7 @@
 import Foundation
 import UIKit
 import CoreData
-@MainActor
+
 class PersistenceController {
     @MainActor let context = (UIApplication.shared.delegate as? AppDelegate)?.persistentContainer.viewContext
     
@@ -45,5 +45,58 @@ class PersistenceController {
         } catch {
             print("Error saving context \(error)")
         }
+    }
+    
+    func save(movieResult: MoviesResult, page: Int32, results: NSOrderedSet) {
+        do {
+            guard let context  else { return }
+            let newResults: [MovieDetail] = getOnlyNewMovies(from: results)
+            
+            if !newResults.isEmpty {
+                movieResult.page = page
+                movieResult.results = NSOrderedSet(array: newResults)
+                try context.save()
+            }
+            
+            movieResult.page = page
+            movieResult.results = results
+        } catch {
+            print("Error saving context \(error)")
+        }
+    }
+    
+    private func getOnlyNewMovies(from results: NSOrderedSet) -> [MovieDetail] {
+        var newResults: [MovieDetail] = []
+        let request : NSFetchRequest<MovieDetail> = MovieDetail.fetchRequest()
+
+        for movie in results {
+            guard let movie = movie as? MovieDetail else { return newResults }
+            request.predicate = NSPredicate(format: "id == %i", movie.id)
+            
+            if request.predicate == nil {
+                newResults.append(movie)
+            } else {
+                request.predicate = nil
+            }
+        }
+        
+        return newResults
+    }
+    
+    func getMovieResult(pageNumber: Int) -> MoviesResult? {
+        var movies: MoviesResult?
+        let request = NSFetchRequest<NSFetchRequestResult>(entityName: "MoviesResult")
+        request.returnsObjectsAsFaults = false
+        let result = try? self.context?.fetch(request)
+        
+        if let resultManaged = result as? [NSManagedObject] {
+            for data in resultManaged {
+                if let detail = data as? MoviesResult, detail.page == pageNumber, detail.results != nil || detail.results?.count ?? 0 > 0 {
+                    movies = detail
+                }
+            }
+        }
+        
+        return movies
     }
 }

@@ -15,28 +15,17 @@
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="LogoApp" translatesAutoresizingMaskIntoConstraints="NO" id="REO-Bs-kOa">
-                                <rect key="frame" x="54.666666666666657" y="150" width="284" height="284"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="284" id="RmC-yY-RrK"/>
-                                    <constraint firstAttribute="height" constant="284" id="Sa1-kT-jBf"/>
-                                </constraints>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="LogoApp" translatesAutoresizingMaskIntoConstraints="NO" id="REO-Bs-kOa">
+                                <rect key="frame" x="-101" y="0.0" width="623" height="852"/>
                             </imageView>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="The Movie DB" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="PCT-Wr-RrR">
-                                <rect key="frame" x="20" y="454" width="353" height="98.333333333333371"/>
-                                <fontDescription key="fontDescription" name="NotoSansMyanmar-Bold" family="Noto Sans Myanmar" pointSize="45"/>
-                                <nil key="textColor"/>
-                                <nil key="highlightedColor"/>
-                            </label>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
-                            <constraint firstItem="REO-Bs-kOa" firstAttribute="centerX" secondItem="6Tk-OE-BBY" secondAttribute="centerX" id="DsZ-Pj-fJ5"/>
-                            <constraint firstItem="PCT-Wr-RrR" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="20" id="Nlk-iR-2w6"/>
-                            <constraint firstItem="REO-Bs-kOa" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="91" id="ZGA-DG-CfP"/>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="PCT-Wr-RrR" secondAttribute="trailing" constant="20" id="xQw-fm-Kaf"/>
-                            <constraint firstItem="PCT-Wr-RrR" firstAttribute="top" secondItem="REO-Bs-kOa" secondAttribute="bottom" constant="20" id="zzR-EX-Xpr"/>
+                            <constraint firstItem="REO-Bs-kOa" firstAttribute="top" secondItem="Ze5-6b-2t3" secondAttribute="top" id="6yX-9c-dQJ"/>
+                            <constraint firstItem="REO-Bs-kOa" firstAttribute="leading" secondItem="Ze5-6b-2t3" secondAttribute="leading" constant="-101" id="Iiu-zY-mzg"/>
+                            <constraint firstAttribute="bottom" secondItem="REO-Bs-kOa" secondAttribute="bottom" id="RSX-pM-jo0"/>
+                            <constraint firstAttribute="trailing" secondItem="REO-Bs-kOa" secondAttribute="trailing" constant="-129" id="o6X-U2-jib"/>
                         </constraints>
                     </view>
                 </viewController>

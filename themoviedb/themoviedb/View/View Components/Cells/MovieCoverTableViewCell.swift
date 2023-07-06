@@ -28,7 +28,6 @@ class MovieCoverTableViewCell: UITableViewCell, ImageFromPathExtensionProtocol {
 
     private func setMovieImage(imageSetting: ImageSetting) {
         guard let imageView = movieImageView else { return }
-        setMovieImage(from: nil)
         setMovieImage(from: imageSetting.imagePath)
         imageView.translatesAutoresizingMaskIntoConstraints = false
         contentView.addSubview(imageView)

@@ -9,7 +9,7 @@ import Foundation
 import UIKit
 
 class HomeViewModel: BasicViewModel {
-    var discoverMovies: DiscoverMovies?
+    var discoverMovies: MoviesResult?
     private var genders: Genre?
     private var getGendersPossibleRetries: Int = 3
     let allowedCells: [AllowedCells] =  [.movieCover]
@@ -20,13 +20,9 @@ class HomeViewModel: BasicViewModel {
             await self?.getGenreList()
         }
     }
-    
-    func getNumberOfRows() -> Int {
-        return discoverMovies?.results.count ?? 1
-    }
-    
+
     func getDetailInfo(movie index: Int) -> BasicViewController? {
-        guard let movie = discoverMovies?.results[index] else { return nil}
+        guard let movie = discoverMovies?.results?[index] as? MovieDetail else { return nil}
         let vieWModel = DetailViewModel(movieInfo: movie, gendersList: genders?.genres)
         return DetailViewController(viewModel: vieWModel)
     }
@@ -37,26 +33,38 @@ class HomeViewModel: BasicViewModel {
             switch response {
             case .success(let data):
                 self.genders = try await data.decodedObject()
-            case .failure(let error):
-                print(error)
+            case .failure(_):
+                loadCoreDataList()
             }
         } catch {
-            if getGendersPossibleRetries > 0 {
-                getGendersPossibleRetries -= 1
-                await getGenreList()
-            } else {
-                let gendreList = getGendreListFromCoreData()
-                self.genders = Genre(genres: gendreList)
-            }
+            await doGenreListCatch()
         }
     }
     
-    func getGendreListFromCoreData() -> [GenreDetail] {
-        var list: [GenreDetail] = []
-        DispatchQueue.main.sync {
-            list = PersistenceController.shared.getGenreList() ?? []
+    func restarMovieList() {
+        discoverMovies = nil 
+    }
+    
+    private func doGenreListCatch() async {
+        if getGendersPossibleRetries > 0 {
+            getGendersPossibleRetries -= 1
+            await getGenreList()
+        } else {
+            loadCoreDataList()
         }
-        return list
+    }
+    
+    private func loadCoreDataList() {
+        let gendreList = getGendreListFromCoreData()
+        self.genders = Genre(genres: gendreList)
+    }
+    
+    private func getGendreListFromCoreData() -> [GenreDetail] {
+        return PersistenceController.shared.getGenreList() ?? []
+    }
+    
+    private func getMovieResultFromCoreData() -> MoviesResult? {
+        return PersistenceController.shared.getMovieResult(pageNumber: 3)
     }
     
     func getMovies(for path: ApiUrlHelper.PathForMovies) async {
@@ -65,10 +73,11 @@ class HomeViewModel: BasicViewModel {
            switch response {
            case .success(let data):
                discoverMovies = try await data.decodedObject()
-            case .failure(let error):
-                print(error)
+           case .failure(_):
+               self.discoverMovies = getMovieResultFromCoreData()
             }
         } catch {
+            self.discoverMovies = getMovieResultFromCoreData()
             print(NetWorkingError.serverError)
         }
     }
@@ -79,8 +88,12 @@ class HomeViewModel: BasicViewModel {
         return path 
     }
     
+    func getNumberOfRows() -> Int {
+        return discoverMovies?.results?.count ?? 0
+    }
+    
     func getCell(for tableView: UITableView, in row: Int) -> UITableViewCell? {
-        guard let movie = discoverMovies?.results[row] else { return nil }
+        guard let movie = discoverMovies?.results?[row] as? MovieDetail else { return nil }
         let cell = tableView.dequeueReusableCell(withIdentifier: AllowedCells.movieCover.rawValue) as? MovieCoverTableViewCell
         let height: CGFloat? = 200
         let imageSetting = MovieCoverTableViewCell.ImageSetting(imagePath: movie.backdropPath, width: nil, height: height, corner: 10)

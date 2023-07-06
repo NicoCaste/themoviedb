@@ -52,16 +52,26 @@ extension TheMovieRepository {
     
     private func getQueryItemsForMovies(page: Int?, includeVideo: Bool?, includeAdult: Bool?) -> [URLQueryItem] {
         var queryItems: [URLQueryItem] = []
-        if let page, let includeAdult, let includeVideo {
-            let includeAdult = URLQueryItem(name: "include_adult", value: "\(includeAdult)")
-            let includeVideo = URLQueryItem(name: "include_video", value: "\(includeVideo)")
+        if let page {
             let page = URLQueryItem(name: "page", value: "\(page)")
-            let sortBy = URLQueryItem(name: "sort_by", value: "popularity.desc")
-            queryItems.append(sortBy)
-            queryItems.append(includeAdult)
-            queryItems.append(includeVideo)
             queryItems.append(page)
         }
+        
+        if let includeAdult {
+            let includeAdult = URLQueryItem(name: "include_adult", value: "\(includeAdult)")
+            queryItems.append(includeAdult)
+        }
+        
+        if let includeVideo {
+            let includeVideo = URLQueryItem(name: "include_video", value: "\(includeVideo)")
+            queryItems.append(includeVideo)
+          
+        }
+        
+//        if let page, let includeAdult, let includeVideo {
+//            let sortBy = URLQueryItem(name: "sort_by", value: "popularity.desc")
+//            queryItems.append(sortBy)
+//        }
 
         let language =  URLQueryItem(name: "language", value: "en-US)")
         queryItems.append(language)

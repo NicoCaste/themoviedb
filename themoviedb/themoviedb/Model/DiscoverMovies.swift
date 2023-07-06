@@ -7,8 +7,8 @@
 
 import Foundation
 
-struct DiscoverMovies: Codable {
-    var page: Int?
-    var totalResults: Int?
-    var results: [MovieInfo]
-}
+//struct DiscoverMovies: Codable {
+//    var page: Int?
+//    var totalResults: Int?
+//    var results: [MovieInfo]
+//}

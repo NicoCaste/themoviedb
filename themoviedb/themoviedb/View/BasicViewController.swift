@@ -17,9 +17,8 @@ class BasicViewController: UIViewController {
     }
     
     private func configNavBar() {
-        let logo = UIImage(systemName: "video")?.withRenderingMode(.alwaysTemplate)
+        let logo = UIImage(named: "LogoApp")
         let imageView = UIImageView(image: logo)
-        imageView.tintColor = .black
         imageView.frame.size.width = 80
         imageView.frame.size.height = 80
         imageView.contentMode = .scaleAspectFit
