@@ -13,6 +13,7 @@ class HomeViewModel: BasicViewModel {
     private var genders: Genre?
     private var getGendersPossibleRetries: Int = 3
     let allowedCells: [AllowedCells] =  [.movieCover]
+    var currentPage: Int = 1
     
     override init() {
         super.init()
@@ -60,28 +61,45 @@ class HomeViewModel: BasicViewModel {
     }
     
     private func getGendreListFromCoreData() -> [GenreDetail] {
-        return PersistenceController.shared.getGenreList() ?? []
+        DispatchQueue.main.sync {
+            return PersistenceController.shared.getGenreList() ?? []
+        }
     }
     
-    private func getMovieResultFromCoreData() -> MoviesResult? {
-        return PersistenceController.shared.getMovieResult(pageNumber: 3)
+    private func getMovieResultFromCoreData(for searchType: PersistenceController.SearchMovie) -> MoviesResult? {
+        DispatchQueue.main.sync {
+            return PersistenceController.shared.getMovieResult(for: searchType, currentPage: currentPage)
+        }
     }
     
-    func getMovies(for path: ApiUrlHelper.PathForMovies) async {
+    func getMovies(for path: ApiUrlHelper.PathForMovies, with searchType: PersistenceController.SearchMovie) async {
         do {
-            let response = try await repository.getDataFromMoviesApi(for: path, page: 3, includeVideo: true, includeAdult: false)
+            let page: Int? = getPage(for: searchType)
+            let response = try await repository.getDataFromMoviesApi(for: path, page: page, includeVideo: true, includeAdult: false)
            switch response {
            case .success(let data):
                discoverMovies = try await data.decodedObject()
            case .failure(_):
-               self.discoverMovies = getMovieResultFromCoreData()
+               discoverMovies = getMovieResultFromCoreData(for: searchType)
             }
         } catch {
-            self.discoverMovies = getMovieResultFromCoreData()
-            print(NetWorkingError.serverError)
+            discoverMovies = getMovieResultFromCoreData(for: searchType)
         }
     }
     
+    private func getPage(for searchType: PersistenceController.SearchMovie) -> Int? {
+        switch searchType {
+        case .forPage(let page):
+            return page
+        default:
+            return nil
+        }
+    }
+    
+    func getCurrentPage() -> Int {
+        currentPage
+    }
+
     func getPathForUserInput(text: String) -> ApiUrlHelper.PathForMovies {
         let textUrlAllowed = text.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)
         let path: ApiUrlHelper.PathForMovies = (textUrlAllowed?.isEmpty ?? true || text.isEmpty) ? .discover :  .search(forText: textUrlAllowed ?? text)

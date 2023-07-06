@@ -186,7 +186,6 @@
 			children = (
 				0E39A0732A5569C900B4193C /* CoreData */,
 				0E39A0562A53FF5600B4193C /* Helpers */,
-				0E39A03D2A52957600B4193C /* Managers */,
 				0E39A03C2A52954900B4193C /* Extensions */,
 				0E39A03B2A52953A00B4193C /* Networking */,
 				0E39A03A2A5294B200B4193C /* ViewModel */,
@@ -284,13 +283,6 @@
 				0E39A0852A558D3100B4193C /* ExtensionJsonDecoder+Context.swift */,
 			);
 			path = Extensions;
-			sourceTree = "<group>";
-		};
-		0E39A03D2A52957600B4193C /* Managers */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Managers;
 			sourceTree = "<group>";
 		};
 		0E39A03E2A52B03000B4193C /* View Components */ = {

@@ -67,11 +67,6 @@ extension TheMovieRepository {
             queryItems.append(includeVideo)
           
         }
-        
-//        if let page, let includeAdult, let includeVideo {
-//            let sortBy = URLQueryItem(name: "sort_by", value: "popularity.desc")
-//            queryItems.append(sortBy)
-//        }
 
         let language =  URLQueryItem(name: "language", value: "en-US)")
         queryItems.append(language)

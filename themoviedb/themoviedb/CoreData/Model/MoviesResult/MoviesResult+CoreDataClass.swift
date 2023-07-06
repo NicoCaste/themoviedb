@@ -37,3 +37,37 @@ public class MoviesResult: NSManagedObject, Decodable {
         }
     }
 }
+
+extension MoviesResult {
+    static func findAll(in managedObjectContext: NSManagedObjectContext) throws -> [MoviesResult] {
+        var moviesResults: [MoviesResult] = []
+        let request: NSFetchRequest<MoviesResult> = MoviesResult.fetchRequest()
+        request.returnsObjectsAsFaults = false
+        moviesResults = try managedObjectContext.fetch(request)
+        
+        return  moviesResults
+    }
+
+    static func findForTitle(in context: NSManagedObjectContext, text: String) throws -> [MovieDetail] {
+        var newResults: [MovieDetail] = []
+        let request : NSFetchRequest<MovieDetail> = MovieDetail.fetchRequest()
+        if !text.isEmpty {
+            request.predicate = NSPredicate(format: "originalTitle CONTAINS[cd] %@", text)
+        }
+
+        newResults = try context.fetch(request)
+
+        return newResults
+    }
+    
+    static func findForPage(in context: NSManagedObjectContext, page: Int) throws -> [MoviesResult] {
+        var newResults: [MoviesResult] = []
+        let request : NSFetchRequest<MoviesResult> = MoviesResult.fetchRequest()
+
+        request.predicate = NSPredicate(format: "page ==  %i", page)
+
+        newResults = try context.fetch(request)
+
+        return newResults
+    }
+}

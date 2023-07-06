@@ -28,11 +28,12 @@ class MovieCoverTableViewCell: UITableViewCell, ImageFromPathExtensionProtocol {
 
     private func setMovieImage(imageSetting: ImageSetting) {
         guard let imageView = movieImageView else { return }
+        setMovieImage(from: nil)
         setMovieImage(from: imageSetting.imagePath)
         imageView.translatesAutoresizingMaskIntoConstraints = false
         contentView.addSubview(imageView)
         imageView.clipsToBounds = true
-        imageView.contentMode = .scaleToFill
+        imageView.contentMode = .scaleAspectFill
 
         if let corner = imageSetting.corner {
             imageView.layer.masksToBounds = true 

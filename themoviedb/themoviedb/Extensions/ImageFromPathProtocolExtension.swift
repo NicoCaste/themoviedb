@@ -30,8 +30,7 @@ extension ImageFromPathExtensionProtocol {
         var newImage = image
         
         if newImage == nil {
-            newImage = UIImage(named: "LogoApp")
-            movieImageView?.contentMode = .scaleToFill
+            newImage = UIImage(named: "sleepLogo")
         }
         
         DispatchQueue.main.async { [weak self] in
