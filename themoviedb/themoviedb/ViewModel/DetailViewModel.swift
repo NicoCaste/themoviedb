@@ -9,7 +9,7 @@ import Foundation
 import UIKit
 
 class DetailViewModel: BasicViewModel {
-    private let movieInfo: MovieInfo
+    private let movieInfo: MovieDetail
     private var movieGenders: String = ""
     private var basicFontSize: CGFloat = 16
     let allowedCells: [AllowedCells] =  [.movieCover, .centerTitleTableViewCell,  .titleAndDescriptionTableViewCell]
@@ -22,21 +22,21 @@ class DetailViewModel: BasicViewModel {
         case overview
     }
     
-    init(movieInfo: MovieInfo, gendersList: [GenresDetail]?) {
+    init(movieInfo: MovieDetail, gendersList: [GenreDetail]?) {
         self.movieInfo = movieInfo
         super.init()
-        setMovieGenders(genderList: gendersList)
+        self.setMovieGenders(genderList: gendersList)
     }
     
     func getNumbersOfCells() -> Int {
         DetailTableCases.allCases.count
     }
     
-    func setMovieGenders(genderList: [GenresDetail]?) {
+    func setMovieGenders(genderList: [GenreDetail]?) {
         guard let genderList else { return }
-        var newMovieGendersList: [GenresDetail] = []
+        var newMovieGendersList: [GenreDetail] = []
         
-        for genre in movieInfo.genreIds ?? [] {
+        for genre in movieInfo.genreIds as? [Int] ?? [] {
             newMovieGendersList += genderList.filter({$0.id == genre})
         }
         
@@ -104,7 +104,7 @@ class DetailViewModel: BasicViewModel {
     //MARK: Average
     private func getVoteAverageCell(for tableView: UITableView) -> UITableViewCell? {
         let title = UILabel.TextValues(text: "Vote average: ", fontSize: basicFontSize, font: .NotoSansMyanmarBold, numberOfLines: 1, aligment: .left, textColor: .black)
-        let voteAverage = movieInfo.voteAverage ?? 0
+        let voteAverage = movieInfo.voteAverage 
         let description = UILabel.TextValues(text: String(voteAverage), fontSize: basicFontSize, font: .NotoSansMyanmar, numberOfLines: 1, aligment: .left, textColor: .black)
         return getTitleAndDescriptionRow(for: tableView, title: title, description: description, position: .next)
     }

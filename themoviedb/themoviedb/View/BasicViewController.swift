@@ -15,15 +15,14 @@ class BasicViewController: UIViewController {
         overrideUserInterfaceStyle = .light
         configNavBar()
     }
-    
+
     private func configNavBar() {
-        navigationController?.navigationBar.barTintColor = UIColor.black
-        let logo = UIImage(systemName: "video")?.withRenderingMode(.alwaysTemplate)
+        let logo = UIImage(named: "appName")
         let imageView = UIImageView(image: logo)
-        imageView.tintColor = .black
-        imageView.frame.size.width = 80
-        imageView.frame.size.height = 80
+        imageView.frame.size.width = 44
+        imageView.frame.size.height = 44
         imageView.contentMode = .scaleAspectFit
+        imageView.clipsToBounds = true
         self.navigationItem.titleView = imageView
         let backItem = UIBarButtonItem()
         backItem.title = "Home"

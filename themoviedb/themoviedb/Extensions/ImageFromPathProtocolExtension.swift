@@ -29,12 +29,11 @@ extension ImageFromPathExtensionProtocol {
     private func set(image: UIImage?) {
         var newImage = image
         
+        if newImage == nil {
+            newImage = UIImage(named: "sleepLogo")
+        }
+        
         DispatchQueue.main.async { [weak self] in
-            if newImage == nil {
-                newImage = UIImage(systemName: "camera.fill")?.withRenderingMode(.alwaysTemplate)
-                self?.movieImageView?.tintColor = .lightGray
-                self?.movieImageView?.contentMode = .scaleAspectFit
-            }
             self?.movieImageView?.image = newImage
         }
     }

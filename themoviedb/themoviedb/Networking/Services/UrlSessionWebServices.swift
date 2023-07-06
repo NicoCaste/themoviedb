@@ -28,10 +28,8 @@ struct UrlSessionWebService: WebService {
                 return
             }
             
-            data.printAsJSON()
             switch result.statusCode {
             case 200..<300:
-                data.printAsJSON()
                 completion(.success(data))
             case 401:
                 completion(.failure(NetWorkingError.needRefreshToken))

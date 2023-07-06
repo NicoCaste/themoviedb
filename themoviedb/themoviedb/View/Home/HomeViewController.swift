@@ -25,7 +25,7 @@ class HomeViewController: BasicViewController {
         super.viewDidLoad()
         setSearchTextField()
         setTableView()
-        getMoviesAndReload(for: .discover)
+        getMoviesAndReload(for: .discover, for: .forPage(viewModel.getCurrentPage()))
     }
     
     private func setSearchTextField() {
@@ -45,9 +45,9 @@ class HomeViewController: BasicViewController {
         setTableViewLayout()
     }
     
-    func getMoviesAndReload(for path: ApiUrlHelper.PathForMovies) {
+    func getMoviesAndReload(for path: ApiUrlHelper.PathForMovies,for searchType: PersistenceController.SearchMovie) {
         Task.detached { [weak self] in
-            await self?.viewModel.getMovies(for: path)
+            await self?.viewModel.getMovies(for: path, with: searchType)
             await self?.tableView?.reloadTableView()
         }
     }
@@ -74,8 +74,9 @@ extension HomeViewController: GenericTableViewDelegate {
 extension HomeViewController: GenericSearchTextFieldDelegate {
     func userInput(text: String) {
         self.tableView?.backToTop()
+        viewModel.restarMovieList()
         let path = viewModel.getPathForUserInput(text: text)
-        getMoviesAndReload(for: path)
+        getMoviesAndReload(for: path, for: .forTitle(text))
     }
 }
 

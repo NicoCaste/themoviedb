@@ -33,7 +33,7 @@ class MovieCoverTableViewCell: UITableViewCell, ImageFromPathExtensionProtocol {
         imageView.translatesAutoresizingMaskIntoConstraints = false
         contentView.addSubview(imageView)
         imageView.clipsToBounds = true
-        imageView.contentMode = .scaleToFill
+        imageView.contentMode = .scaleAspectFill
 
         if let corner = imageSetting.corner {
             imageView.layer.masksToBounds = true 

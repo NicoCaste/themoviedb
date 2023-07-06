@@ -17,7 +17,6 @@ class LoaderImageHelper {
         guard let urlString, let url = URL(string: urlString) else {
             completion(nil)
             return
-            
         }
         
         let urlAbsoluteString = url.absoluteString
@@ -26,7 +25,7 @@ class LoaderImageHelper {
             return
         }
         
-        DispatchQueue.global(qos: .background).async { [weak self] in
+        DispatchQueue.global(qos: .userInitiated).async { [weak self] in
             do {
                 let data = try Data(contentsOf: url)
                 guard let image = UIImage(data: data) else {
