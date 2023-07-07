@@ -14,8 +14,8 @@ class HomeViewModelMock: BasicViewModel, HomeViewModelProtocol {
     var currentPage: Int = 1
     var numberOfRows = 10
     
-    override init() {
-        super.init()
+    init() {
+        super.init(repository: MovieRespositoryMock(responseType: .moviesResult))
     }
     
     func getCurrentPage() -> Int {
@@ -29,6 +29,7 @@ class HomeViewModelMock: BasicViewModel, HomeViewModelProtocol {
     func getMovies(for path: themoviedb.ApiUrlHelper.PathForMovies, with searchType: themoviedb.PersistenceController.SearchMovie) async {
         switch searchType {
         case .forPage(let page):
+            guard let page = page else { return }
             NotificationCenter.default.post(name: .callGetMovies, object: nil, userInfo: ["page": page])
         case .forTitle(let title):
             NotificationCenter.default.post(name: .callGetMovies, object: nil, userInfo: ["infoMovie": title])

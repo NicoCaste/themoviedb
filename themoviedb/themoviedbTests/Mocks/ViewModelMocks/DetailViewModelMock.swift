@@ -11,8 +11,9 @@ import UIKit
 
 class DetailViewModelMock: BasicViewModel, DetailViewModelProtocol {
     var allowedCells: [AllowedCells] = [.movieCover, .centerTitleTableViewCell,  .titleAndDescriptionTableViewCell]
-    override init() {
-        super.init()
+    init() {
+        let repository: TheMovieRepositoryProtocol = MovieRespositoryMock(responseType: .moviesResult)
+        super.init(repository: repository)
     }
     
     func getCell(for tableView: UITableView, in row: Int) -> UITableViewCell? {

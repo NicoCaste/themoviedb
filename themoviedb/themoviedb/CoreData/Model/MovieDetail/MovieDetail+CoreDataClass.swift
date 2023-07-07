@@ -39,13 +39,18 @@ public class MovieDetail:  NSManagedObject, Decodable {
         adult = ((try? values.decode(Bool.self, forKey: .adult)) != nil)
         backdropPath = try? values.decode(String.self, forKey: .backdropPath)
         genreIds = try? values.decode([Int].self, forKey: .genreIds) as NSObject
-        originalLanguage = try values.decode(String.self, forKey: .originalLanguage)
+        originalLanguage = try? values.decode(String.self, forKey: .originalLanguage)
         originalTitle = try? values.decode(String.self, forKey: .originalTitle)
         overview = try? values.decode(String.self, forKey: .overview)
         posterPath = try? values.decode(String.self, forKey: .posterPath)
         releaseDate = try? values.decode(String.self, forKey: .releaseDate)
-        voteAverage = try values.decode(Float.self, forKey: .voteAverage)
-        voteCount = try values.decode(Int32.self, forKey: .voteCount)
+        do {
+            voteAverage = try values.decode(Float.self, forKey: .voteAverage)
+            voteCount = try values.decode(Int32.self, forKey: .voteCount)
+        } catch {
+            voteAverage = 0
+            voteCount = 0
+        }
     }
 }
 

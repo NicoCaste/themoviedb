@@ -24,9 +24,9 @@ class DetailViewModel: BasicViewModel, DetailViewModelProtocol {
         case overview
     }
     
-    init(movieInfo: MovieDetail, gendersList: [GenreDetail]?) {
+    init(movieInfo: MovieDetail, gendersList: [GenreDetail]?, repository: TheMovieRepositoryProtocol) {
         self.movieInfo = movieInfo
-        super.init()
+        super.init(repository: repository)
         self.setMovieGenders(genderList: gendersList)
     }
     
