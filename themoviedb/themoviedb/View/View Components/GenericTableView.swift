@@ -14,16 +14,9 @@ enum AllowedCells: String {
     case titleAndDescriptionTableViewCell
 }
 
-@objc protocol GenericTableViewDelegate {
-    @objc func numberOfRowInSection() -> Int
-    @objc func cellForRowAt(tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell?
-    @objc optional func didSelectRow(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath)
-
-}
-
-class GenericTableView: UIView {
-    private lazy var tableView: UITableView = UITableView()
-    private var delegate: GenericTableViewDelegate
+class GenericTableView: UIView, GenericTableViewProtocol {
+    private(set) lazy var tableView: UITableView = UITableView()
+    private(set) var delegate: GenericTableViewDelegate
     
     init(cellsTypeList: [AllowedCells], delegate: GenericTableViewDelegate) {
         self.delegate = delegate
@@ -69,7 +62,9 @@ class GenericTableView: UIView {
     }
     
     func reloadTableView() {
-        tableView.reloadData()
+        DispatchQueue.main.async { [weak self] in
+            self?.tableView.reloadData()
+        }
     }
     
     func backToTop() {

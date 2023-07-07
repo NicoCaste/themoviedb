@@ -8,7 +8,9 @@
 import Foundation
 import UIKit
 
-class DetailViewModel: BasicViewModel {
+typealias DetailViewModelProtocol = ViewModelHandleInfoTableViewProtocol
+
+class DetailViewModel: BasicViewModel, DetailViewModelProtocol {
     private let movieInfo: MovieDetail
     private var movieGenders: String = ""
     private var basicFontSize: CGFloat = 16
@@ -28,7 +30,7 @@ class DetailViewModel: BasicViewModel {
         self.setMovieGenders(genderList: gendersList)
     }
     
-    func getNumbersOfCells() -> Int {
+    func getNumberOfRows() -> Int {
         DetailTableCases.allCases.count
     }
     
@@ -59,7 +61,8 @@ class DetailViewModel: BasicViewModel {
         movieInfo.posterPath
     }
     
-    func getCell(for tableView: UITableView, in rowCase: DetailTableCases?) -> UITableViewCell? {
+    func getCell(for tableView: UITableView, in row: Int) -> UITableViewCell? {
+        let rowCase = DetailViewModel.DetailTableCases(rawValue: row)
         var cell: UITableViewCell?
         switch rowCase {
         case .posterImage:

@@ -8,11 +8,13 @@
 import Foundation
 import UIKit
 
-class HomeViewModel: BasicViewModel {
+typealias HomeViewModelProtocol = ViewModelHandleInfoTableViewProtocol & ViewModelHandleApiMoviesProtocol & ViewModelHandleTextFieldProtocol & ViewModelHandleNextStepProtocol
+
+class HomeViewModel: BasicViewModel, HomeViewModelProtocol {
     var discoverMovies: MoviesResult?
     private var genders: Genre?
     private var getGendersPossibleRetries: Int = 3
-    let allowedCells: [AllowedCells] =  [.movieCover]
+    private(set) var allowedCells: [AllowedCells] =  [.movieCover]
     var currentPage: Int = 1
     
     override init() {

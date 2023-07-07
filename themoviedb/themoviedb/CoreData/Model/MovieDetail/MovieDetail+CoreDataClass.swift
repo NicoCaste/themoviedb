@@ -48,3 +48,36 @@ public class MovieDetail:  NSManagedObject, Decodable {
         voteCount = try values.decode(Int32.self, forKey: .voteCount)
     }
 }
+
+extension MovieDetail {
+    static func findForTitle(in context: NSManagedObjectContext, text: String) throws -> [MovieDetail] {
+        var newResults: [MovieDetail] = []
+        let request : NSFetchRequest<MovieDetail> = MovieDetail.fetchRequest()
+        if !text.isEmpty {
+            request.predicate = NSPredicate(format: "originalTitle CONTAINS[cd] %@", text)
+        }
+
+        newResults = try context.fetch(request)
+
+        return newResults
+    }
+    
+    static func filterByNewMovies(in results: NSOrderedSet, with context: NSManagedObjectContext? ) -> [MovieDetail] {
+        var newResults: [MovieDetail] = []
+        let request : NSFetchRequest<MovieDetail> = MovieDetail.fetchRequest()
+        guard let context  else { return [] }
+        for movie in results {
+            guard let movie = movie as? MovieDetail else { return newResults }
+            request.predicate = NSPredicate(format: "id == %i", movie.id)
+            
+            let numberOfRecords = try? context.count(for: request)
+            if numberOfRecords == 1 {
+                newResults.append(movie)
+            } else {
+                request.predicate = nil
+            }
+        }
+        
+        return newResults
+    }
+}

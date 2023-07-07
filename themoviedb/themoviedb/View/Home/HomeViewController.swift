@@ -8,11 +8,11 @@ import UIKit
 
 class HomeViewController: BasicViewController {
     private var searchTextField: GenericSearchTextField?
-    private var tableView: GenericTableView?
+    private var tableView: GenericTableViewProtocol?
    
-    private var viewModel: HomeViewModel
+    private var viewModel: HomeViewModelProtocol
     
-    required init(viewModel: HomeViewModel) {
+    required init(viewModel: HomeViewModelProtocol) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
     }

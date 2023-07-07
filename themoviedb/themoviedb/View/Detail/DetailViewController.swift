@@ -8,10 +8,10 @@
 import UIKit
 
 class DetailViewController: BasicViewController {
-    var tableView: GenericTableView?
-    let viewModel: DetailViewModel
+    var tableView: GenericTableViewProtocol?
+    let viewModel: DetailViewModelProtocol
     
-    required init(viewModel: DetailViewModel) {
+    required init(viewModel: DetailViewModelProtocol) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
     }
@@ -36,12 +36,11 @@ class DetailViewController: BasicViewController {
 
 extension DetailViewController: GenericTableViewDelegate {
     func numberOfRowInSection() -> Int {
-        viewModel.getNumbersOfCells()
+        viewModel.getNumberOfRows()
     }
     
     func cellForRowAt(tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell? {
-        let rowCase = DetailViewModel.DetailTableCases(rawValue: indexPath.row)
-        return viewModel.getCell(for: tableView, in: rowCase)
+        return viewModel.getCell(for: tableView, in: indexPath.row)
     }
 }
 
@@ -56,5 +55,4 @@ extension DetailViewController {
             tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
         ])
     }
-    
 }
