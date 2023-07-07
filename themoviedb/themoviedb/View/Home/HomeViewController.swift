@@ -8,7 +8,7 @@ import UIKit
 
 class HomeViewController: BasicViewController {
     private var searchTextField: GenericSearchTextField?
-    private var tableView: GenericTableViewProtocol?
+    var tableView: GenericTableViewProtocol?
    
     private var viewModel: HomeViewModelProtocol
     

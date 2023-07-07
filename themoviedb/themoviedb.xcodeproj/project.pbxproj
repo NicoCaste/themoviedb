@@ -49,6 +49,10 @@
 		0EF7F9DE2A578C3400DB998E /* ViewModelHandleNextStepProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EF7F9DD2A578C3400DB998E /* ViewModelHandleNextStepProtocol.swift */; };
 		0EF7F9E22A578E5E00DB998E /* GenericTableViewProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EF7F9E12A578E5E00DB998E /* GenericTableViewProtocol.swift */; };
 		0EF7F9E42A578E8B00DB998E /* GenericTableViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EF7F9E32A578E8B00DB998E /* GenericTableViewDelegate.swift */; };
+		0EF7F9E72A579EA300DB998E /* HomeViewControllerTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EF7F9E62A579EA300DB998E /* HomeViewControllerTest.swift */; };
+		0EF7F9EA2A57E33900DB998E /* HomeViewModelMocks.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EF7F9E92A57E33900DB998E /* HomeViewModelMocks.swift */; };
+		0EF7F9EC2A57E38C00DB998E /* GenericTableViewMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EF7F9EB2A57E38C00DB998E /* GenericTableViewMock.swift */; };
+		0EF7F9EF2A57E3BD00DB998E /* DetailViewModelMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EF7F9EE2A57E3BD00DB998E /* DetailViewModelMock.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -115,6 +119,10 @@
 		0EF7F9DD2A578C3400DB998E /* ViewModelHandleNextStepProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewModelHandleNextStepProtocol.swift; sourceTree = "<group>"; };
 		0EF7F9E12A578E5E00DB998E /* GenericTableViewProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GenericTableViewProtocol.swift; sourceTree = "<group>"; };
 		0EF7F9E32A578E8B00DB998E /* GenericTableViewDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GenericTableViewDelegate.swift; sourceTree = "<group>"; };
+		0EF7F9E62A579EA300DB998E /* HomeViewControllerTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewControllerTest.swift; sourceTree = "<group>"; };
+		0EF7F9E92A57E33900DB998E /* HomeViewModelMocks.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewModelMocks.swift; sourceTree = "<group>"; };
+		0EF7F9EB2A57E38C00DB998E /* GenericTableViewMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GenericTableViewMock.swift; sourceTree = "<group>"; };
+		0EF7F9EE2A57E3BD00DB998E /* DetailViewModelMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailViewModelMock.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -212,6 +220,8 @@
 		0E39A01A2A5290CF00B4193C /* themoviedbTests */ = {
 			isa = PBXGroup;
 			children = (
+				0EF7F9ED2A57E39E00DB998E /* Mocks */,
+				0EF7F9E52A579E6F00DB998E /* ViewModels */,
 				0E39A01B2A5290CF00B4193C /* themoviedbTests.swift */,
 			);
 			path = themoviedbTests;
@@ -384,6 +394,32 @@
 				0EF7F9E32A578E8B00DB998E /* GenericTableViewDelegate.swift */,
 			);
 			path = GenericTableView;
+			sourceTree = "<group>";
+		};
+		0EF7F9E52A579E6F00DB998E /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+				0EF7F9E62A579EA300DB998E /* HomeViewControllerTest.swift */,
+			);
+			path = ViewModels;
+			sourceTree = "<group>";
+		};
+		0EF7F9E82A57E31900DB998E /* ViewModelMocks */ = {
+			isa = PBXGroup;
+			children = (
+				0EF7F9EE2A57E3BD00DB998E /* DetailViewModelMock.swift */,
+				0EF7F9E92A57E33900DB998E /* HomeViewModelMocks.swift */,
+			);
+			path = ViewModelMocks;
+			sourceTree = "<group>";
+		};
+		0EF7F9ED2A57E39E00DB998E /* Mocks */ = {
+			isa = PBXGroup;
+			children = (
+				0EF7F9EB2A57E38C00DB998E /* GenericTableViewMock.swift */,
+				0EF7F9E82A57E31900DB998E /* ViewModelMocks */,
+			);
+			path = Mocks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -561,6 +597,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				0E39A01C2A5290CF00B4193C /* themoviedbTests.swift in Sources */,
+				0EF7F9E72A579EA300DB998E /* HomeViewControllerTest.swift in Sources */,
+				0EF7F9EF2A57E3BD00DB998E /* DetailViewModelMock.swift in Sources */,
+				0EF7F9EA2A57E33900DB998E /* HomeViewModelMocks.swift in Sources */,
+				0EF7F9EC2A57E38C00DB998E /* GenericTableViewMock.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
