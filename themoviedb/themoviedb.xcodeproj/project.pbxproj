@@ -49,6 +49,13 @@
 		0EF7F9DE2A578C3400DB998E /* ViewModelHandleNextStepProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EF7F9DD2A578C3400DB998E /* ViewModelHandleNextStepProtocol.swift */; };
 		0EF7F9E22A578E5E00DB998E /* GenericTableViewProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EF7F9E12A578E5E00DB998E /* GenericTableViewProtocol.swift */; };
 		0EF7F9E42A578E8B00DB998E /* GenericTableViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EF7F9E32A578E8B00DB998E /* GenericTableViewDelegate.swift */; };
+		0EF7F9E72A579EA300DB998E /* HomeViewControllerTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EF7F9E62A579EA300DB998E /* HomeViewControllerTest.swift */; };
+		0EF7F9EA2A57E33900DB998E /* HomeViewModelMocks.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EF7F9E92A57E33900DB998E /* HomeViewModelMocks.swift */; };
+		0EF7F9EC2A57E38C00DB998E /* GenericTableViewMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EF7F9EB2A57E38C00DB998E /* GenericTableViewMock.swift */; };
+		0EF7F9EF2A57E3BD00DB998E /* DetailViewModelMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EF7F9EE2A57E3BD00DB998E /* DetailViewModelMock.swift */; };
+		0EF7F9F22A57EB4400DB998E /* HomeViewModelTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EF7F9F12A57EB4400DB998E /* HomeViewModelTest.swift */; };
+		0EF7F9F52A5813C200DB998E /* WebServiceMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EF7F9F42A5813C200DB998E /* WebServiceMock.swift */; };
+		0EF7F9F72A5813FD00DB998E /* MovieRepositoryMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EF7F9F62A5813FD00DB998E /* MovieRepositoryMock.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -115,6 +122,13 @@
 		0EF7F9DD2A578C3400DB998E /* ViewModelHandleNextStepProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewModelHandleNextStepProtocol.swift; sourceTree = "<group>"; };
 		0EF7F9E12A578E5E00DB998E /* GenericTableViewProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GenericTableViewProtocol.swift; sourceTree = "<group>"; };
 		0EF7F9E32A578E8B00DB998E /* GenericTableViewDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GenericTableViewDelegate.swift; sourceTree = "<group>"; };
+		0EF7F9E62A579EA300DB998E /* HomeViewControllerTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewControllerTest.swift; sourceTree = "<group>"; };
+		0EF7F9E92A57E33900DB998E /* HomeViewModelMocks.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewModelMocks.swift; sourceTree = "<group>"; };
+		0EF7F9EB2A57E38C00DB998E /* GenericTableViewMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GenericTableViewMock.swift; sourceTree = "<group>"; };
+		0EF7F9EE2A57E3BD00DB998E /* DetailViewModelMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailViewModelMock.swift; sourceTree = "<group>"; };
+		0EF7F9F12A57EB4400DB998E /* HomeViewModelTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewModelTest.swift; sourceTree = "<group>"; };
+		0EF7F9F42A5813C200DB998E /* WebServiceMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebServiceMock.swift; sourceTree = "<group>"; };
+		0EF7F9F62A5813FD00DB998E /* MovieRepositoryMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieRepositoryMock.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -212,6 +226,9 @@
 		0E39A01A2A5290CF00B4193C /* themoviedbTests */ = {
 			isa = PBXGroup;
 			children = (
+				0EF7F9F02A57EB2E00DB998E /* ViewModel */,
+				0EF7F9ED2A57E39E00DB998E /* Mocks */,
+				0EF7F9E52A579E6F00DB998E /* ViewController */,
 				0E39A01B2A5290CF00B4193C /* themoviedbTests.swift */,
 			);
 			path = themoviedbTests;
@@ -384,6 +401,50 @@
 				0EF7F9E32A578E8B00DB998E /* GenericTableViewDelegate.swift */,
 			);
 			path = GenericTableView;
+			sourceTree = "<group>";
+		};
+		0EF7F9E52A579E6F00DB998E /* ViewController */ = {
+			isa = PBXGroup;
+			children = (
+				0EF7F9E62A579EA300DB998E /* HomeViewControllerTest.swift */,
+			);
+			path = ViewController;
+			sourceTree = "<group>";
+		};
+		0EF7F9E82A57E31900DB998E /* ViewModelMocks */ = {
+			isa = PBXGroup;
+			children = (
+				0EF7F9EE2A57E3BD00DB998E /* DetailViewModelMock.swift */,
+				0EF7F9E92A57E33900DB998E /* HomeViewModelMocks.swift */,
+			);
+			path = ViewModelMocks;
+			sourceTree = "<group>";
+		};
+		0EF7F9ED2A57E39E00DB998E /* Mocks */ = {
+			isa = PBXGroup;
+			children = (
+				0EF7F9F32A58136600DB998E /* NetWorking */,
+				0EF7F9EB2A57E38C00DB998E /* GenericTableViewMock.swift */,
+				0EF7F9E82A57E31900DB998E /* ViewModelMocks */,
+			);
+			path = Mocks;
+			sourceTree = "<group>";
+		};
+		0EF7F9F02A57EB2E00DB998E /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				0EF7F9F12A57EB4400DB998E /* HomeViewModelTest.swift */,
+			);
+			path = ViewModel;
+			sourceTree = "<group>";
+		};
+		0EF7F9F32A58136600DB998E /* NetWorking */ = {
+			isa = PBXGroup;
+			children = (
+				0EF7F9F42A5813C200DB998E /* WebServiceMock.swift */,
+				0EF7F9F62A5813FD00DB998E /* MovieRepositoryMock.swift */,
+			);
+			path = NetWorking;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -560,7 +621,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0EF7F9F52A5813C200DB998E /* WebServiceMock.swift in Sources */,
 				0E39A01C2A5290CF00B4193C /* themoviedbTests.swift in Sources */,
+				0EF7F9E72A579EA300DB998E /* HomeViewControllerTest.swift in Sources */,
+				0EF7F9EF2A57E3BD00DB998E /* DetailViewModelMock.swift in Sources */,
+				0EF7F9F22A57EB4400DB998E /* HomeViewModelTest.swift in Sources */,
+				0EF7F9EA2A57E33900DB998E /* HomeViewModelMocks.swift in Sources */,
+				0EF7F9F72A5813FD00DB998E /* MovieRepositoryMock.swift in Sources */,
+				0EF7F9EC2A57E38C00DB998E /* GenericTableViewMock.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

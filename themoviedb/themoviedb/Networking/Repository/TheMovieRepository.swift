@@ -6,8 +6,15 @@
 //
 
 import Foundation
+@testable import themoviedb
 
-final class TheMovieRepository {
+protocol TheMovieRepositoryProtocol {
+    var webService: WebService {get}
+    func getBasicRequest(url: URL, components: URLComponents) -> URLRequest
+    func getDataFromMoviesApi(for path: ApiUrlHelper.PathForMovies, page: Int?, includeVideo: Bool?, includeAdult: Bool?) async throws -> Result<Data, Error>
+}
+
+final class TheMovieRepository: TheMovieRepositoryProtocol {
     var webService: WebService
     static private var apiKey = "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJmZDc2ZTE0NWExMDYwYzMwOTBjYzUyYTM5ZjI1ZjE0MCIsInN1YiI6IjY0YTNjNDljZTlkYTY5MDEwMTQ3NmQwZCIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.KbijbMuTqucX0s2AKlNQtbcFNoE2oqWTbY8CntkMWus"
     private var headers =  [ "accept": "application/json", "Authorization": apiKey ]

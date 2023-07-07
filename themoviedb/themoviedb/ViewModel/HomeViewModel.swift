@@ -12,13 +12,13 @@ typealias HomeViewModelProtocol = ViewModelHandleInfoTableViewProtocol & ViewMod
 
 class HomeViewModel: BasicViewModel, HomeViewModelProtocol {
     var discoverMovies: MoviesResult?
-    private var genders: Genre?
+    private(set) var genders: Genre?
     private var getGendersPossibleRetries: Int = 3
     private(set) var allowedCells: [AllowedCells] =  [.movieCover]
     var currentPage: Int = 1
     
-    override init() {
-        super.init()
+    override init(repository: TheMovieRepositoryProtocol) {
+        super.init(repository: repository)
         Task.detached { [weak self] in
             await self?.getGenreList()
         }
@@ -26,13 +26,13 @@ class HomeViewModel: BasicViewModel, HomeViewModelProtocol {
 
     func getDetailInfo(movie index: Int) -> BasicViewController? {
         guard let movie = discoverMovies?.results?[index] as? MovieDetail else { return nil}
-        let vieWModel = DetailViewModel(movieInfo: movie, gendersList: genders?.genres)
+        let vieWModel = DetailViewModel(movieInfo: movie, gendersList: genders?.genres, repository: self.repository)
         return DetailViewController(viewModel: vieWModel)
     }
     
-    private func getGenreList() async {
+    func getGenreList() async {
         do {
-            let response = try await repository.getDataFromMoviesApi(for: .genre)
+            let response = try await repository.getDataFromMoviesApi(for: .genre, page: nil, includeVideo: nil, includeAdult: nil)
             switch response {
             case .success(let data):
                 self.genders = try await data.decodedObject()

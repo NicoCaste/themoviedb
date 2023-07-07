@@ -8,10 +8,9 @@
 import Foundation
 
 class BasicViewModel {
-    var repository: TheMovieRepository
+    var repository: TheMovieRepositoryProtocol
     
-    init() {
-        let webService = UrlSessionWebService()
-        self.repository = TheMovieRepository(webService: webService)
+    init(repository: TheMovieRepositoryProtocol) {
+        self.repository = repository
     }
 }
