@@ -17,6 +17,7 @@ class PersistenceController {
     
     private init() {}
     
+    //MARK: Genre
     func getGenreList() -> [GenreDetail]? {
         var genreList: [GenreDetail] = []
         let request = NSFetchRequest<NSFetchRequestResult>(entityName: "GenreDetail")
@@ -48,10 +49,11 @@ class PersistenceController {
         }
     }
     
+    //MARK: Movie
     func save(movieResult: MoviesResult, page: Int32, results: NSOrderedSet) {
         do {
-            guard let context  else { return }
-            let newResults: [MovieDetail] = getOnlyNewMovies(from: results)
+            guard let context else { return }
+            let newResults: [MovieDetail] = MovieDetail.filterByNewMovies(in: results, with: context)
             
             if !newResults.isEmpty {
                 movieResult.page = page
@@ -65,26 +67,7 @@ class PersistenceController {
             print("Error saving context \(error)")
         }
     }
-    
-    private func getOnlyNewMovies(from results: NSOrderedSet) -> [MovieDetail] {
-        var newResults: [MovieDetail] = []
-        let request : NSFetchRequest<MovieDetail> = MovieDetail.fetchRequest()
-        guard let context  else { return [] }
-        for movie in results {
-            guard let movie = movie as? MovieDetail else { return newResults }
-            request.predicate = NSPredicate(format: "id == %i", movie.id)
-            
-            let numberOfRecords = try? context.count(for: request)
-            if numberOfRecords == 1 {
-                newResults.append(movie)
-            } else {
-                request.predicate = nil
-            }
-        }
-        
-        return newResults
-    }
-    
+
     enum SearchMovie {
         case forPage(Int?)
         case forTitle(String)
@@ -102,15 +85,17 @@ class PersistenceController {
         return movies
     }
     
+    //MARK: - Movie Filter by Page
     private func filter(by page: Int?) -> MoviesResult? {
         var movies: MoviesResult?
         let result = try? MoviesResult.findForPage(in: context!, page: page ?? 1)
+        
         if movies == nil {
             movies = result?.first
         }
         
         if let movies = movies {
-            var currentMovies = NSMutableOrderedSet()
+            let currentMovies = NSMutableOrderedSet()
             for pageMovie in result ?? [] {
                 guard let results = pageMovie.results else { continue }
                 currentMovies.addObjects(from: results.array)
@@ -122,10 +107,11 @@ class PersistenceController {
         return movies
     }
     
+    //MARK: - Movie Filter by title
     private func filter(by title: String?, currentPage: Int?) -> MoviesResult? {
         var movies: MoviesResult?
         guard let context = context, let title = title else { return nil }
-        let result = try? MoviesResult.findForTitle(in: context, text: title)
+        let result = try? MovieDetail.findForTitle(in: context, text: title)
         if movies == nil {
             movies = MoviesResult(context: context)
             movies?.results = NSOrderedSet(array: result ?? [])

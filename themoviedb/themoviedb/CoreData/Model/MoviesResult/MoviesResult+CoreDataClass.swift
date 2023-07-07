@@ -47,18 +47,6 @@ extension MoviesResult {
         
         return  moviesResults
     }
-
-    static func findForTitle(in context: NSManagedObjectContext, text: String) throws -> [MovieDetail] {
-        var newResults: [MovieDetail] = []
-        let request : NSFetchRequest<MovieDetail> = MovieDetail.fetchRequest()
-        if !text.isEmpty {
-            request.predicate = NSPredicate(format: "originalTitle CONTAINS[cd] %@", text)
-        }
-
-        newResults = try context.fetch(request)
-
-        return newResults
-    }
     
     static func findForPage(in context: NSManagedObjectContext, page: Int) throws -> [MoviesResult] {
         var newResults: [MoviesResult] = []
