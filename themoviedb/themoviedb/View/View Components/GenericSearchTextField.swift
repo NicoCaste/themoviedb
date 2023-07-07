@@ -31,7 +31,7 @@ class GenericSearchTextField: UIView {
     }
     
     //MARK: - SetNewArtistsTextField
-    func setCharactersTextField() {
+    private func setCharactersTextField() {
         guard let textField = textField else { return }
         textField.addTarget(self, action: #selector(textFieldDidChange(_:)), for: .editingChanged)
         
@@ -53,7 +53,7 @@ class GenericSearchTextField: UIView {
     }
     
     // This function wait 1 second without typing and made de search.
-    func findMovie(from inputText: String) {
+    private func findMovie(from inputText: String) {
         if searchTimer != nil {
             searchTimer?.invalidate()
             searchTimer = nil
@@ -80,7 +80,7 @@ class GenericSearchTextField: UIView {
 }
 
 extension GenericSearchTextField {
-    func setTextFieldLayout() {
+    private func setTextFieldLayout() {
         guard let textField else { return }
         NSLayoutConstraint.activate([
             textField.topAnchor.constraint(equalTo: self.safeAreaLayoutGuide.topAnchor),

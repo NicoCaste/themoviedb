@@ -47,6 +47,7 @@ class MovieCoverTableViewCell: UITableViewCell, ImageFromPathExtensionProtocol {
         movieTitleLabel.translatesAutoresizingMaskIntoConstraints = false
         contentView.addSubview(movieTitleLabel)
         let textValues = UILabel.TextValues(text: movieTitle.capitalized, fontSize: 20, font: .NotoSansMyanmarBold, numberOfLines: 2, aligment: .left, textColor: .white)
+        
         movieTitleLabel.set(with: textValues)
         movieTitleLabel.sizeToFit()
         movieTitleLabel.setContentHuggingPriority(.required, for: .vertical)
@@ -56,6 +57,7 @@ class MovieCoverTableViewCell: UITableViewCell, ImageFromPathExtensionProtocol {
         layoutMovieTitleLabel()
     }
     
+    //gray background for title.
     func setBlurView(movieTitle: String?) {
         guard movieTitle != nil else { return }
         blurview.translatesAutoresizingMaskIntoConstraints = false
