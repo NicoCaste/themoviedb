@@ -45,6 +45,12 @@ extension TheMovieRepository {
     }
     
     func getDataFromMoviesApi(for path: ApiUrlHelper.PathForMovies, page: Int? = nil, includeVideo: Bool? = nil, includeAdult: Bool? = nil) async throws -> Result<Data, Error> {
+        
+        //enviroment for UITesting
+        if ProcessInfo.processInfo.environment["ui_test_variable"] == "verbose" {
+            return Result<Data,Error>(catching: jsonForTest)
+        }
+        
         let url = ApiUrlHelper.makeURL(for: .theMovieApi, url: path)
         let queryItems = getQueryItemsForMovies(page: page, includeVideo: includeVideo, includeAdult: includeAdult)
         var nsurl = NSURL(string: url) as? URL
@@ -55,6 +61,16 @@ extension TheMovieRepository {
         request.allHTTPHeaderFields = headers
         return try await getFromWebServices(request: request)
     }
+    
+    private func jsonForTest() throws -> Data {
+        guard let path = Bundle.main.path(forResource: "MoviesResult", ofType: "json") else { throw NetWorkingError.unknowError }
+
+        let url = URL(fileURLWithPath: path)
+
+        let data = try Data(contentsOf: url)
+        return data
+    }
+    
     
     private func getQueryItemsForMovies(page: Int?, includeVideo: Bool?, includeAdult: Bool?) -> [URLQueryItem] {
         var queryItems: [URLQueryItem] = []

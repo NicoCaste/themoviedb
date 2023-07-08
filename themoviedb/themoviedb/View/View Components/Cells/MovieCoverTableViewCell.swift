@@ -17,6 +17,7 @@ class MovieCoverTableViewCell: UITableViewCell, ImageFromPathExtensionProtocol {
         var width: CGFloat?
         var height: CGFloat?
         var corner: CGFloat?
+        var image: UIImage?
     }
     
     func populate(movieTitle: String?, imageSetting: ImageSetting) {
@@ -28,18 +29,27 @@ class MovieCoverTableViewCell: UITableViewCell, ImageFromPathExtensionProtocol {
 
     private func setMovieImage(imageSetting: ImageSetting) {
         guard let imageView = movieImageView else { return }
-        setMovieImage(from: nil)
-        setMovieImage(from: imageSetting.imagePath)
+        set(image: imageSetting)
         imageView.translatesAutoresizingMaskIntoConstraints = false
         contentView.addSubview(imageView)
         imageView.clipsToBounds = true
         imageView.contentMode = .scaleAspectFill
-
         if let corner = imageSetting.corner {
             imageView.layer.masksToBounds = true 
             imageView.layer.cornerRadius = corner
         }
         layoutMovieImageView(imageSetting: imageSetting)
+    }
+    
+    func set(image: ImageSetting) {
+        guard let imageView = movieImageView else { return }
+        
+        if let uiImage = image.image {
+            imageView.image = uiImage
+        } else {
+            setMovieImage(from: nil)
+            setMovieImage(from: image.imagePath)
+        }
     }
 
     func setTitleConfig(movieTitle: String?) {

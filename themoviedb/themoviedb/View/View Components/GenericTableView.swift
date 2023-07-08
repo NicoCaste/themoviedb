@@ -18,6 +18,7 @@ class GenericTableView: UIView, GenericTableViewProtocol {
     private(set) lazy var tableView: UITableView = UITableView()
     private(set) var delegate: GenericTableViewDelegate?
     private(set) var viewModel: ViewModelHandleInfoTableViewProtocol
+    private var numberOfRows: Int = 0
     
     init(cellsTypeList: [AllowedCells], delegate: GenericTableViewDelegate? = nil,  viewModel: ViewModelHandleInfoTableViewProtocol) {
         self.delegate = delegate
@@ -46,7 +47,9 @@ class GenericTableView: UIView, GenericTableViewProtocol {
     }
     
     private func cellsNeeded(with cellsType: [AllowedCells]) {
-        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "EmptyListGenericCell")
+        //obligatory rows
+        tableView.register(MovieCoverTableViewCell.self, forCellReuseIdentifier: AllowedCells.movieCover.rawValue)
+        tableView.register(CenterTitleTableViewCell.self, forCellReuseIdentifier: AllowedCells.centerTitleTableViewCell.rawValue)
         
         for cell in cellsType {
             register(cell: cell)
@@ -55,12 +58,10 @@ class GenericTableView: UIView, GenericTableViewProtocol {
     
     private func register(cell: AllowedCells) {
         switch cell {
-        case .movieCover:
-            tableView.register(MovieCoverTableViewCell.self, forCellReuseIdentifier: cell.rawValue)
         case .titleAndDescriptionTableViewCell:
             tableView.register(TitleAndDescriptionTableViewCell.self, forCellReuseIdentifier: cell.rawValue)
-        case .centerTitleTableViewCell:
-            tableView.register(CenterTitleTableViewCell.self, forCellReuseIdentifier: cell.rawValue)
+        default:
+            break
         }
     }
     
@@ -73,17 +74,51 @@ class GenericTableView: UIView, GenericTableViewProtocol {
     func backToTop() {
         tableView.setContentOffset(.zero, animated: true)
     }
+    
+    private enum EmptyCaseCells: Int, CaseIterable {
+        case image
+        case title
+    }
+    
+    private func getEmptyResultCell(for tableView: UITableView, in row: Int) -> UITableViewCell? {
+        switch EmptyCaseCells(rawValue: row)  {
+        case .image:
+            let cell = tableView.dequeueReusableCell(withIdentifier: AllowedCells.movieCover.rawValue) as? MovieCoverTableViewCell
+            let height: CGFloat? = 200
+            let image = UIImage(named: "sadLogo")
+            let imageSetting = MovieCoverTableViewCell.ImageSetting(imagePath: nil, width: nil, height: height, corner: 10, image: image)
+            
+            cell?.populate(movieTitle: nil, imageSetting: imageSetting)
+            return cell
+        case .title:
+            let cell = tableView.dequeueReusableCell(withIdentifier: AllowedCells.centerTitleTableViewCell.rawValue) as? CenterTitleTableViewCell
+            
+            cell?.populate(title: "Sorry, no results found")
+            return cell
+        default:
+            return nil
+        }
+        
+    }
 }
 
 extension GenericTableView:  UITableViewDelegate, UITableViewDataSource, UITableViewDataSourcePrefetching {
     // MARK: - Number Of Rows
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return viewModel.getNumberOfRows()
+        numberOfRows = viewModel.getNumberOfRows()
+        let showRows = numberOfRows == 0 ? EmptyCaseCells.allCases.count : numberOfRows
+        tableView.allowsSelection = !(numberOfRows == 0)
+        return showRows
     }
     
     // MARK: - Cell For Row
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        return viewModel.getCell(for: tableView, in: indexPath.row)  ?? UITableViewCell()
+        let emptyCell = UITableViewCell()
+        if numberOfRows == 0 {
+            return getEmptyResultCell(for: tableView, in: indexPath.row) ?? emptyCell
+        } else {
+            return viewModel.getCell(for: tableView, in: indexPath.row)  ?? emptyCell
+        }
     }
     
     // MARK: - Did Select Row

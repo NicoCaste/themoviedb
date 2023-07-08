@@ -9,12 +9,12 @@ import Foundation
 import UIKit
 import CoreData
 
-@MainActor
 class PersistenceController {
     var context: NSManagedObjectContext
-    
-    init(context: NSManagedObjectContext = CoreDataStack.shared.mainContext) {
+    var backgroundContext: NSManagedObjectContext
+    init(context: NSManagedObjectContext = CoreDataStack.shared.mainContext, backgroundContext: NSManagedObjectContext = CoreDataStack.shared.backgroundContext) {
         self.context = context
+        self.backgroundContext = backgroundContext
     }
     
     //MARK: Genre
@@ -50,19 +50,21 @@ class PersistenceController {
     
     //MARK: Movie
     func save(movieResult: MoviesResult, page: Int32, results: NSOrderedSet) {
-        do {
-            let newResults: [MovieDetail] = MovieDetail.filterByNewMovies(in: results, with: context)
-            
-            if !newResults.isEmpty {
-                movieResult.page = page
-                movieResult.results = NSOrderedSet(array: newResults)
-                try context.save()
+        movieResult.page = page
+        movieResult.results = results
+        
+        backgroundContext.perform {
+            do {
+                let newResults: [MovieDetail] = MovieDetail.filterByNewMovies(in: results, with: self.context)
+                
+                if !newResults.isEmpty {
+                    movieResult.page = page
+                    movieResult.results = NSOrderedSet(array: newResults)
+                    try self.backgroundContext.save()
+                }
+            } catch {
+                print("Error saving context \(error)")
             }
-            
-            movieResult.page = page
-            movieResult.results = results
-        } catch {
-            print("Error saving context \(error)")
         }
     }
 

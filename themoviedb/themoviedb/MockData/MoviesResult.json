@@ -7,7 +7,7 @@
                  25
                ],
                "adult": false,
-               "backdrop_path": "/27u4kBGGOQLqizEudJAOWMkvhip.jpg",
+               "backdrop_path": "",
                "id": 385687,
                "original_title": "Movie Test",
                "vote_average": 7.2999999999999998,
@@ -25,7 +25,7 @@
                  37
                ],
                "adult": false,
-               "backdrop_path": "/fhquRW28vRZHr26orSaFFnhYIA0.jpg",
+               "backdrop_path": "",
                "id": 697843,
                "original_title": "Extraction 2",
                "vote_average": 7.5999999999999996,
@@ -44,7 +44,7 @@
                  25
                ],
                "adult": false,
-               "backdrop_path": "/27u4kBGGOQLqizEudJAOWMkvhip.jpg",
+               "backdrop_path": "",
                "id": 385687,
                "original_title": "Second Movie",
                "vote_average": 7.2999999999999998,
@@ -62,9 +62,9 @@
                  37
                ],
                "adult": false,
-               "backdrop_path": "/fhquRW28vRZHr26orSaFFnhYIA0.jpg",
+               "backdrop_path": "",
                "id": 697843,
-               "original_title": "Extraction 2",
+               "original_title": "Extraction 3",
                "vote_average": 7.5999999999999996,
                "popularity": 1904.432,
                "poster_path": "/7gKI9hpEMcZUQpNgKrkDzJpbnNS.jpg",

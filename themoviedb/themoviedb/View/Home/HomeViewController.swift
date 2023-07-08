@@ -46,9 +46,13 @@ class HomeViewController: BasicViewController {
     }
     
     func getMoviesAndReload(for path: ApiUrlHelper.PathForMovies,for searchType: PersistenceController.SearchMovie) {
+        let currentNumbersOfRows = viewModel.getNumberOfRows()
         Task.detached { [weak self] in
             await self?.viewModel.getMovies(for: path, with: searchType)
-            await self?.tableView?.reloadTableView()
+            let newNumbersofRows = await self?.viewModel.getNumberOfRows() ?? 0
+            if currentNumbersOfRows != newNumbersofRows || newNumbersofRows == 0 {
+                await self?.tableView?.reloadTableView()
+            }
         }
     }
 }

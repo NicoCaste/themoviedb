@@ -16,7 +16,7 @@ class HomeViewModel: BasicViewModel, HomeViewModelProtocol {
     var prefetch: [Int: UITableViewCell] = [:]
     private(set) var genders: Genre?
     private var getGendersPossibleRetries: Int = 3
-    private(set) var allowedCells: [AllowedCells] =  [.movieCover]
+    private(set) var allowedCells: [AllowedCells] =  [.movieCover, .centerTitleTableViewCell]
     var currentPage: Int = 1
     var persistence: PersistenceController?
     var movieList: [MovieDetail] = []
@@ -113,8 +113,11 @@ class HomeViewModel: BasicViewModel, HomeViewModelProtocol {
     }
     
     @MainActor func setMovieList() {
-        let discover = self.discoverMovies?.results?.array as? [MovieDetail] ?? []
-        movieList.append(contentsOf: discover)
+        if let discover = self.discoverMovies?.results?.array as? [MovieDetail], !discover.isEmpty  {
+            movieList.append(contentsOf: discover)
+        } else {
+            movieList = []
+        }
     }
     
     private func getPage(for searchType: PersistenceController.SearchMovie) -> Int? {
@@ -147,9 +150,10 @@ class HomeViewModel: BasicViewModel, HomeViewModelProtocol {
     
     func getCell(for tableView: UITableView, in row: Int) -> UITableViewCell? {
         let existPrefetch = prefetch.contains(where: {$0.key == row})
-        
         if existPrefetch {
-            return prefetch[row]
+            let cell = prefetch[row]
+            prefetch[row] = nil
+            return cell
         } else {
             guard let movie = movieList[safe: row] else { return nil }
             let cell = tableView.dequeueReusableCell(withIdentifier: AllowedCells.movieCover.rawValue) as? MovieCoverTableViewCell
@@ -162,10 +166,13 @@ class HomeViewModel: BasicViewModel, HomeViewModelProtocol {
     }
     
     func savePrefetchCell(for tableView: UITableView, in indexPaths: [IndexPath]) {
-        for path in indexPaths {
-            if !prefetch.contains(where: {$0.key == path.row}) {
-                let cell = getCell(for: tableView, in: path.row)
-                prefetch[path.row] = cell
+        if movieList.isEmpty { return }
+        DispatchQueue.main.async {
+            for path in indexPaths {
+                if !self.prefetch.contains(where: {$0.key == path.row}) {
+                    let cell = self.getCell(for: tableView, in: path.row)
+                    self.prefetch[path.row] = cell
+                }
             }
         }
     }
@@ -180,5 +187,4 @@ extension Array {
 
         return self[index]
     }
-
 }
