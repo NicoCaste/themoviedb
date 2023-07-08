@@ -33,7 +33,7 @@ public class MoviesResult: NSManagedObject, Decodable {
     private func saveMoviesResult(page: Int32?, results: NSOrderedSet?) {
         guard let page, let results else { return }
         DispatchQueue.main.async {
-            PersistenceController.shared.save(movieResult: self, page: page, results: results)
+            PersistenceController().save(movieResult: self, page: page, results: results)
         }
     }
 }

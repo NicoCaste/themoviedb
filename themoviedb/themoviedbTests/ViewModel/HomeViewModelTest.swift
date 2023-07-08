@@ -15,7 +15,7 @@ final class HomeViewModelTest: XCTestCase {
     var movieDetail: MovieDetail!
     
     @MainActor override func setUpWithError() throws {
-        guard let context = PersistenceController.shared.context else { throw NetWorkingError.unknowError }
+        let context = PersistenceController().context
         movieResult = MoviesResult(context: context)
         movieDetail = MovieDetail(context: context)
         movieDetail.id = 1

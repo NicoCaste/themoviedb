@@ -16,11 +16,19 @@ class HomeViewModel: BasicViewModel, HomeViewModelProtocol {
     private var getGendersPossibleRetries: Int = 3
     private(set) var allowedCells: [AllowedCells] =  [.movieCover]
     var currentPage: Int = 1
+    var persistence: PersistenceController?
     
     override init(repository: TheMovieRepositoryProtocol) {
         super.init(repository: repository)
         Task.detached { [weak self] in
             await self?.getGenreList()
+        }
+        self.setPersistence()
+    }
+    
+    func setPersistence() {
+        DispatchQueue.main.async {
+            self.persistence = PersistenceController()
         }
     }
 
@@ -64,13 +72,13 @@ class HomeViewModel: BasicViewModel, HomeViewModelProtocol {
     
     private func getGendreListFromCoreData() -> [GenreDetail] {
         DispatchQueue.main.sync {
-            return PersistenceController.shared.getGenreList() ?? []
+            return persistence?.getGenreList() ?? []
         }
     }
     
     private func getMovieResultFromCoreData(for searchType: PersistenceController.SearchMovie) -> MoviesResult? {
         DispatchQueue.main.sync {
-            return PersistenceController.shared.getMovieResult(for: searchType, currentPage: currentPage)
+            return persistence?.getMovieResult(for: searchType, currentPage: currentPage)
         }
     }
     

@@ -43,6 +43,9 @@
 		0E39A0A42A5636F400B4193C /* MovieDetail+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E39A0A02A5636F400B4193C /* MovieDetail+CoreDataProperties.swift */; };
 		0E39A0A92A563D7F00B4193C /* MoviesResult+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E39A0A72A563D7F00B4193C /* MoviesResult+CoreDataClass.swift */; };
 		0E39A0AA2A563D7F00B4193C /* MoviesResult+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E39A0A82A563D7F00B4193C /* MoviesResult+CoreDataProperties.swift */; };
+		0E4EDB562A58C6660027BFD0 /* CoreDataStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E4EDB552A58C6660027BFD0 /* CoreDataStack.swift */; };
+		0E4EDB592A58CDAB0027BFD0 /* CoreDataTestStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E4EDB582A58CDAB0027BFD0 /* CoreDataTestStack.swift */; };
+		0E4EDB5B2A58CDFE0027BFD0 /* PersistenceControllerTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E4EDB5A2A58CDFE0027BFD0 /* PersistenceControllerTest.swift */; };
 		0EF7F9D82A578BD300DB998E /* ViewModelHandleInfoTableViewProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EF7F9D72A578BD300DB998E /* ViewModelHandleInfoTableViewProtocol.swift */; };
 		0EF7F9DA2A578C0700DB998E /* ViewModelHandleApiMoviesProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EF7F9D92A578C0700DB998E /* ViewModelHandleApiMoviesProtocol.swift */; };
 		0EF7F9DC2A578C1C00DB998E /* ViewModelHandleTextFieldProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EF7F9DB2A578C1C00DB998E /* ViewModelHandleTextFieldProtocol.swift */; };
@@ -116,6 +119,9 @@
 		0E39A0A02A5636F400B4193C /* MovieDetail+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MovieDetail+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		0E39A0A72A563D7F00B4193C /* MoviesResult+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MoviesResult+CoreDataClass.swift"; sourceTree = "<group>"; };
 		0E39A0A82A563D7F00B4193C /* MoviesResult+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MoviesResult+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		0E4EDB552A58C6660027BFD0 /* CoreDataStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = CoreDataStack.swift; path = ../../../../../.Trash/themoviedb/themoviedb/themoviedb/CoreData/CoreDataStack.swift; sourceTree = "<group>"; };
+		0E4EDB582A58CDAB0027BFD0 /* CoreDataTestStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = CoreDataTestStack.swift; path = ../../../../../CoreDataTestStack.swift; sourceTree = "<group>"; };
+		0E4EDB5A2A58CDFE0027BFD0 /* PersistenceControllerTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = PersistenceControllerTest.swift; path = ../../../../../PersistenceControllerTest.swift; sourceTree = "<group>"; };
 		0EF7F9D72A578BD300DB998E /* ViewModelHandleInfoTableViewProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewModelHandleInfoTableViewProtocol.swift; sourceTree = "<group>"; };
 		0EF7F9D92A578C0700DB998E /* ViewModelHandleApiMoviesProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewModelHandleApiMoviesProtocol.swift; sourceTree = "<group>"; };
 		0EF7F9DB2A578C1C00DB998E /* ViewModelHandleTextFieldProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewModelHandleTextFieldProtocol.swift; sourceTree = "<group>"; };
@@ -226,6 +232,7 @@
 		0E39A01A2A5290CF00B4193C /* themoviedbTests */ = {
 			isa = PBXGroup;
 			children = (
+				0E4EDB572A58CD150027BFD0 /* CoreData */,
 				0EF7F9F02A57EB2E00DB998E /* ViewModel */,
 				0EF7F9ED2A57E39E00DB998E /* Mocks */,
 				0EF7F9E52A579E6F00DB998E /* ViewController */,
@@ -361,6 +368,7 @@
 			children = (
 				0E39A07E2A556FD500B4193C /* Model */,
 				0E39A07F2A55748200B4193C /* PersistenceController.swift */,
+				0E4EDB552A58C6660027BFD0 /* CoreDataStack.swift */,
 			);
 			path = CoreData;
 			sourceTree = "<group>";
@@ -373,6 +381,15 @@
 				0E2948BE2A56437500EB5ABA /* MoviesResult */,
 			);
 			path = Model;
+			sourceTree = "<group>";
+		};
+		0E4EDB572A58CD150027BFD0 /* CoreData */ = {
+			isa = PBXGroup;
+			children = (
+				0E4EDB582A58CDAB0027BFD0 /* CoreDataTestStack.swift */,
+				0E4EDB5A2A58CDFE0027BFD0 /* PersistenceControllerTest.swift */,
+			);
+			path = CoreData;
 			sourceTree = "<group>";
 		};
 		0EF7F9D62A578BB200DB998E /* Protocols */ = {
@@ -604,6 +621,7 @@
 				0E39A0432A52CD9B00B4193C /* MovieCoverTableViewCell.swift in Sources */,
 				0E39A0AA2A563D7F00B4193C /* MoviesResult+CoreDataProperties.swift in Sources */,
 				0E39A0832A557A2C00B4193C /* GenreDetail+CoreDataClass.swift in Sources */,
+				0E4EDB562A58C6660027BFD0 /* CoreDataStack.swift in Sources */,
 				0E39A00C2A5290CE00B4193C /* themoviedb.xcdatamodeld in Sources */,
 				0E39A0522A53F63500B4193C /* ExtensionData+PrintJson.swift in Sources */,
 				0E39A0582A54040F00B4193C /* ApiUrlHelper.swift in Sources */,
@@ -623,12 +641,14 @@
 			files = (
 				0EF7F9F52A5813C200DB998E /* WebServiceMock.swift in Sources */,
 				0E39A01C2A5290CF00B4193C /* themoviedbTests.swift in Sources */,
+				0E4EDB592A58CDAB0027BFD0 /* CoreDataTestStack.swift in Sources */,
 				0EF7F9E72A579EA300DB998E /* HomeViewControllerTest.swift in Sources */,
 				0EF7F9EF2A57E3BD00DB998E /* DetailViewModelMock.swift in Sources */,
 				0EF7F9F22A57EB4400DB998E /* HomeViewModelTest.swift in Sources */,
 				0EF7F9EA2A57E33900DB998E /* HomeViewModelMocks.swift in Sources */,
 				0EF7F9F72A5813FD00DB998E /* MovieRepositoryMock.swift in Sources */,
 				0EF7F9EC2A57E38C00DB998E /* GenericTableViewMock.swift in Sources */,
+				0E4EDB5B2A58CDFE0027BFD0 /* PersistenceControllerTest.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
