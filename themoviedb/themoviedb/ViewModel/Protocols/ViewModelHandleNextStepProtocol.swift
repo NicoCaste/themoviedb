@@ -6,7 +6,9 @@
 //
 
 import Foundation
+import UIKit
 
-protocol ViewModelHandleNextStepProtocol: BasicViewModel {
+protocol ViewModelHandleTableViewDataSourceProtocol: BasicViewModel {
     func getDetailInfo(movie index: Int) -> BasicViewController?
+    func savePrefetchCell(for tableView: UITableView, in indexPaths: [IndexPath])
 }

@@ -34,6 +34,7 @@ class GenericTableView: UIView, GenericTableViewProtocol {
     private func setTableView(with cellsTypeList: [AllowedCells]) {
         tableView.delegate = self
         tableView.dataSource = self
+        tableView.prefetchDataSource = self
         tableView.separatorStyle = .none
         tableView.allowsSelection =  delegate.didSelectRow != nil ? true : false
         cellsNeeded(with: cellsTypeList)
@@ -72,7 +73,7 @@ class GenericTableView: UIView, GenericTableViewProtocol {
     }
 }
 
-extension GenericTableView:  UITableViewDelegate, UITableViewDataSource {
+extension GenericTableView:  UITableViewDelegate, UITableViewDataSource, UITableViewDataSourcePrefetching {
     // MARK: - Number Of Rows
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return delegate.numberOfRowInSection()
@@ -86,6 +87,10 @@ extension GenericTableView:  UITableViewDelegate, UITableViewDataSource {
     // MARK: - Did Select Row
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         delegate.didSelectRow?(tableView, didSelectRowAt: indexPath)
+    }
+    
+    func tableView(_ tableView: UITableView, prefetchRowsAt indexPaths: [IndexPath]) {
+        delegate.prefetchRowsAt?(tableView: tableView, prefetchRowsAt: indexPaths)
     }
 }
 

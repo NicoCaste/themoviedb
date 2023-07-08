@@ -8,10 +8,11 @@
 import Foundation
 import UIKit
 
-typealias HomeViewModelProtocol = ViewModelHandleInfoTableViewProtocol & ViewModelHandleApiMoviesProtocol & ViewModelHandleTextFieldProtocol & ViewModelHandleNextStepProtocol
+typealias HomeViewModelProtocol = ViewModelHandleInfoTableViewProtocol & ViewModelHandleApiMoviesProtocol & ViewModelHandleTextFieldProtocol & ViewModelHandleTableViewDataSourceProtocol
 
 class HomeViewModel: BasicViewModel, HomeViewModelProtocol {
     var discoverMovies: MoviesResult?
+    var prefetch: [Int: UITableViewCell] = [:]
     private(set) var genders: Genre?
     private var getGendersPossibleRetries: Int = 3
     private(set) var allowedCells: [AllowedCells] =  [.movieCover]
@@ -53,7 +54,8 @@ class HomeViewModel: BasicViewModel, HomeViewModelProtocol {
     }
     
     func restarMovieList() {
-        discoverMovies = nil 
+        discoverMovies = nil
+        prefetch = [:]
     }
     
     private func doGenreListCatch() async {
@@ -121,12 +123,27 @@ class HomeViewModel: BasicViewModel, HomeViewModelProtocol {
     }
     
     func getCell(for tableView: UITableView, in row: Int) -> UITableViewCell? {
-        guard let movie = discoverMovies?.results?[row] as? MovieDetail else { return nil }
-        let cell = tableView.dequeueReusableCell(withIdentifier: AllowedCells.movieCover.rawValue) as? MovieCoverTableViewCell
-        let height: CGFloat? = 200
-        let imageSetting = MovieCoverTableViewCell.ImageSetting(imagePath: movie.backdropPath, width: nil, height: height, corner: 10)
+        let existPrefetch = prefetch.contains(where: {$0.key == row})
         
-        cell?.populate(movieTitle: movie.originalTitle, imageSetting: imageSetting)
-        return cell
+        if existPrefetch {
+            return prefetch[row]
+        } else {
+            guard let movie = discoverMovies?.results?[row] as? MovieDetail else { return nil }
+            let cell = tableView.dequeueReusableCell(withIdentifier: AllowedCells.movieCover.rawValue) as? MovieCoverTableViewCell
+            let height: CGFloat? = 200
+            let imageSetting = MovieCoverTableViewCell.ImageSetting(imagePath: movie.backdropPath, width: nil, height: height, corner: 10)
+            
+            cell?.populate(movieTitle: movie.originalTitle, imageSetting: imageSetting)
+            return cell
+        }
+    }
+    
+    func savePrefetchCell(for tableView: UITableView, in indexPaths: [IndexPath]) {
+        for path in indexPaths {
+            if !prefetch.contains(where: {$0.key == path.row}) {
+                let cell = getCell(for: tableView, in: path.row)
+                prefetch[path.row] = cell
+            }
+        }
     }
 }
