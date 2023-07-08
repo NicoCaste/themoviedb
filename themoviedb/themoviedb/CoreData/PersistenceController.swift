@@ -110,19 +110,10 @@ class PersistenceController {
         var movies: MoviesResult?
         guard let title = title else { return nil }
         let result = try? MovieDetail.findForTitle(in: context, text: title)
-        if movies == nil {
-            movies = MoviesResult(context: context)
-            movies?.results = NSOrderedSet(array: result ?? [])
-            movies?.page = Int32(currentPage ?? 1)
-        } else {
-            guard let moviesResults = movies?.results,
-                  let currentMoviesResult = result
-            else { return nil }
-            
-            let newList = NSMutableOrderedSet(array: moviesResults.array)
-            newList.addObjects(from: currentMoviesResult)
-            movies?.results = newList
-        }
+        movies = MoviesResult(context: context)
+        movies?.results = NSOrderedSet(array: result ?? [])
+        movies?.page = Int32(currentPage ?? 1)
+
         return movies
     }
 }
