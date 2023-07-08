@@ -16,10 +16,12 @@ enum AllowedCells: String {
 
 class GenericTableView: UIView, GenericTableViewProtocol {
     private(set) lazy var tableView: UITableView = UITableView()
-    private(set) var delegate: GenericTableViewDelegate
+    private(set) var delegate: GenericTableViewDelegate?
+    private(set) var viewModel: ViewModelHandleInfoTableViewProtocol
     
-    init(cellsTypeList: [AllowedCells], delegate: GenericTableViewDelegate) {
+    init(cellsTypeList: [AllowedCells], delegate: GenericTableViewDelegate? = nil,  viewModel: ViewModelHandleInfoTableViewProtocol) {
         self.delegate = delegate
+        self.viewModel = viewModel
         super.init(frame: .zero)
         tableView.backgroundColor = .white
         self.backgroundColor = .white
@@ -36,7 +38,7 @@ class GenericTableView: UIView, GenericTableViewProtocol {
         tableView.dataSource = self
         tableView.prefetchDataSource = self
         tableView.separatorStyle = .none
-        tableView.allowsSelection =  delegate.didSelectRow != nil ? true : false
+        tableView.allowsSelection =  delegate?.didSelectRow != nil ? true : false
         cellsNeeded(with: cellsTypeList)
         tableView.translatesAutoresizingMaskIntoConstraints = false
         self.addSubview(tableView)
@@ -76,27 +78,27 @@ class GenericTableView: UIView, GenericTableViewProtocol {
 extension GenericTableView:  UITableViewDelegate, UITableViewDataSource, UITableViewDataSourcePrefetching {
     // MARK: - Number Of Rows
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return delegate.numberOfRowInSection()
+        return viewModel.getNumberOfRows()
     }
     
     // MARK: - Cell For Row
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        return delegate.cellForRowAt(tableView: tableView, cellForRowAt: indexPath) ?? UITableViewCell()
+        return viewModel.getCell(for: tableView, in: indexPath.row)  ?? UITableViewCell()
     }
     
     // MARK: - Did Select Row
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        delegate.didSelectRow?(tableView, didSelectRowAt: indexPath)
+        delegate?.didSelectRow?(tableView, didSelectRowAt: indexPath)
     }
     
     //MARK: - Prefetch
     func tableView(_ tableView: UITableView, prefetchRowsAt indexPaths: [IndexPath]) {
-        delegate.prefetchRowsAt?(tableView: tableView, prefetchRowsAt: indexPaths)
+        delegate?.prefetchRowsAt?(tableView: tableView, prefetchRowsAt: indexPaths)
     }
     
     //MARK: - Will Display
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        delegate.willDisplay?(tableView, willDisplay: cell, forRowAt: indexPath)
+        delegate?.willDisplay?(tableView, willDisplay: cell, forRowAt: indexPath)
     }
 }
 

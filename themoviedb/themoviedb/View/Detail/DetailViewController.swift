@@ -26,21 +26,11 @@ class DetailViewController: BasicViewController {
     }
     
     private func setTableView() {
-        tableView = GenericTableView(cellsTypeList: viewModel.allowedCells, delegate: self)
+        tableView = GenericTableView(cellsTypeList: viewModel.allowedCells, viewModel: viewModel)
         guard let tableView  else { return }
         self.view.addSubview(tableView)
         tableView.translatesAutoresizingMaskIntoConstraints = false
         setTableViewLayout()
-    }
-}
-
-extension DetailViewController: GenericTableViewDelegate {
-    func numberOfRowInSection() -> Int {
-        viewModel.getNumberOfRows()
-    }
-    
-    func cellForRowAt(tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell? {
-        return viewModel.getCell(for: tableView, in: indexPath.row)
     }
 }
 

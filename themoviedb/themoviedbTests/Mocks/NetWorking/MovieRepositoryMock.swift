@@ -67,13 +67,11 @@ extension MovieRespositoryMock {
             "page": 1,
             "results": [
             {
-                "original_title": "Test Movie",
+                "original_title": "test movie",
                 "id": 37,
                 "vote_count": 1,
-                "vote_average: 1,
-                "original_language": "en"
-            }
-            ]
+                "vote_average": 1
+            }]
         }
         """
         let jsonData = Data(jsonString.utf8)

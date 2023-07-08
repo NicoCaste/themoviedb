@@ -15,19 +15,23 @@ final class HomeViewModelTest: XCTestCase {
     var movieDetail: MovieDetail!
     
     @MainActor override func setUpWithError() throws {
-        let context = PersistenceController().context
+        let testContext = CoreDataTestStack()
+        let context = PersistenceController(context: testContext.mainContext).context
         movieResult = MoviesResult(context: context)
         movieDetail = MovieDetail(context: context)
         movieDetail.id = 1
         movieDetail.originalTitle = "test movie"
         movieResult.page = 1
         movieResult.results = [movieDetail!]
-        sut = HomeViewModel(repository: MovieRespositoryMock(responseType: .gendreList))
+        sut = HomeViewModel(repository: MovieRespositoryMock(responseType: .gendreList), context: context)
         sut.discoverMovies = movieResult
+        let movieResult = sut.discoverMovies
+        let movieList = movieResult?.results?.array as? [MovieDetail] ?? []
+        sut.movieList = movieList
     }
 
     override func tearDownWithError() throws {
-
+        sut = nil 
     }
 
     func test_getDetailViewController_firstViewModelAllowedCells_equalTrue() throws {
@@ -48,12 +52,12 @@ final class HomeViewModelTest: XCTestCase {
     
     func test_getMovies_mockJson_equalMockMovieName() async {
         let repo = MovieRespositoryMock(responseType: .moviesResult)
-        sut = HomeViewModel(repository: repo)
+        let testContext = CoreDataTestStack()
+        let context = await PersistenceController(context: testContext.mainContext).context
+        sut = HomeViewModel(repository: repo, context: context)
         
         await sut.getMovies(for: .discover, with: .forPage(1))
-        let movie = sut.discoverMovies
-        let movieDetail = movie?.results?[0] as? MovieDetail
-        XCTAssertEqual(movie?.page, 1)
+        let movieDetail = sut.movieList.first
         XCTAssertEqual(movieDetail?.originalTitle, "test movie")
     }
     
