@@ -18,6 +18,7 @@ class HomeViewModel: BasicViewModel, HomeViewModelProtocol {
     private(set) var allowedCells: [AllowedCells] =  [.movieCover]
     var currentPage: Int = 1
     var persistence: PersistenceController?
+    var movieList: [MovieDetail] = []
     
     override init(repository: TheMovieRepositoryProtocol) {
         super.init(repository: repository)
@@ -34,7 +35,7 @@ class HomeViewModel: BasicViewModel, HomeViewModelProtocol {
     }
 
     func getDetailInfo(movie index: Int) -> BasicViewController? {
-        guard let movie = discoverMovies?.results?[index] as? MovieDetail else { return nil}
+        guard let movie = movieList[safe: index] else { return nil}
         let vieWModel = DetailViewModel(movieInfo: movie, gendersList: genders?.genres, repository: self.repository)
         return DetailViewController(viewModel: vieWModel)
     }
@@ -55,6 +56,7 @@ class HomeViewModel: BasicViewModel, HomeViewModelProtocol {
     
     func restarMovieList() {
         discoverMovies = nil
+        movieList = []
         prefetch = [:]
     }
     
@@ -91,12 +93,20 @@ class HomeViewModel: BasicViewModel, HomeViewModelProtocol {
            switch response {
            case .success(let data):
                discoverMovies = try await data.decodedObject()
+               await setMovieList()
            case .failure(_):
                discoverMovies = getMovieResultFromCoreData(for: searchType)
+               await setMovieList()
             }
         } catch {
             discoverMovies = getMovieResultFromCoreData(for: searchType)
+            await setMovieList()
         }
+    }
+    
+    @MainActor func setMovieList() {
+        let discover = self.discoverMovies?.results?.array as? [MovieDetail] ?? []
+        movieList.append(contentsOf: discover)
     }
     
     private func getPage(for searchType: PersistenceController.SearchMovie) -> Int? {
@@ -111,6 +121,11 @@ class HomeViewModel: BasicViewModel, HomeViewModelProtocol {
     func getCurrentPage() -> Int {
         currentPage
     }
+    
+    func nextPage() -> Int {
+        currentPage += 1
+        return currentPage
+    }
 
     func getPathForUserInput(text: String) -> ApiUrlHelper.PathForMovies {
         let textUrlAllowed = text.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)
@@ -119,7 +134,7 @@ class HomeViewModel: BasicViewModel, HomeViewModelProtocol {
     }
     
     func getNumberOfRows() -> Int {
-        return discoverMovies?.results?.count ?? 0
+        return movieList.count
     }
     
     func getCell(for tableView: UITableView, in row: Int) -> UITableViewCell? {
@@ -128,7 +143,7 @@ class HomeViewModel: BasicViewModel, HomeViewModelProtocol {
         if existPrefetch {
             return prefetch[row]
         } else {
-            guard let movie = discoverMovies?.results?[row] as? MovieDetail else { return nil }
+            guard let movie = movieList[safe: row] else { return nil }
             let cell = tableView.dequeueReusableCell(withIdentifier: AllowedCells.movieCover.rawValue) as? MovieCoverTableViewCell
             let height: CGFloat? = 200
             let imageSetting = MovieCoverTableViewCell.ImageSetting(imagePath: movie.backdropPath, width: nil, height: height, corner: 10)
@@ -146,4 +161,16 @@ class HomeViewModel: BasicViewModel, HomeViewModelProtocol {
             }
         }
     }
+}
+
+extension Array {
+
+    subscript(safe index: Int) -> Element? {
+        guard indices.contains(index) else {
+            return nil
+        }
+
+        return self[index]
+    }
+
 }

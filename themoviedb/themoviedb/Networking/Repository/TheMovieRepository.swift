@@ -6,7 +6,6 @@
 //
 
 import Foundation
-@testable import themoviedb
 
 protocol TheMovieRepositoryProtocol {
     var webService: WebService {get}

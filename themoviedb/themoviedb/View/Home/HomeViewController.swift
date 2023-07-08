@@ -72,6 +72,13 @@ extension HomeViewController: GenericTableViewDelegate {
     func prefetchRowsAt(tableView: UITableView, prefetchRowsAt indexPaths: [IndexPath]) {
         viewModel.savePrefetchCell(for: tableView, in: indexPaths)
     }
+    
+    func willDisplay(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        if indexPath.row == viewModel.getNumberOfRows() - 3 {
+            let page = viewModel.nextPage()
+            getMoviesAndReload(for: .discover, for: .forPage(page))
+        }
+    }
 }
 
 //MARK: - SearchTextField Delegate

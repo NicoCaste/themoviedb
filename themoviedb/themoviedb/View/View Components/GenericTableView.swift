@@ -89,8 +89,14 @@ extension GenericTableView:  UITableViewDelegate, UITableViewDataSource, UITable
         delegate.didSelectRow?(tableView, didSelectRowAt: indexPath)
     }
     
+    //MARK: - Prefetch
     func tableView(_ tableView: UITableView, prefetchRowsAt indexPaths: [IndexPath]) {
         delegate.prefetchRowsAt?(tableView: tableView, prefetchRowsAt: indexPaths)
+    }
+    
+    //MARK: - Will Display
+    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        delegate.willDisplay?(tableView, willDisplay: cell, forRowAt: indexPath)
     }
 }
 

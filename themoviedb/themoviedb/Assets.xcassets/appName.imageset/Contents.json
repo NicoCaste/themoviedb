@@ -1,16 +1,17 @@
 {
   "images" : [
     {
-      "filename" : "22 sin título_20230706154950.jpg",
+      "filename" : "appName.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
+      "filename" : "appName@2x.png",
       "idiom" : "universal",
       "scale" : "2x"
     },
     {
-      "filename" : "22 sin título_20230706154950 1.jpg",
+      "filename" : "appName@3x.png",
       "idiom" : "universal",
       "scale" : "3x"
     }

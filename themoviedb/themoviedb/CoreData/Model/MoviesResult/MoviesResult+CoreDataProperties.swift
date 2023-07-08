@@ -2,7 +2,7 @@
 //  MoviesResult+CoreDataProperties.swift
 //  themoviedb
 //
-//  Created by nicolas castello on 06/07/2023.
+//  Created by nicolas castello on 08/07/2023.
 //
 //
 

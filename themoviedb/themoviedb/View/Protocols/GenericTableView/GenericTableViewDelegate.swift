@@ -13,5 +13,6 @@ import UIKit
     @objc func cellForRowAt(tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell?
     @objc optional func didSelectRow(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath)
     @objc optional func prefetchRowsAt(tableView: UITableView, prefetchRowsAt indexPaths: [IndexPath])
+    @objc optional func willDisplay(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath)
 
 }
