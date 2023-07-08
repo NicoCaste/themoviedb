@@ -38,7 +38,7 @@ class HomeViewController: BasicViewController {
     }
     
     private func setTableView() {
-        tableView = GenericTableView(cellsTypeList: viewModel.allowedCells, delegate: self)
+        tableView = GenericTableView(cellsTypeList: viewModel.allowedCells, delegate: self, viewModel: viewModel)
         guard let tableView  else { return }
         self.view.addSubview(tableView)
         tableView.translatesAutoresizingMaskIntoConstraints = false
@@ -55,14 +55,6 @@ class HomeViewController: BasicViewController {
 
 //MARK: - TableView Delegate
 extension HomeViewController: GenericTableViewDelegate {
-    func numberOfRowInSection() -> Int {
-        viewModel.getNumberOfRows()
-    }
-    
-    func cellForRowAt(tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell? {
-        viewModel.getCell(for: tableView, in: indexPath.row)
-    }
-    
     //MARK: Action Delegate
     func didSelectRow(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         guard let viewController = viewModel.getDetailInfo(movie: indexPath.row) else { return }

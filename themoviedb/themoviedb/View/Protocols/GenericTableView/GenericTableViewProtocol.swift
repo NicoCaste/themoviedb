@@ -9,7 +9,7 @@ import Foundation
 import UIKit
 
 protocol GenericTableViewProtocol: UIView {
-    var delegate: GenericTableViewDelegate { get }
+    var delegate: GenericTableViewDelegate? { get }
     var tableView: UITableView {get}
     func reloadTableView()
     func backToTop()

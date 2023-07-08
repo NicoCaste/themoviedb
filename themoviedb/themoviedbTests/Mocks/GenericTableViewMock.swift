@@ -10,7 +10,7 @@ import UIKit
 @testable import themoviedb
 
 class GenericTableViewMock: UIView, GenericTableViewProtocol, GenericTableViewDelegate {
-    var delegate: themoviedb.GenericTableViewDelegate
+    var delegate: themoviedb.GenericTableViewDelegate?
     var tableView: UITableView = UITableView()
     
     init(delegate: GenericTableViewDelegate) {

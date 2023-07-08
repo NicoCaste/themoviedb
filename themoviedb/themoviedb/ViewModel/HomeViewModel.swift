@@ -7,6 +7,7 @@
 
 import Foundation
 import UIKit
+import CoreData
 
 typealias HomeViewModelProtocol = ViewModelHandleInfoTableViewProtocol & ViewModelHandleApiMoviesProtocol & ViewModelHandleTextFieldProtocol & ViewModelHandleTableViewDataSourceProtocol
 
@@ -19,8 +20,11 @@ class HomeViewModel: BasicViewModel, HomeViewModelProtocol {
     var currentPage: Int = 1
     var persistence: PersistenceController?
     var movieList: [MovieDetail] = []
+    private var context: NSManagedObjectContext?
     
-    override init(repository: TheMovieRepositoryProtocol) {
+    required init(repository: TheMovieRepositoryProtocol, context: NSManagedObjectContext? = nil) {
+        self.context = context
+        
         super.init(repository: repository)
         Task.detached { [weak self] in
             await self?.getGenreList()
@@ -30,7 +34,11 @@ class HomeViewModel: BasicViewModel, HomeViewModelProtocol {
     
     func setPersistence() {
         DispatchQueue.main.async {
-            self.persistence = PersistenceController()
+            if let context = self.context {
+                self.persistence = PersistenceController(context: context)
+            } else {
+                self.persistence = PersistenceController()
+            }
         }
     }
 

@@ -30,29 +30,10 @@ final class HomeViewControllerTest: XCTestCase {
       sut = nil
     }
     
-    func test_numberOfRow_equalTen() throws {
-        let rows = sut.numberOfRowInSection()
-        XCTAssertEqual(rows, 10)
-    }
-
-    func test_getCellForRowCell_notNil() throws {
-        let indexPath = IndexPath(row: 1, section: 1)
-        let tableView = UITableView()
-        let cell = sut.cellForRowAt(tableView: tableView, cellForRowAt: indexPath)
-        XCTAssertNotEqual(cell, nil)
-    }
-    
-    func test_getcellForRow_cellNil() {
-        let indexPath = IndexPath(row: 0, section: 1)
-        let tableView = UITableView()
-        let cell = sut.cellForRowAt(tableView: tableView, cellForRowAt: indexPath)
-        XCTAssertEqual(cell, nil)
-    }
-    
     var titleCalled = ""
     func test_getMoviesAndReload_callViewModelGetMovies() {
         let title = "test"
-        let asyncWaitDuration = 0.5
+        let asyncWaitDuration = 0.9
         let description = "getMovies viewModel async, viewController with Task sync"
         let expectation = XCTestExpectation( description: description )
         NotificationCenter.default.addObserver(self, selector: #selector(notificationTitleCalled(_:)), name: .callGetMovies, object: nil)

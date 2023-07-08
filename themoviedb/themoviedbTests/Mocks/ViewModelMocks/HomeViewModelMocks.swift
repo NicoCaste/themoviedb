@@ -54,4 +54,12 @@ class HomeViewModelMock: BasicViewModel, HomeViewModelProtocol {
     func getPathForUserInput(text: String) -> themoviedb.ApiUrlHelper.PathForMovies {
         return .search(forText: text )
     }
+    
+    func nextPage() -> Int {
+        1
+    }
+    
+    func savePrefetchCell(for tableView: UITableView, in indexPaths: [IndexPath]) {
+        
+    }
 }
