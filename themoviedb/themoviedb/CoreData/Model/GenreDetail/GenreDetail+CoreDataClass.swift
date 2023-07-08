@@ -26,13 +26,13 @@ public class GenreDetail: NSManagedObject, Decodable {
         
         name = try values.decode(String.self, forKey: .name)
         id = try values.decode(Int64.self, forKey: .id)
-        saveGenreDetail(id: id, name: name)
+        saveGenreDetail()
     }
     
-    private func saveGenreDetail(id: Int64, name: String?) {
+    private func saveGenreDetail() {
         guard let name else { return }
         DispatchQueue.main.async {
-            PersistenceController.shared.saveGenreDetail(id: id, name: name)
+            PersistenceController().saveGenreDetail(genreDetail: self)
         }
     }
 }
