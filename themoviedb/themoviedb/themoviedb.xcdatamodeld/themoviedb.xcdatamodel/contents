@@ -16,11 +16,11 @@
         <attribute name="releaseDate" optional="YES" attributeType="String"/>
         <attribute name="voteAverage" optional="YES" attributeType="Float" defaultValueString="0.0" usesScalarValueType="YES"/>
         <attribute name="voteCount" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
-        <relationship name="moviesResult" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="MoviesResult"/>
+        <relationship name="moviesResult" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="MoviesResult" inverseName="results" inverseEntity="MoviesResult"/>
     </entity>
     <entity name="MoviesResult" representedClassName="MoviesResult" syncable="YES">
         <attribute name="page" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="totalResults" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
-        <relationship name="results" optional="YES" toMany="YES" deletionRule="Nullify" ordered="YES" destinationEntity="MovieDetail"/>
+        <relationship name="results" optional="YES" toMany="YES" deletionRule="Nullify" ordered="YES" destinationEntity="MovieDetail" inverseName="moviesResult" inverseEntity="MovieDetail"/>
     </entity>
 </model>

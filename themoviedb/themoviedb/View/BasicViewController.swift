@@ -15,12 +15,12 @@ class BasicViewController: UIViewController {
         overrideUserInterfaceStyle = .light
         configNavBar()
     }
-
+    
     private func configNavBar() {
         let logo = UIImage(named: "appName")
         let imageView = UIImageView(image: logo)
-        imageView.frame.size.width = 44
-        imageView.frame.size.height = 44
+        imageView.frame.size.width = 200
+        imageView.frame.size.height = 240
         imageView.contentMode = .scaleAspectFit
         imageView.clipsToBounds = true
         self.navigationItem.titleView = imageView

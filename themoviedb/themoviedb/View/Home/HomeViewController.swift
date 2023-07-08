@@ -9,7 +9,7 @@ import UIKit
 class HomeViewController: BasicViewController {
     private var searchTextField: GenericSearchTextField?
     var tableView: GenericTableViewProtocol?
-   
+    var prefetch: [Int: UITableViewCell] = [:]
     private var viewModel: HomeViewModelProtocol
     
     required init(viewModel: HomeViewModelProtocol) {
@@ -67,6 +67,17 @@ extension HomeViewController: GenericTableViewDelegate {
     func didSelectRow(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         guard let viewController = viewModel.getDetailInfo(movie: indexPath.row) else { return }
         navigationController?.pushViewController(viewController, animated: true)
+    }
+    
+    func prefetchRowsAt(tableView: UITableView, prefetchRowsAt indexPaths: [IndexPath]) {
+        viewModel.savePrefetchCell(for: tableView, in: indexPaths)
+    }
+    
+    func willDisplay(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        if indexPath.row == viewModel.getNumberOfRows() - 3 {
+            let page = viewModel.nextPage()
+            getMoviesAndReload(for: .discover, for: .forPage(page))
+        }
     }
 }
 
