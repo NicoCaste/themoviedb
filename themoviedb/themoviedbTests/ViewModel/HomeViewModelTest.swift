@@ -53,7 +53,7 @@ final class HomeViewModelTest: XCTestCase {
     func test_getMovies_mockJson_equalMockMovieName() async {
         let repo = MovieRespositoryMock(responseType: .moviesResult)
         let testContext = CoreDataTestStack()
-        let context = await PersistenceController(context: testContext.mainContext).context
+        let context = PersistenceController(context: testContext.mainContext).context
         sut = HomeViewModel(repository: repo, context: context)
         
         await sut.getMovies(for: .discover, with: .forPage(1))

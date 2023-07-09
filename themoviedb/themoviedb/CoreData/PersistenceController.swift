@@ -12,6 +12,7 @@ import CoreData
 class PersistenceController {
     var context: NSManagedObjectContext
     var backgroundContext: NSManagedObjectContext
+    
     init(context: NSManagedObjectContext = CoreDataStack.shared.mainContext, backgroundContext: NSManagedObjectContext = CoreDataStack.shared.backgroundContext) {
         self.context = context
         self.backgroundContext = backgroundContext
@@ -49,21 +50,21 @@ class PersistenceController {
     }
     
     //MARK: Movie
-    func save(movieResult: MoviesResult, page: Int32, results: NSOrderedSet) {
+    @MainActor func save(movieResult: MoviesResult, page: Int32, results: NSOrderedSet) {
         movieResult.page = page
         movieResult.results = results
-        
-        backgroundContext.perform {
-            do {
-                let newResults: [MovieDetail] = MovieDetail.filterByNewMovies(in: results, with: self.context)
-                
-                if !newResults.isEmpty {
-                    movieResult.page = page
-                    movieResult.results = NSOrderedSet(array: newResults)
-                    try self.backgroundContext.save()
+        let newResults: [MovieDetail] = MovieDetail.filterByNewMovies(in: results, with: self.context)
+        DispatchQueue.global(qos: .background).async {
+            self.backgroundContext.perform {
+                do {
+                    if !newResults.isEmpty {
+                        movieResult.page = page
+                        movieResult.results = NSOrderedSet(array: newResults)
+                        try self.backgroundContext.save()
+                    }
+                } catch {
+                    print("Error saving context \(error)")
                 }
-            } catch {
-                print("Error saving context \(error)")
             }
         }
     }

@@ -15,16 +15,9 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         guard let windowScene = (scene as? UIWindowScene) else { return }
         let window = UIWindow(windowScene: windowScene)
         let webService = UrlSessionWebService()
-        let isUitestEnviroment = ProcessInfo.processInfo.environment["ui_test_variable"] == "verbose"
         let repository = TheMovieRepository(webService: webService)
         var viewModel: HomeViewModel!
-        
-        if isUitestEnviroment {
-            viewModel = HomeViewModel(repository: repository, context: nil )
-        } else {
-            viewModel = HomeViewModel(repository: repository)
-        }
-        
+        viewModel = HomeViewModel(repository: repository)
         let navController = UINavigationController(rootViewController: HomeViewController(viewModel: viewModel))
         window.rootViewController = navController
         self.window = window

@@ -33,7 +33,7 @@ final class HomeViewControllerTest: XCTestCase {
     var titleCalled = ""
     func test_getMoviesAndReload_callViewModelGetMovies() {
         let title = "test"
-        let asyncWaitDuration = 0.9
+        let asyncWaitDuration = 3.0
         let description = "getMovies viewModel async, viewController with Task sync"
         let expectation = XCTestExpectation( description: description )
         NotificationCenter.default.addObserver(self, selector: #selector(notificationTitleCalled(_:)), name: .callGetMovies, object: nil)

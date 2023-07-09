@@ -12,15 +12,16 @@ import CoreData
 typealias HomeViewModelProtocol = ViewModelHandleInfoTableViewProtocol & ViewModelHandleApiMoviesProtocol & ViewModelHandleTextFieldProtocol & ViewModelHandleTableViewDataSourceProtocol
 
 class HomeViewModel: BasicViewModel, HomeViewModelProtocol {
-    var discoverMovies: MoviesResult?
-    var prefetch: [Int: UITableViewCell] = [:]
     private(set) var genders: Genre?
     private var getGendersPossibleRetries: Int = 3
     private(set) var allowedCells: [AllowedCells] =  [.movieCover, .centerTitleTableViewCell]
-    var currentPage: Int = 1
+    private var context: NSManagedObjectContext?
+    
+    var discoverMovies: MoviesResult?
+    var prefetch: [Int: UITableViewCell] = [:]
+    var startPage: Int = 1
     var persistence: PersistenceController?
     var movieList: [MovieDetail] = []
-    private var context: NSManagedObjectContext?
     
     required init(repository: TheMovieRepositoryProtocol, context: NSManagedObjectContext? = nil) {
         self.context = context
@@ -31,7 +32,90 @@ class HomeViewModel: BasicViewModel, HomeViewModelProtocol {
         }
         self.setPersistence()
     }
+
+    func getDetailInfo(movie index: Int) -> BasicViewController? {
+        guard let movie = movieList[safe: index] else { return nil}
+        let vieWModel = DetailViewModel(movieInfo: movie, gendersList: genders?.genres, repository: self.repository)
+        return DetailViewController(viewModel: vieWModel)
+    }
     
+    func restarMovieList() {
+        discoverMovies = nil
+        movieList = []
+        prefetch = [:]
+    }
+        
+    @MainActor func setMovieList() {
+        if let discover = self.discoverMovies?.results?.array as? [MovieDetail], !discover.isEmpty  {
+            movieList.append(contentsOf: discover)
+        } else {
+            movieList = []
+        }
+    }
+
+    //MARK: - Pagination
+    func getCurrentPage() -> Int {
+        return discoverMovies?.page != nil ? Int(discoverMovies?.page ?? 1) : startPage
+    }
+    
+    func nextPage() -> Int {
+        let currentPage = Int(discoverMovies?.page ?? 1)
+        return  currentPage + 1
+    }
+}
+
+//MARK: - TextField
+extension HomeViewModel {
+    func getPathForUserInput(text: String) -> ApiUrlHelper.PathForMovies {
+        let textUrlAllowed = text.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)
+        let path: ApiUrlHelper.PathForMovies = (textUrlAllowed?.isEmpty ?? true || text.isEmpty) ? .discover :  .search(forText: textUrlAllowed ?? text)
+        return path
+    }
+}
+
+//MARK: TableView Data
+extension HomeViewModel {
+    
+    //MARK: - Number Of Rows
+    func getNumberOfRows() -> Int {
+        return movieList.count
+    }
+    
+    //MARK: GetCell
+    func getCell(for tableView: UITableView, in row: Int) -> UITableViewCell? {
+        let existPrefetch = prefetch.contains(where: {$0.key == row})
+        if existPrefetch {
+            let cell = prefetch[row]
+            prefetch[row] = nil
+            return cell
+        } else {
+            guard let movie = movieList[safe: row] else { return nil }
+            let cell = tableView.dequeueReusableCell(withIdentifier: AllowedCells.movieCover.rawValue) as? MovieCoverTableViewCell
+            let height: CGFloat? = 200
+            let imageSetting = MovieCoverTableViewCell.ImageSetting(imagePath: movie.backdropPath, width: nil, height: height, corner: 10)
+            
+            cell?.populate(movieTitle: movie.originalTitle, imageSetting: imageSetting)
+            return cell
+        }
+    }
+    
+    //MARK: Prefetch
+    func savePrefetchCell(for tableView: UITableView, in indexPaths: [IndexPath]) {
+        if movieList.isEmpty { return }
+        DispatchQueue.main.async {
+            for path in indexPaths {
+                if !self.prefetch.contains(where: {$0.key == path.row}) {
+                    let cell = self.getCell(for: tableView, in: path.row)
+                    self.prefetch[path.row] = cell
+                }
+            }
+        }
+    }
+}
+
+//MARK: - Core Data
+extension HomeViewModel {
+    //MARK: - Set Persistence
     func setPersistence() {
         DispatchQueue.main.async {
             if let context = self.context {
@@ -41,13 +125,30 @@ class HomeViewModel: BasicViewModel, HomeViewModelProtocol {
             }
         }
     }
-
-    func getDetailInfo(movie index: Int) -> BasicViewController? {
-        guard let movie = movieList[safe: index] else { return nil}
-        let vieWModel = DetailViewModel(movieInfo: movie, gendersList: genders?.genres, repository: self.repository)
-        return DetailViewController(viewModel: vieWModel)
+    //MARK: - Gendre List
+    private func loadCoreDataList() {
+        let gendreList = getGendreListFromCoreData()
+        self.genders = Genre(genres: gendreList)
     }
     
+    private func getGendreListFromCoreData() -> [GenreDetail] {
+        DispatchQueue.main.sync {
+            return persistence?.getGenreList() ?? []
+        }
+    }
+    
+    //MARK: - Movies Core Data
+    private func getMovieResultFromCoreData(for searchType: PersistenceController.SearchMovie) -> MoviesResult? {
+        DispatchQueue.main.sync {
+            let currentPage = discoverMovies?.page != nil ? Int(discoverMovies?.page ?? 1) : startPage
+            return persistence?.getMovieResult(for: searchType, currentPage: currentPage)
+        }
+    }
+}
+
+//MARK: - Network
+extension HomeViewModel {
+    //MARK: - Genre List
     func getGenreList() async {
         do {
             let response = try await repository.getDataFromMoviesApi(for: .genre, page: nil, includeVideo: nil, includeAdult: nil)
@@ -62,38 +163,7 @@ class HomeViewModel: BasicViewModel, HomeViewModelProtocol {
         }
     }
     
-    func restarMovieList() {
-        discoverMovies = nil
-        movieList = []
-        prefetch = [:]
-    }
-    
-    private func doGenreListCatch() async {
-        if getGendersPossibleRetries > 0 {
-            getGendersPossibleRetries -= 1
-            await getGenreList()
-        } else {
-            loadCoreDataList()
-        }
-    }
-    
-    private func loadCoreDataList() {
-        let gendreList = getGendreListFromCoreData()
-        self.genders = Genre(genres: gendreList)
-    }
-    
-    private func getGendreListFromCoreData() -> [GenreDetail] {
-        DispatchQueue.main.sync {
-            return persistence?.getGenreList() ?? []
-        }
-    }
-    
-    private func getMovieResultFromCoreData(for searchType: PersistenceController.SearchMovie) -> MoviesResult? {
-        DispatchQueue.main.sync {
-            return persistence?.getMovieResult(for: searchType, currentPage: currentPage)
-        }
-    }
-    
+    //MARK: - Movie List Network
     func getMovies(for path: ApiUrlHelper.PathForMovies, with searchType: PersistenceController.SearchMovie) async {
         do {
             let page: Int? = getPage(for: searchType)
@@ -112,14 +182,6 @@ class HomeViewModel: BasicViewModel, HomeViewModelProtocol {
         }
     }
     
-    @MainActor func setMovieList() {
-        if let discover = self.discoverMovies?.results?.array as? [MovieDetail], !discover.isEmpty  {
-            movieList.append(contentsOf: discover)
-        } else {
-            movieList = []
-        }
-    }
-    
     private func getPage(for searchType: PersistenceController.SearchMovie) -> Int? {
         switch searchType {
         case .forPage(let page):
@@ -129,62 +191,12 @@ class HomeViewModel: BasicViewModel, HomeViewModelProtocol {
         }
     }
     
-    func getCurrentPage() -> Int {
-        currentPage
-    }
-    
-    func nextPage() -> Int {
-        currentPage += 1
-        return currentPage
-    }
-
-    func getPathForUserInput(text: String) -> ApiUrlHelper.PathForMovies {
-        let textUrlAllowed = text.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)
-        let path: ApiUrlHelper.PathForMovies = (textUrlAllowed?.isEmpty ?? true || text.isEmpty) ? .discover :  .search(forText: textUrlAllowed ?? text)
-        return path 
-    }
-    
-    func getNumberOfRows() -> Int {
-        return movieList.count
-    }
-    
-    func getCell(for tableView: UITableView, in row: Int) -> UITableViewCell? {
-        let existPrefetch = prefetch.contains(where: {$0.key == row})
-        if existPrefetch {
-            let cell = prefetch[row]
-            prefetch[row] = nil
-            return cell
+    private func doGenreListCatch() async {
+        if getGendersPossibleRetries > 0 {
+            getGendersPossibleRetries -= 1
+            await getGenreList()
         } else {
-            guard let movie = movieList[safe: row] else { return nil }
-            let cell = tableView.dequeueReusableCell(withIdentifier: AllowedCells.movieCover.rawValue) as? MovieCoverTableViewCell
-            let height: CGFloat? = 200
-            let imageSetting = MovieCoverTableViewCell.ImageSetting(imagePath: movie.backdropPath, width: nil, height: height, corner: 10)
-            
-            cell?.populate(movieTitle: movie.originalTitle, imageSetting: imageSetting)
-            return cell
+            loadCoreDataList()
         }
-    }
-    
-    func savePrefetchCell(for tableView: UITableView, in indexPaths: [IndexPath]) {
-        if movieList.isEmpty { return }
-        DispatchQueue.main.async {
-            for path in indexPaths {
-                if !self.prefetch.contains(where: {$0.key == path.row}) {
-                    let cell = self.getCell(for: tableView, in: path.row)
-                    self.prefetch[path.row] = cell
-                }
-            }
-        }
-    }
-}
-
-extension Array {
-
-    subscript(safe index: Int) -> Element? {
-        guard indices.contains(index) else {
-            return nil
-        }
-
-        return self[index]
     }
 }
