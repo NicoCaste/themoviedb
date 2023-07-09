@@ -16,7 +16,7 @@ class TitleAndDescriptionTableViewCell: UITableViewCell {
         case below
     }
     
-    func populate(title: UILabel.TextValues, description: UILabel.TextValues, descriptionPosition: DescriptionPosition) {
+    func populate(title: UILabel.TextValues, description: UILabel.TextValues?, descriptionPosition: DescriptionPosition) {
         setTitle(textValues: title)
         setDescription(textValues: description, descriptionPosition)
     }
@@ -32,7 +32,8 @@ class TitleAndDescriptionTableViewCell: UITableViewCell {
         titleLabel.setContentCompressionResistancePriority(.required, for: .horizontal)
     }
     
-    func setDescription(textValues: UILabel.TextValues,_ descriptionPosition: DescriptionPosition) {
+    func setDescription(textValues: UILabel.TextValues?,_ descriptionPosition: DescriptionPosition) {
+        guard let textValues else { return }
         descriptionLabel.translatesAutoresizingMaskIntoConstraints = false
         contentView.addSubview(descriptionLabel)
         descriptionLabel.set(with: textValues)

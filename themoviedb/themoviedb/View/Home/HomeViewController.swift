@@ -11,6 +11,7 @@ class HomeViewController: BasicViewController {
     var tableView: GenericTableViewProtocol?
     var prefetch: [Int: UITableViewCell] = [:]
     private var viewModel: HomeViewModelProtocol
+    var keyboardActive: Bool = false
     
     required init(viewModel: HomeViewModelProtocol) {
         self.viewModel = viewModel
@@ -23,6 +24,7 @@ class HomeViewController: BasicViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        configDismissBoard()
         setSearchTextField()
         setTableView()
         getMoviesAndReload(for: .discover, for: .forPage(viewModel.getCurrentPage()))

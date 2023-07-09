@@ -45,6 +45,11 @@
 		0E4EDB5B2A58CDFE0027BFD0 /* PersistenceControllerTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E4EDB5A2A58CDFE0027BFD0 /* PersistenceControllerTest.swift */; };
 		0E4EDB5E2A58FA610027BFD0 /* MoviesResult+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E4EDB5C2A58FA610027BFD0 /* MoviesResult+CoreDataClass.swift */; };
 		0E4EDB5F2A58FA610027BFD0 /* MoviesResult+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E4EDB5D2A58FA610027BFD0 /* MoviesResult+CoreDataProperties.swift */; };
+		0EC3308F2A5A463A002D2177 /* TabBarViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EC3308E2A5A463A002D2177 /* TabBarViewModel.swift */; };
+		0EC330912A5A4791002D2177 /* TabBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EC330902A5A4791002D2177 /* TabBarViewController.swift */; };
+		0EC330932A5A4F0F002D2177 /* ExtensionViewController+KeyboardHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EC330922A5A4F0F002D2177 /* ExtensionViewController+KeyboardHandler.swift */; };
+		0EC330962A5A59FB002D2177 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EC330952A5A59FB002D2177 /* SettingsViewController.swift */; };
+		0EC330982A5A8426002D2177 /* InfoViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EC330972A5A8426002D2177 /* InfoViewModel.swift */; };
 		0EF7F9D82A578BD300DB998E /* ViewModelHandleInfoTableViewProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EF7F9D72A578BD300DB998E /* ViewModelHandleInfoTableViewProtocol.swift */; };
 		0EF7F9DA2A578C0700DB998E /* ViewModelHandleApiMoviesProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EF7F9D92A578C0700DB998E /* ViewModelHandleApiMoviesProtocol.swift */; };
 		0EF7F9DC2A578C1C00DB998E /* ViewModelHandleTextFieldProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EF7F9DB2A578C1C00DB998E /* ViewModelHandleTextFieldProtocol.swift */; };
@@ -119,6 +124,11 @@
 		0E4EDB5A2A58CDFE0027BFD0 /* PersistenceControllerTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = PersistenceControllerTest.swift; path = ../../../../../PersistenceControllerTest.swift; sourceTree = "<group>"; };
 		0E4EDB5C2A58FA610027BFD0 /* MoviesResult+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MoviesResult+CoreDataClass.swift"; sourceTree = "<group>"; };
 		0E4EDB5D2A58FA610027BFD0 /* MoviesResult+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MoviesResult+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		0EC3308E2A5A463A002D2177 /* TabBarViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarViewModel.swift; sourceTree = "<group>"; };
+		0EC330902A5A4791002D2177 /* TabBarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarViewController.swift; sourceTree = "<group>"; };
+		0EC330922A5A4F0F002D2177 /* ExtensionViewController+KeyboardHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ExtensionViewController+KeyboardHandler.swift"; sourceTree = "<group>"; };
+		0EC330952A5A59FB002D2177 /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
+		0EC330972A5A8426002D2177 /* InfoViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoViewModel.swift; sourceTree = "<group>"; };
 		0EF7F9D72A578BD300DB998E /* ViewModelHandleInfoTableViewProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewModelHandleInfoTableViewProtocol.swift; sourceTree = "<group>"; };
 		0EF7F9D92A578C0700DB998E /* ViewModelHandleApiMoviesProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewModelHandleApiMoviesProtocol.swift; sourceTree = "<group>"; };
 		0EF7F9DB2A578C1C00DB998E /* ViewModelHandleTextFieldProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewModelHandleTextFieldProtocol.swift; sourceTree = "<group>"; };
@@ -255,6 +265,8 @@
 		0E39A0382A52948500B4193C /* View */ = {
 			isa = PBXGroup;
 			children = (
+				0EC330942A5A59DF002D2177 /* Settings */,
+				0EC3308D2A5A4605002D2177 /* TabBar */,
 				0EF7F9DF2A578E3300DB998E /* Protocols */,
 				0E39A03E2A52B03000B4193C /* View Components */,
 				0E39A0342A52925800B4193C /* Home */,
@@ -279,6 +291,8 @@
 				0E39A0442A53E68900B4193C /* HomeViewModel.swift */,
 				0E39A05D2A5434E900B4193C /* BasicViewModel.swift */,
 				0E39A0612A54F3A100B4193C /* DetailViewModel.swift */,
+				0EC3308E2A5A463A002D2177 /* TabBarViewModel.swift */,
+				0EC330972A5A8426002D2177 /* InfoViewModel.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -300,6 +314,7 @@
 				0E39A0672A55170200B4193C /* ImageFromPathProtocolExtension.swift */,
 				0E39A0852A558D3100B4193C /* ExtensionJsonDecoder+Context.swift */,
 				0E4E0D7E2A5A2679002065FC /* ExtensionArraySafe.swift */,
+				0EC330922A5A4F0F002D2177 /* ExtensionViewController+KeyboardHandler.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -377,6 +392,22 @@
 				0E4EDB5A2A58CDFE0027BFD0 /* PersistenceControllerTest.swift */,
 			);
 			path = CoreData;
+			sourceTree = "<group>";
+		};
+		0EC3308D2A5A4605002D2177 /* TabBar */ = {
+			isa = PBXGroup;
+			children = (
+				0EC330902A5A4791002D2177 /* TabBarViewController.swift */,
+			);
+			path = TabBar;
+			sourceTree = "<group>";
+		};
+		0EC330942A5A59DF002D2177 /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+				0EC330952A5A59FB002D2177 /* SettingsViewController.swift */,
+			);
+			path = Settings;
 			sourceTree = "<group>";
 		};
 		0EF7F9D62A578BB200DB998E /* Protocols */ = {
@@ -585,6 +616,8 @@
 				0E39A0682A55170200B4193C /* ImageFromPathProtocolExtension.swift in Sources */,
 				0E39A05C2A541F3300B4193C /* LoaderImageHelper.swift in Sources */,
 				0E39A0022A5290CE00B4193C /* AppDelegate.swift in Sources */,
+				0EC330912A5A4791002D2177 /* TabBarViewController.swift in Sources */,
+				0EC330982A5A8426002D2177 /* InfoViewModel.swift in Sources */,
 				0E39A0622A54F3A100B4193C /* DetailViewModel.swift in Sources */,
 				0E39A0492A53F35F00B4193C /* BasicViewController.swift in Sources */,
 				0EF7F9E42A578E8B00DB998E /* GenericTableViewDelegate.swift in Sources */,
@@ -596,6 +629,7 @@
 				0E4EDB5F2A58FA610027BFD0 /* MoviesResult+CoreDataProperties.swift in Sources */,
 				0E39A0452A53E68900B4193C /* HomeViewModel.swift in Sources */,
 				0E39A04C2A53F53900B4193C /* WebServicesProtocol.swift in Sources */,
+				0EC330932A5A4F0F002D2177 /* ExtensionViewController+KeyboardHandler.swift in Sources */,
 				0E39A0862A558D3100B4193C /* ExtensionJsonDecoder+Context.swift in Sources */,
 				0EF7F9DE2A578C3400DB998E /* ViewModelHandleNextStepProtocol.swift in Sources */,
 				0E4EDB5E2A58FA610027BFD0 /* MoviesResult+CoreDataClass.swift in Sources */,
@@ -614,7 +648,9 @@
 				0E39A0522A53F63500B4193C /* ExtensionData+PrintJson.swift in Sources */,
 				0E4E0D7F2A5A2679002065FC /* ExtensionArraySafe.swift in Sources */,
 				0E39A0582A54040F00B4193C /* ApiUrlHelper.swift in Sources */,
+				0EC330962A5A59FB002D2177 /* SettingsViewController.swift in Sources */,
 				0E39A0842A557A2C00B4193C /* GenreDetail+CoreDataProperties.swift in Sources */,
+				0EC3308F2A5A463A002D2177 /* TabBarViewModel.swift in Sources */,
 				0E39A0042A5290CE00B4193C /* SceneDelegate.swift in Sources */,
 				0E39A0552A53F68C00B4193C /* TheMovieRepository.swift in Sources */,
 				0E39A0372A52934400B4193C /* HomeViewController.swift in Sources */,

@@ -11,12 +11,15 @@ class BasicViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        edgesForExtendedLayout = UIRectEdge.bottom
+        extendedLayoutIncludesOpaqueBars = true
         view.backgroundColor = .white
         overrideUserInterfaceStyle = .light
         configNavBar()
     }
     
     private func configNavBar() {
+        self.navigationController?.isNavigationBarHidden = false 
         let logo = UIImage(named: "appName")
         let imageView = UIImageView(image: logo)
         imageView.frame.size.width = 200

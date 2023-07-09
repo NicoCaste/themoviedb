@@ -25,7 +25,6 @@ class HomeViewModel: BasicViewModel, HomeViewModelProtocol {
     
     required init(repository: TheMovieRepositoryProtocol, context: NSManagedObjectContext? = nil) {
         self.context = context
-        
         super.init(repository: repository)
         Task.detached { [weak self] in
             await self?.getGenreList()

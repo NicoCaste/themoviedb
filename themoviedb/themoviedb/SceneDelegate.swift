@@ -14,11 +14,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         guard let windowScene = (scene as? UIWindowScene) else { return }
         let window = UIWindow(windowScene: windowScene)
-        let webService = UrlSessionWebService()
-        let repository = TheMovieRepository(webService: webService)
-        var viewModel: HomeViewModel!
-        viewModel = HomeViewModel(repository: repository)
-        let navController = UINavigationController(rootViewController: HomeViewController(viewModel: viewModel))
+        let navController = UINavigationController(rootViewController: TabBarViewController())
         window.rootViewController = navController
         self.window = window
         window.makeKeyAndVisible()

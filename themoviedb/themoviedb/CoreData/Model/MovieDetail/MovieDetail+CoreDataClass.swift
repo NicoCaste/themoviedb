@@ -82,4 +82,14 @@ extension MovieDetail {
         
         return newResults
     }
+    
+    static func deleteAllMovieDetail(in context: NSManagedObjectContext) throws {
+        let request : NSFetchRequest<MovieDetail> = MovieDetail.fetchRequest()
+        let results = try! context.fetch(request)
+        for data in results {
+            let exerciseToBeDeleted: MovieDetail = data
+            context.delete(exerciseToBeDeleted)
+        }
+        try! context.save()
+    }
 }
