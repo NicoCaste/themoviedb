@@ -91,7 +91,7 @@ extension HomeViewModel {
             guard let movie = movieList[safe: row] else { return nil }
             let cell = tableView.dequeueReusableCell(withIdentifier: AllowedCells.movieCover.rawValue) as? MovieCoverTableViewCell
             let height: CGFloat? = 200
-            let imageSetting = MovieCoverTableViewCell.ImageSetting(imagePath: movie.backdropPath, width: nil, height: height, corner: 10)
+            let imageSetting = ImageSetting(imagePath: movie.backdropPath, width: nil, height: height, corner: 10)
             
             cell?.populate(movieTitle: movie.originalTitle, imageSetting: imageSetting)
             return cell
@@ -125,24 +125,24 @@ extension HomeViewModel {
         }
     }
     //MARK: - Gendre List
-    private func loadCoreDataList() {
-        let gendreList = getGendreListFromCoreData()
-        self.genders = Genre(genres: gendreList)
-    }
-    
-    private func getGendreListFromCoreData() -> [GenreDetail] {
-        DispatchQueue.main.sync {
-            return persistence?.getGenreList() ?? []
-        }
-    }
+//    private func loadCoreDataList() {
+//        let gendreList = getGendreListFromCoreData()
+//        self.genders = Genre(genres: gendreList)
+//    }
+//
+//    private func getGendreListFromCoreData() -> [GenreDetail] {
+//        DispatchQueue.main.sync {
+//            return persistence?.getGenreList() ?? []
+//        }
+//    }
     
     //MARK: - Movies Core Data
-    private func getMovieResultFromCoreData(for searchType: PersistenceController.SearchMovie) -> MoviesResult? {
-        DispatchQueue.main.sync {
-            let currentPage = discoverMovies?.page != nil ? Int(discoverMovies?.page ?? 1) : startPage
-            return persistence?.getMovieResult(for: searchType, currentPage: currentPage)
-        }
-    }
+//    private func getMovieResultFromCoreData(for searchType: PersistenceController.SearchMovie) -> MoviesResult? {
+//        DispatchQueue.main.sync {
+//            let currentPage = discoverMovies?.page != nil ? Int(discoverMovies?.page ?? 1) : startPage
+//            return persistence?.getMovieResult(for: searchType, currentPage: currentPage)
+//        }
+//    }
 }
 
 //MARK: - Network
@@ -155,7 +155,8 @@ extension HomeViewModel {
             case .success(let data):
                 self.genders = try await data.decodedObject()
             case .failure(_):
-                loadCoreDataList()
+                break
+//                loadCoreDataList()
             }
         } catch {
             await doGenreListCatch()
@@ -163,7 +164,7 @@ extension HomeViewModel {
     }
     
     //MARK: - Movie List Network
-    func getMovies(for path: ApiUrlHelper.PathForMovies, with searchType: PersistenceController.SearchMovie) async {
+    func getMovies(for path: ApiUrlHelper.PathForMovies, with searchType: SearchMovie) async {
         do {
             let page: Int? = getPage(for: searchType)
             let response = try await repository.getDataFromMoviesApi(for: path, page: page, includeVideo: true, includeAdult: false)
@@ -172,16 +173,16 @@ extension HomeViewModel {
                discoverMovies = try await data.decodedObject()
                await setMovieList()
            case .failure(_):
-               discoverMovies = getMovieResultFromCoreData(for: searchType)
+//               discoverMovies = getMovieResultFromCoreData(for: searchType)
                await setMovieList()
             }
         } catch {
-            discoverMovies = getMovieResultFromCoreData(for: searchType)
+//            discoverMovies = getMovieResultFromCoreData(for: searchType)
             await setMovieList()
         }
     }
     
-    private func getPage(for searchType: PersistenceController.SearchMovie) -> Int? {
+    private func getPage(for searchType: SearchMovie) -> Int? {
         switch searchType {
         case .forPage(let page):
             return page
@@ -195,7 +196,7 @@ extension HomeViewModel {
             getGendersPossibleRetries -= 1
             await getGenreList()
         } else {
-            loadCoreDataList()
+//            loadCoreDataList()
         }
     }
 }

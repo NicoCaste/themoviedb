@@ -15,7 +15,7 @@ protocol TheMovieRepositoryProtocol {
 
 final class TheMovieRepository: TheMovieRepositoryProtocol {
     var webService: WebService
-    static private let key = "" //here your apikey
+    static private let key = "eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJmZDc2ZTE0NWExMDYwYzMwOTBjYzUyYTM5ZjI1ZjE0MCIsInN1YiI6IjY0YTNjNDljZTlkYTY5MDEwMTQ3NmQwZCIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.KbijbMuTqucX0s2AKlNQtbcFNoE2oqWTbY8CntkMWus" //here your apikey
     static private var apiKey = "Bearer \(key)"
     private var headers =  [ "accept": "application/json", "Authorization": apiKey ]
     

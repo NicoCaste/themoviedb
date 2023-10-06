@@ -26,12 +26,5 @@ public class GenreDetail: NSManagedObject, Decodable {
         
         name = try values.decode(String.self, forKey: .name)
         id = try values.decode(Int64.self, forKey: .id)
-        saveGenreDetail()
-    }
-    
-    private func saveGenreDetail() {
-        DispatchQueue.main.async {
-            PersistenceController().saveGenreDetail(genreDetail: self)
-        }
     }
 }

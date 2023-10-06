@@ -86,7 +86,7 @@ class GenericTableView: UIView, GenericTableViewProtocol {
             let cell = tableView.dequeueReusableCell(withIdentifier: AllowedCells.movieCover.rawValue) as? MovieCoverTableViewCell
             let height: CGFloat? = 200
             let image = UIImage(named: "sadLogo")
-            let imageSetting = MovieCoverTableViewCell.ImageSetting(imagePath: nil, width: nil, height: height, corner: 10, image: image)
+            let imageSetting = ImageSetting(imagePath: nil, width: nil, height: height, corner: 10, image: image)
             
             cell?.populate(movieTitle: nil, imageSetting: imageSetting)
             return cell

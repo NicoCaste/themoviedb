@@ -85,7 +85,7 @@ class DetailViewModel: BasicViewModel, DetailViewModelProtocol {
     func getPosterImageCell(for tableView: UITableView) -> UITableViewCell? {
         let cell = tableView.dequeueReusableCell(withIdentifier: AllowedCells.movieCover.rawValue) as? MovieCoverTableViewCell
         let imagePath = getMovieImagePath()
-        let imageSetting = MovieCoverTableViewCell.ImageSetting(imagePath: imagePath, width: 220, height: 300, corner: 18)
+        let imageSetting = ImageSetting(imagePath: imagePath, width: 220, height: 300, corner: 18)
         cell?.populate(movieTitle: nil, imageSetting: imageSetting)
         return cell
     }

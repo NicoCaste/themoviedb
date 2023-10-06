@@ -11,5 +11,5 @@ protocol ViewModelHandleApiMoviesProtocol: BasicViewModel {
     func getCurrentPage() -> Int
     func nextPage() -> Int
     func restarMovieList()
-    func getMovies(for path: ApiUrlHelper.PathForMovies, with searchType: PersistenceController.SearchMovie) async
+    func getMovies(for path: ApiUrlHelper.PathForMovies, with searchType: SearchMovie) async
 }

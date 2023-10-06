@@ -47,7 +47,7 @@ class HomeViewController: BasicViewController {
         setTableViewLayout()
     }
     
-    func getMoviesAndReload(for path: ApiUrlHelper.PathForMovies,for searchType: PersistenceController.SearchMovie) {
+    func getMoviesAndReload(for path: ApiUrlHelper.PathForMovies,for searchType: SearchMovie) {
         let currentNumbersOfRows = viewModel.getNumberOfRows()
         Task.detached { [weak self] in
             await self?.viewModel.getMovies(for: path, with: searchType)
