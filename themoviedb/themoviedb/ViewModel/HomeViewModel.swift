@@ -9,12 +9,18 @@ import Foundation
 import UIKit
 import CoreData
 
+enum FilmsSections: Int, CaseIterable {
+    case SUSCRIPTAS
+    case TODAS
+}
+
 typealias HomeViewModelProtocol = ViewModelHandleInfoTableViewProtocol & ViewModelHandleApiMoviesProtocol & ViewModelHandleTextFieldProtocol & ViewModelHandleTableViewDataSourceProtocol
 
 class HomeViewModel: BasicViewModel, HomeViewModelProtocol {
+    var sections: Int = FilmsSections.allCases.count 
     private(set) var genders: Genre?
     private var getGendersPossibleRetries: Int = 3
-    private(set) var allowedCells: [AllowedCells] =  [.movieCover, .centerTitleTableViewCell]
+    private(set) var allowedCells: [AllowedCells] =  [.movieCover, .centerTitleTableViewCell, .movieSubscribed]
     private var context: NSManagedObjectContext?
     
     var discoverMovies: MoviesResult?
@@ -76,25 +82,41 @@ extension HomeViewModel {
 extension HomeViewModel {
     
     //MARK: - Number Of Rows
-    func getNumberOfRows() -> Int {
-        return movieList.count
+    func getNumberOfRows(for section: Int) -> Int {
+        if section == FilmsSections.SUSCRIPTAS.rawValue {
+            return 1
+        } else {
+            return movieList.count
+        }
     }
     
     //MARK: GetCell
-    func getCell(for tableView: UITableView, in row: Int) -> UITableViewCell? {
+    func getCell(for tableView: UITableView, in row: Int, for section: Int) -> UITableViewCell? {
         let existPrefetch = prefetch.contains(where: {$0.key == row})
-        if existPrefetch {
-            let cell = prefetch[row]
-            prefetch[row] = nil
+        
+        if section == FilmsSections.SUSCRIPTAS.rawValue {
+            let cell = tableView.dequeueReusableCell(withIdentifier: AllowedCells.movieSubscribed.rawValue) as? MovieSubscribedTableViewCell
+            let context = CoreDataStack.shared.mainContext
+            let movieDetail = MovieDetail(context: context)
+            movieDetail.originalTitle = "Que"
+            movieDetail.posterPath = "/mhPhEvh2ffBdbgiSIjrlkqAGwNH.jpg"
+            cell?.populate(movies: [movieDetail])
+            
             return cell
         } else {
-            guard let movie = movieList[safe: row] else { return nil }
-            let cell = tableView.dequeueReusableCell(withIdentifier: AllowedCells.movieCover.rawValue) as? MovieCoverTableViewCell
-            let height: CGFloat? = 200
-            let imageSetting = ImageSetting(imagePath: movie.backdropPath, width: nil, height: height, corner: 10)
-            
-            cell?.populate(movieTitle: movie.originalTitle, imageSetting: imageSetting)
-            return cell
+            if existPrefetch {
+                let cell = prefetch[row]
+                prefetch[row] = nil
+                return cell
+            } else {
+                guard let movie = movieList[safe: row] else { return nil }
+                let cell = tableView.dequeueReusableCell(withIdentifier: AllowedCells.movieCover.rawValue) as? MovieCoverTableViewCell
+                let height: CGFloat? = 200
+                let imageSetting = ImageSetting(imagePath: movie.backdropPath, width: nil, height: height, corner: 10)
+                
+                cell?.populate(movieTitle: movie.originalTitle, imageSetting: imageSetting)
+                return cell
+            }
         }
     }
     
@@ -104,7 +126,7 @@ extension HomeViewModel {
         DispatchQueue.main.async {
             for path in indexPaths {
                 if !self.prefetch.contains(where: {$0.key == path.row}) {
-                    let cell = self.getCell(for: tableView, in: path.row)
+                    let cell = self.getCell(for: tableView, in: path.row, for: path.section)
                     self.prefetch[path.row] = cell
                 }
             }

@@ -48,10 +48,10 @@ class HomeViewController: BasicViewController {
     }
     
     func getMoviesAndReload(for path: ApiUrlHelper.PathForMovies,for searchType: SearchMovie) {
-        let currentNumbersOfRows = viewModel.getNumberOfRows()
+        let currentNumbersOfRows = viewModel.getNumberOfRows(for: 0)
         Task.detached { [weak self] in
             await self?.viewModel.getMovies(for: path, with: searchType)
-            let newNumbersofRows = await self?.viewModel.getNumberOfRows() ?? 0
+            let newNumbersofRows = await self?.viewModel.getNumberOfRows(for: FilmsSections.TODAS.rawValue) ?? 0
             if currentNumbersOfRows != newNumbersofRows || newNumbersofRows == 0 {
                 await self?.tableView?.reloadTableView()
             }
@@ -72,7 +72,7 @@ extension HomeViewController: GenericTableViewDelegate {
     }
     
     func willDisplay(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        if indexPath.row == viewModel.getNumberOfRows() - 3 {
+        if indexPath.row == viewModel.getNumberOfRows(for: FilmsSections.TODAS.rawValue) - 3 {
             let page = viewModel.nextPage()
             getMoviesAndReload(for: .discover, for: .forPage(page))
         }

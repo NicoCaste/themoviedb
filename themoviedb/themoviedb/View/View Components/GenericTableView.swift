@@ -12,6 +12,7 @@ enum AllowedCells: String {
     case movieCover
     case centerTitleTableViewCell
     case titleAndDescriptionTableViewCell
+    case movieSubscribed
 }
 
 class GenericTableView: UIView, GenericTableViewProtocol {
@@ -60,6 +61,8 @@ class GenericTableView: UIView, GenericTableViewProtocol {
         switch cell {
         case .titleAndDescriptionTableViewCell:
             tableView.register(TitleAndDescriptionTableViewCell.self, forCellReuseIdentifier: cell.rawValue)
+        case .movieSubscribed:
+            tableView.register(MovieSubscribedTableViewCell.self, forCellReuseIdentifier: cell.rawValue)
         default:
             break
         }
@@ -103,9 +106,14 @@ class GenericTableView: UIView, GenericTableViewProtocol {
 }
 
 extension GenericTableView:  UITableViewDelegate, UITableViewDataSource, UITableViewDataSourcePrefetching {
+    //Sections
+    func numberOfSections(in tableView: UITableView) -> Int {
+        viewModel.sections
+    }
+    
     // MARK: - Number Of Rows
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        numberOfRows = viewModel.getNumberOfRows()
+        numberOfRows = viewModel.getNumberOfRows(for: section)
         let showRows = numberOfRows == 0 ? EmptyCaseCells.allCases.count : numberOfRows
         tableView.allowsSelection = !(numberOfRows == 0)
         return showRows
@@ -117,7 +125,7 @@ extension GenericTableView:  UITableViewDelegate, UITableViewDataSource, UITable
         if numberOfRows == 0 {
             return getEmptyResultCell(for: tableView, in: indexPath.row) ?? emptyCell
         } else {
-            return viewModel.getCell(for: tableView, in: indexPath.row)  ?? emptyCell
+            return viewModel.getCell(for: tableView, in: indexPath.row, for: indexPath.section)  ?? emptyCell
         }
     }
     

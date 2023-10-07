@@ -28,7 +28,8 @@ class MovieSubscribedTableViewCell: UITableViewCell {
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         collectionView.showsHorizontalScrollIndicator = false
         collectionView.backgroundColor = .clear
-        
+        collectionView.delegate = self
+        collectionView.dataSource = self
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .horizontal
         layout.minimumLineSpacing = 4
@@ -45,5 +46,40 @@ class MovieSubscribedTableViewCell: UITableViewCell {
             collectionView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
             collectionView.heightAnchor.constraint(equalToConstant: 180)
         ])
+    }
+}
+
+extension MovieSubscribedTableViewCell: UICollectionViewDelegate, UICollectionViewDataSource, ImageFromPathExtensionProtocol {
+    var movieImageView: UIImageView? {
+        get {
+            UIImageView()
+        }
+        set {
+            UIImageView()
+        }
+    }
+    
+    
+    // MARK: - Number Of Items
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        collectionView.reloadData()
+        return 15
+    }
+    
+    // MARK: - Cell For Item
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "MovieSubscribedCollectionViewCell", for: indexPath) as? MovieSubscribedCollectionViewCell
+        let path = movies?[0].posterPath
+        let imageLoader = LoaderImageHelper()
+        let url = ApiUrlHelper.makeURL(for: .getImage, url: .image(path: path))
+        imageLoader.loadImage(with: url, completion: { movieImage in
+            cell?.populate(image: movieImage)
+            cell?.reloadInputViews()
+        })
+        return cell ?? UICollectionViewCell()
+    }
+    
+    // MARK: - did Select Item
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
     }
 }

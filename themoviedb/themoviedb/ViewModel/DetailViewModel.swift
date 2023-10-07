@@ -11,6 +11,7 @@ import UIKit
 typealias DetailViewModelProtocol = ViewModelHandleInfoTableViewProtocol
 
 class DetailViewModel: BasicViewModel, DetailViewModelProtocol {
+    var sections: Int = 1
     private let movieInfo: MovieDetail
     private var movieGenders: String = ""
     private var basicFontSize: CGFloat = 16
@@ -30,7 +31,7 @@ class DetailViewModel: BasicViewModel, DetailViewModelProtocol {
         self.setMovieGenders(genderList: gendersList)
     }
     
-    func getNumberOfRows() -> Int {
+    func getNumberOfRows(for section: Int) -> Int {
         DetailTableCases.allCases.count
     }
     
@@ -61,7 +62,7 @@ class DetailViewModel: BasicViewModel, DetailViewModelProtocol {
         movieInfo.posterPath
     }
     
-    func getCell(for tableView: UITableView, in row: Int) -> UITableViewCell? {
+    func getCell(for tableView: UITableView, in row: Int, for section: Int) -> UITableViewCell? {
         let rowCase = DetailViewModel.DetailTableCases(rawValue: row)
         var cell: UITableViewCell?
         switch rowCase {
