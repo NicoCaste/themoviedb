@@ -94,6 +94,7 @@ class DetailViewModel: BasicViewModel, DetailViewModelProtocol {
     //MARK: - Title
     func getMovieNameCell(for tableView: UITableView) -> UITableViewCell? {
         let cell = tableView.dequeueReusableCell(withIdentifier: AllowedCells.centerTitleTableViewCell.rawValue) as? CenterTitleTableViewCell
+        cell?.delegate = self 
         cell?.populate(title: movieInfo.originalTitle, withLikeButton: true)
         return cell
     }
@@ -126,4 +127,11 @@ class DetailViewModel: BasicViewModel, DetailViewModelProtocol {
         cell?.populate(title: title, description: description, descriptionPosition: position)
         return cell
     }
+}
+
+extension DetailViewModel: CenterTitleLikeButtonDelegate {
+    func heartButton(isLiked: Bool) {
+        print(isLiked)
+    }
+    
 }

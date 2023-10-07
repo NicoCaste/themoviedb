@@ -7,11 +7,16 @@
 
 import UIKit
 
+protocol CenterTitleLikeButtonDelegate: AnyObject {
+    func heartButton(isLiked: Bool)
+}
+
 class CenterTitleTableViewCell: UITableViewCell {
     lazy var titleLabel: UILabel = UILabel()
     lazy var likeHeartImageView: UIImageView = UIImageView()
     private var isLiked: Bool = false
     private var renderLikeButton: Bool = false
+    var delegate: CenterTitleLikeButtonDelegate?
     
     func populate(title: String?, withLikeButton: Bool) {
         self.renderLikeButton = withLikeButton
@@ -44,6 +49,7 @@ class CenterTitleTableViewCell: UITableViewCell {
         isLiked = !isLiked
         let imageName = isLiked ? "heart.fill" : "heart"
         likeHeartImageView.image = UIImage(systemName: imageName)
+        delegate?.heartButton(isLiked: isLiked)
     }
 }
 
