@@ -40,7 +40,6 @@ class GenericTableView: UIView, GenericTableViewProtocol {
         tableView.dataSource = self
         tableView.prefetchDataSource = self
         tableView.separatorStyle = .none
-        tableView.allowsSelection =  delegate?.didSelectRow != nil ? true : false
         cellsNeeded(with: cellsTypeList)
         tableView.translatesAutoresizingMaskIntoConstraints = false
         self.addSubview(tableView)
@@ -96,7 +95,7 @@ class GenericTableView: UIView, GenericTableViewProtocol {
         case .title:
             let cell = tableView.dequeueReusableCell(withIdentifier: AllowedCells.centerTitleTableViewCell.rawValue) as? CenterTitleTableViewCell
             
-            cell?.populate(title: "Sorry, no results found")
+            cell?.populate(title: "Sorry, no results found", withLikeButton: false)
             return cell
         default:
             return nil
@@ -125,7 +124,9 @@ extension GenericTableView:  UITableViewDelegate, UITableViewDataSource, UITable
         if numberOfRows == 0 {
             return getEmptyResultCell(for: tableView, in: indexPath.row) ?? emptyCell
         } else {
-            return viewModel.getCell(for: tableView, in: indexPath.row, for: indexPath.section)  ?? emptyCell
+            let cell =  viewModel.getCell(for: tableView, in: indexPath.row, for: indexPath.section)  ?? emptyCell
+            cell.selectionStyle = .none
+            return cell
         }
     }
     

@@ -41,8 +41,8 @@ class MovieSubscribedTableViewCell: UITableViewCell {
         
         NSLayoutConstraint.activate([
             collectionView.topAnchor.constraint(equalTo: contentView.topAnchor),
-            collectionView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-            collectionView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+            collectionView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
+            collectionView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20),
             collectionView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
             collectionView.heightAnchor.constraint(equalToConstant: 180)
         ])
