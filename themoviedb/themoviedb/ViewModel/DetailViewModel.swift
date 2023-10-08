@@ -153,10 +153,8 @@ extension DetailViewModel: CenterTitleLikeButtonDelegate {
     
     func removeMovie(with controller: PersistenceController) {
         DispatchQueue.main.async { [weak self] in
-            guard let id = self?.movieInfo.id,
-                  let movie = controller.fetchMovieDetail(id: id)
-            else { return }
-            controller.delete(movieDetail: movie)
+            guard let id = self?.movieInfo.id else { return }
+            controller.deleteMovie(from: id)
         }
     }
 }

@@ -102,7 +102,7 @@ extension HomeViewModel {
         
         if section == FilmsSections.SUSCRIPTAS.rawValue {
             let cell = tableView.dequeueReusableCell(withIdentifier: AllowedCells.movieSubscribed.rawValue) as? MovieSubscribedTableViewCell
-            cell?.populate(movies: subscribedMovies as! [MovieDetail])
+            cell?.populate(movies: subscribedMovies)
             return cell
         } else {
             if existPrefetch {

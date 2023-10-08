@@ -10,10 +10,10 @@ import UIKit
 class MovieSubscribedTableViewCell: UITableViewCell {
     lazy var title: UILabel = UILabel()
     var collectionView: UICollectionView?
-    var movies: [MovieDetail]?
+    var movies: [Movie]?
     var firstLoad = true
     
-    func populate(movies: [MovieDetail]) {
+    func populate(movies: [Movie]) {
         self.movies = movies
         self.backgroundColor = UIColor.clear
         configCollectionView()

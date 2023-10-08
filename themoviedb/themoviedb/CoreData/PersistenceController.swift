@@ -16,21 +16,19 @@ enum SearchMovie {
 
 class PersistenceController {
     var context: NSManagedObjectContext
-    var backgroundContext: NSManagedObjectContext
     
-    init(context: NSManagedObjectContext = CoreDataStack.shared.mainContext, backgroundContext: NSManagedObjectContext = CoreDataStack.shared.backgroundContext) {
+    init(context: NSManagedObjectContext = CoreDataStack.shared.mainContext) {
         self.context = context
-        self.backgroundContext = backgroundContext
     }
 //MARK: - Save
     func save(favMovie: Movie){
-        backgroundContext.performAndWait {
-            guard let movieDetail = NSEntityDescription.insertNewObject(forEntityName: "MovieDetail", into: backgroundContext) as? MovieDetail
+        context.performAndWait {
+            guard let movieDetail = NSEntityDescription.insertNewObject(forEntityName: "MovieDetail", into: context) as? MovieDetail
             else { return }
             movieDetail.adult = favMovie.adult ?? false
             movieDetail.backdropPath = favMovie.backdropPath
             movieDetail.id = Int64(favMovie.id ?? 0)
-            movieDetail.genreIds = favMovie.genreIds as NSObject?
+            movieDetail.genreIds = favMovie.genreIds
             movieDetail.originalLanguage = favMovie.originalLanguage
             movieDetail.originalTitle = favMovie.originalTitle
             movieDetail.overview = favMovie.overview
@@ -39,17 +37,21 @@ class PersistenceController {
             movieDetail.voteAverage = favMovie.voteAverage ?? 0
             movieDetail.voteCount = Int32(favMovie.voteCount ?? 0)
             
-            try? backgroundContext.save()
+            try? context.save()
         }
     }
     
 //MARK: - Delete
-    func delete(movieDetail: MovieDetail) {
-        let objectID = movieDetail.objectID
-        backgroundContext.performAndWait {
-            if let movieInContext = try? backgroundContext.existingObject(with: objectID) {
-                backgroundContext.delete(movieInContext)
-                try? backgroundContext.save()
+    func deleteMovie(from id: Int) {
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else { return }
+            let movieDetail = self.fetchMovieDetail(id: id)
+            guard let objectID = movieDetail?.objectID else { return }
+            self.context.performAndWait {
+                if let movieInContext = try? self.context.existingObject(with: objectID) {
+                    self.context.delete(movieInContext)
+                    try? self.context.save()
+                }
             }
         }
     }
