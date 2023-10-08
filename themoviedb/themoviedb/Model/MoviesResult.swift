@@ -7,8 +7,8 @@
 
 import Foundation
 
-//struct MoviesResult {
-//    var page: Int?
-//    var totalResults: Int?
-//    var results: [MovieDetail]?
-//}
+struct MoviesResult: Decodable {
+    var page: Int?
+    var totalResults: Int?
+    var results: [Movie]?
+}

@@ -27,8 +27,8 @@ class HomeViewModel: BasicViewModel, HomeViewModelProtocol {
     var prefetch: [Int: UITableViewCell] = [:]
     var startPage: Int = 1
     var persistence: PersistenceController?
-    var movieList: [MovieDetail] = []
-    var subscribedMovies: [MovieDetail] = []
+    var movieList: [Movie] = []
+    var subscribedMovies: [Movie] = []
     
     required init(repository: TheMovieRepositoryProtocol, context: NSManagedObjectContext? = nil) {
         self.context = context
@@ -53,12 +53,12 @@ class HomeViewModel: BasicViewModel, HomeViewModelProtocol {
     }
     
     func setSubscribedMovies() {
-        subscribedMovies = persistence?.fetchMovieDetails() ?? []
+        subscribedMovies = persistence?.fetchMovieDetails() as? [Movie] ?? []
     }
         
     @MainActor func setMovieList() {
-        if let discover = self.discoverMovies?.results?.array as? [MovieDetail], !discover.isEmpty  {
-            movieList.append(contentsOf: discover)
+        if let discover = self.discoverMovies?.results as? [Movie], !discover.isEmpty  {
+            movieList += discover 
         } else {
             movieList = []
         }
@@ -102,7 +102,7 @@ extension HomeViewModel {
         
         if section == FilmsSections.SUSCRIPTAS.rawValue {
             let cell = tableView.dequeueReusableCell(withIdentifier: AllowedCells.movieSubscribed.rawValue) as? MovieSubscribedTableViewCell
-            cell?.populate(movies: subscribedMovies)
+            cell?.populate(movies: subscribedMovies as! [MovieDetail])
             return cell
         } else {
             if existPrefetch {
@@ -142,25 +142,6 @@ extension HomeViewModel {
     func setPersistence() {
         self.persistence = self.context != nil ? PersistenceController(context: context!) : PersistenceController()
     }
-    //MARK: - Gendre List
-//    private func loadCoreDataList() {
-//        let gendreList = getGendreListFromCoreData()
-//        self.genders = Genre(genres: gendreList)
-//    }
-//
-//    private func getGendreListFromCoreData() -> [GenreDetail] {
-//        DispatchQueue.main.sync {
-//            return persistence?.getGenreList() ?? []
-//        }
-//    }
-    
-    //MARK: - Movies Core Data
-//    private func getMovieResultFromCoreData(for searchType: PersistenceController.SearchMovie) -> MoviesResult? {
-//        DispatchQueue.main.sync {
-//            let currentPage = discoverMovies?.page != nil ? Int(discoverMovies?.page ?? 1) : startPage
-//            return persistence?.getMovieResult(for: searchType, currentPage: currentPage)
-//        }
-//    }
 }
 
 //MARK: - Network

@@ -12,9 +12,10 @@ typealias DetailViewModelProtocol = ViewModelHandleInfoTableViewProtocol
 
 class DetailViewModel: BasicViewModel, DetailViewModelProtocol {
     var sections: Int = 1
-    private let movieInfo: MovieDetail
+    private let movieInfo: Movie
     private var movieGenders: String = ""
     private var basicFontSize: CGFloat = 16
+    let persistenceController = PersistenceController()
     let allowedCells: [AllowedCells] =  [.movieCover, .centerTitleTableViewCell,  .titleAndDescriptionTableViewCell]
     
     enum DetailTableCases: Int, CaseIterable {
@@ -25,7 +26,7 @@ class DetailViewModel: BasicViewModel, DetailViewModelProtocol {
         case overview
     }
     
-    init(movieInfo: MovieDetail, gendersList: [GenreDetail]?, repository: TheMovieRepositoryProtocol) {
+    init(movieInfo: Movie, gendersList: [GenreDetail]?, repository: TheMovieRepositoryProtocol) {
         self.movieInfo = movieInfo
         super.init(repository: repository)
         self.setMovieGenders(genderList: gendersList)
@@ -39,7 +40,7 @@ class DetailViewModel: BasicViewModel, DetailViewModelProtocol {
         guard let genderList else { return }
         var newMovieGendersList: [GenreDetail] = []
         
-        for genre in movieInfo.genreIds as? [Int] ?? [] {
+        for genre in movieInfo.genreIds ?? [] {
             newMovieGendersList += genderList.filter({$0.id == genre})
         }
         
@@ -62,6 +63,7 @@ class DetailViewModel: BasicViewModel, DetailViewModelProtocol {
         movieInfo.posterPath
     }
     
+    @MainActor
     func getCell(for tableView: UITableView, in row: Int, for section: Int) -> UITableViewCell? {
         let rowCase = DetailViewModel.DetailTableCases(rawValue: row)
         var cell: UITableViewCell?
@@ -92,6 +94,7 @@ class DetailViewModel: BasicViewModel, DetailViewModelProtocol {
     }
     
     //MARK: - Title
+    @MainActor
     func getMovieNameCell(for tableView: UITableView) -> UITableViewCell? {
         let cell = tableView.dequeueReusableCell(withIdentifier: AllowedCells.centerTitleTableViewCell.rawValue) as? CenterTitleTableViewCell
         cell?.delegate = self
@@ -99,10 +102,13 @@ class DetailViewModel: BasicViewModel, DetailViewModelProtocol {
         return cell
     }
     
+    @MainActor
     func getMovieIsLiked() -> Bool {
-       let i = PersistenceController().fetchMovieDetails()
-        print(i)
-        return true
+        var isLiked = false
+        guard let id = movieInfo.id else { return isLiked }
+        let currentMovie = persistenceController.fetchMovieDetail(id: id)
+        isLiked = currentMovie != nil
+        return isLiked
     }
     
     //MARK: - Category
@@ -115,7 +121,7 @@ class DetailViewModel: BasicViewModel, DetailViewModelProtocol {
     //MARK: Average
     private func getVoteAverageCell(for tableView: UITableView) -> UITableViewCell? {
         let title = UILabel.TextValues(text: "Vote average: ", fontSize: basicFontSize, font: .NotoSansMyanmarBold, numberOfLines: 1, aligment: .left, textColor: .black)
-        let voteAverage = movieInfo.voteAverage 
+        let voteAverage = movieInfo.voteAverage ?? 0
         let description = UILabel.TextValues(text: String(voteAverage), fontSize: basicFontSize, font: .NotoSansMyanmar, numberOfLines: 1, aligment: .left, textColor: .black)
         return getTitleAndDescriptionRow(for: tableView, title: title, description: description, position: .next)
     }
@@ -138,17 +144,19 @@ class DetailViewModel: BasicViewModel, DetailViewModelProtocol {
 //MARK: - LikedButton Delegate
 extension DetailViewModel: CenterTitleLikeButtonDelegate {
     func heartButton(isLiked: Bool) {
-        let persistenceController = PersistenceController()
         isLiked ? saveMovie(with: persistenceController) : removeMovie(with: persistenceController)
     }
     
     func saveMovie(with controller: PersistenceController) {
-        let i = controller.fetchMovieDetails()
-        print(i)
         controller.save(favMovie: movieInfo)
     }
     
     func removeMovie(with controller: PersistenceController) {
-        controller.delete(movieDetail: movieInfo)
+        DispatchQueue.main.async { [weak self] in
+            guard let id = self?.movieInfo.id,
+                  let movie = controller.fetchMovieDetail(id: id)
+            else { return }
+            controller.delete(movieDetail: movie)
+        }
     }
 }
