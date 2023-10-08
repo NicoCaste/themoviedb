@@ -18,8 +18,9 @@ class CenterTitleTableViewCell: UITableViewCell {
     private var renderLikeButton: Bool = false
     var delegate: CenterTitleLikeButtonDelegate?
     
-    func populate(title: String?, withLikeButton: Bool) {
+    func populate(title: String?, withLikeButton: Bool, startLiked: Bool = false) {
         self.renderLikeButton = withLikeButton
+        isLiked = startLiked
         if withLikeButton {
             setLikeHeartImageView()
         }
@@ -29,7 +30,7 @@ class CenterTitleTableViewCell: UITableViewCell {
     func setLikeHeartImageView() {
         likeHeartImageView.translatesAutoresizingMaskIntoConstraints = false
         contentView.addSubview(likeHeartImageView)
-        likeHeartImageView.image = UIImage(systemName: "heart")
+        setLikedButton()
         likeHeartImageView.tintColor = .red
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(likeHeart(tapGestureRecognizer:)))
         likeHeartImageView.isUserInteractionEnabled = true
@@ -47,9 +48,13 @@ class CenterTitleTableViewCell: UITableViewCell {
     
     @objc func likeHeart(tapGestureRecognizer: UITapGestureRecognizer) {
         isLiked = !isLiked
+        setLikedButton()
+        delegate?.heartButton(isLiked: isLiked)
+    }
+    
+    func setLikedButton() {
         let imageName = isLiked ? "heart.fill" : "heart"
         likeHeartImageView.image = UIImage(systemName: imageName)
-        delegate?.heartButton(isLiked: isLiked)
     }
 }
 

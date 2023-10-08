@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0E0049B82AD3215B00E4065E /* MoviesResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E0049B72AD3215B00E4065E /* MoviesResult.swift */; };
 		0E2498F82AB15B2B00617775 /* MovieSubscribedCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E2498F72AB15B2B00617775 /* MovieSubscribedCollectionViewCell.swift */; };
 		0E2498FA2AB1630B00617775 /* MovieSubscribedTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E2498F92AB1630B00617775 /* MovieSubscribedTableViewCell.swift */; };
 		0E39A0022A5290CE00B4193C /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E39A0012A5290CE00B4193C /* AppDelegate.swift */; };
@@ -85,6 +86,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		0E0049B72AD3215B00E4065E /* MoviesResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoviesResult.swift; sourceTree = "<group>"; };
 		0E2498F72AB15B2B00617775 /* MovieSubscribedCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieSubscribedCollectionViewCell.swift; sourceTree = "<group>"; };
 		0E2498F92AB1630B00617775 /* MovieSubscribedTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieSubscribedTableViewCell.swift; sourceTree = "<group>"; };
 		0E399FFE2A5290CE00B4193C /* themoviedb.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = themoviedb.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -284,6 +286,7 @@
 			isa = PBXGroup;
 			children = (
 				0E39A06F2A555CA500B4193C /* GenreModel.swift */,
+				0E0049B72AD3215B00E4065E /* MoviesResult.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -649,6 +652,7 @@
 				0E39A0602A54EAFF00B4193C /* DetailViewController.swift in Sources */,
 				0E39A0702A555CA500B4193C /* GenreModel.swift in Sources */,
 				0E39A0432A52CD9B00B4193C /* MovieCoverTableViewCell.swift in Sources */,
+				0E0049B82AD3215B00E4065E /* MoviesResult.swift in Sources */,
 				0E39A0832A557A2C00B4193C /* GenreDetail+CoreDataClass.swift in Sources */,
 				0E4E0D802A5A2ECE002065FC /* CoreDataTestStack.swift in Sources */,
 				0E4EDB562A58C6660027BFD0 /* CoreDataStack.swift in Sources */,

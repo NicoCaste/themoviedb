@@ -28,14 +28,16 @@ class HomeViewModel: BasicViewModel, HomeViewModelProtocol {
     var startPage: Int = 1
     var persistence: PersistenceController?
     var movieList: [MovieDetail] = []
+    var subscribedMovies: [MovieDetail] = []
     
     required init(repository: TheMovieRepositoryProtocol, context: NSManagedObjectContext? = nil) {
         self.context = context
         super.init(repository: repository)
         Task.detached { [weak self] in
             await self?.getGenreList()
+            await self?.setPersistence()
+            self?.setSubscribedMovies()
         }
-        self.setPersistence()
     }
 
     func getDetailInfo(movie index: Int) -> BasicViewController? {
@@ -48,6 +50,10 @@ class HomeViewModel: BasicViewModel, HomeViewModelProtocol {
         discoverMovies = nil
         movieList = []
         prefetch = [:]
+    }
+    
+    func setSubscribedMovies() {
+        subscribedMovies = persistence?.fetchMovieDetails() ?? []
     }
         
     @MainActor func setMovieList() {
@@ -96,12 +102,7 @@ extension HomeViewModel {
         
         if section == FilmsSections.SUSCRIPTAS.rawValue {
             let cell = tableView.dequeueReusableCell(withIdentifier: AllowedCells.movieSubscribed.rawValue) as? MovieSubscribedTableViewCell
-            let context = CoreDataStack.shared.mainContext
-            let movieDetail = MovieDetail(context: context)
-            movieDetail.originalTitle = "Que"
-            movieDetail.posterPath = "/mhPhEvh2ffBdbgiSIjrlkqAGwNH.jpg"
-            cell?.populate(movies: [movieDetail])
-            
+            cell?.populate(movies: subscribedMovies)
             return cell
         } else {
             if existPrefetch {
@@ -137,14 +138,9 @@ extension HomeViewModel {
 //MARK: - Core Data
 extension HomeViewModel {
     //MARK: - Set Persistence
+    @MainActor
     func setPersistence() {
-        DispatchQueue.main.async {
-            if let context = self.context {
-                self.persistence = PersistenceController(context: context)
-            } else {
-                self.persistence = PersistenceController()
-            }
-        }
+        self.persistence = self.context != nil ? PersistenceController(context: context!) : PersistenceController()
     }
     //MARK: - Gendre List
 //    private func loadCoreDataList() {
@@ -195,11 +191,9 @@ extension HomeViewModel {
                discoverMovies = try await data.decodedObject()
                await setMovieList()
            case .failure(_):
-//               discoverMovies = getMovieResultFromCoreData(for: searchType)
                await setMovieList()
             }
         } catch {
-//            discoverMovies = getMovieResultFromCoreData(for: searchType)
             await setMovieList()
         }
     }

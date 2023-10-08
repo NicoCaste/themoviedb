@@ -63,13 +63,13 @@ extension MovieSubscribedTableViewCell: UICollectionViewDelegate, UICollectionVi
     // MARK: - Number Of Items
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         collectionView.reloadData()
-        return 15
+        return movies?.count ?? 0
     }
     
     // MARK: - Cell For Item
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "MovieSubscribedCollectionViewCell", for: indexPath) as? MovieSubscribedCollectionViewCell
-        let path = movies?[0].posterPath
+        let path = movies?[indexPath.row].posterPath
         let imageLoader = LoaderImageHelper()
         let url = ApiUrlHelper.makeURL(for: .getImage, url: .image(path: path))
         imageLoader.loadImage(with: url, completion: { movieImage in

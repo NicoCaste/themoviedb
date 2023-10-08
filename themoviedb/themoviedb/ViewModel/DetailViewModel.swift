@@ -94,9 +94,15 @@ class DetailViewModel: BasicViewModel, DetailViewModelProtocol {
     //MARK: - Title
     func getMovieNameCell(for tableView: UITableView) -> UITableViewCell? {
         let cell = tableView.dequeueReusableCell(withIdentifier: AllowedCells.centerTitleTableViewCell.rawValue) as? CenterTitleTableViewCell
-        cell?.delegate = self 
-        cell?.populate(title: movieInfo.originalTitle, withLikeButton: true)
+        cell?.delegate = self
+        cell?.populate(title: movieInfo.originalTitle, withLikeButton: true, startLiked: getMovieIsLiked())
         return cell
+    }
+    
+    func getMovieIsLiked() -> Bool {
+       let i = PersistenceController().fetchMovieDetails()
+        print(i)
+        return true
     }
     
     //MARK: - Category
@@ -129,9 +135,20 @@ class DetailViewModel: BasicViewModel, DetailViewModelProtocol {
     }
 }
 
+//MARK: - LikedButton Delegate
 extension DetailViewModel: CenterTitleLikeButtonDelegate {
     func heartButton(isLiked: Bool) {
-        print(isLiked)
+        let persistenceController = PersistenceController()
+        isLiked ? saveMovie(with: persistenceController) : removeMovie(with: persistenceController)
     }
     
+    func saveMovie(with controller: PersistenceController) {
+        let i = controller.fetchMovieDetails()
+        print(i)
+        controller.save(favMovie: movieInfo)
+    }
+    
+    func removeMovie(with controller: PersistenceController) {
+        controller.delete(movieDetail: movieInfo)
+    }
 }

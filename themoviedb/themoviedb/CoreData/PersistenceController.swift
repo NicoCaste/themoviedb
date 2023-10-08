@@ -17,14 +17,16 @@ enum SearchMovie {
 class PersistenceController {
     var context: NSManagedObjectContext
     var backgroundContext: NSManagedObjectContext
+    var decodedContext: NSManagedObjectContext
     
     init(context: NSManagedObjectContext = CoreDataStack.shared.mainContext, backgroundContext: NSManagedObjectContext = CoreDataStack.shared.backgroundContext) {
         self.context = context
         self.backgroundContext = backgroundContext
+        self.decodedContext = CoreDataStack.shared.decodedContext
     }
 //MARK: - Save
     func save(favMovie: MovieDetail){
-        backgroundContext.performAndWait {
+        context.performAndWait {
             let movieDetail = NSEntityDescription.insertNewObject(forEntityName: "MovieDetail", into: backgroundContext) as! MovieDetail
             movieDetail.adult = favMovie.adult
             movieDetail.backdropPath = favMovie.backdropPath
@@ -37,8 +39,8 @@ class PersistenceController {
             movieDetail.releaseDate = favMovie.releaseDate
             movieDetail.voteAverage = favMovie.voteAverage
             movieDetail.voteCount = favMovie.voteCount
-            
-            try? backgroundContext.save()
+
+            try? context.save()
         }
     }
     
@@ -54,24 +56,24 @@ class PersistenceController {
     }
     
 //MARK: - FetchMovie
-    func fetchMovieDetail(id: Int32) -> MovieDetail? {
-        let fetchRequest = NSFetchRequest<MovieDetail>(entityName: "MovieDetail")
-        fetchRequest.fetchLimit = 1
-        fetchRequest.predicate = NSPredicate(format: "id == %@", id)
-        
-        var movieDetail: MovieDetail?
-        
-        context.performAndWait {
-            do {
-                let movies = try context.fetch(fetchRequest)
-                movieDetail = movies.first
-            } catch let error {
-                print("Failed to fetch: \(error)")
-            }
-        }
-        
-        return movieDetail
-    }
+//    func fetchMovieDetail(id: Int32) -> MovieDetail? {
+//        let fetchRequest = NSFetchRequest<MovieDetail>(entityName: "MovieDetail")
+//        fetchRequest.fetchLimit = 1
+//        fetchRequest.predicate = NSPredicate(format: "id == %@", id)
+//
+//        var movieDetail: MovieDetail?
+//
+//        context.performAndWait {
+//            do {
+//                let movies = try context.fetch(fetchRequest)
+//                movieDetail = movies.first
+//            } catch let error {
+//                print("Failed to fetch: \(error)")
+//            }
+//        }
+//
+//        return movieDetail
+//    }
     
 //MARK: - Fetch Movies
     func fetchMovieDetails() -> [MovieDetail]? {
