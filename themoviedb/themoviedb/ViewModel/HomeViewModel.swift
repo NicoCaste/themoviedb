@@ -14,10 +14,9 @@ enum FilmsSections: Int, CaseIterable {
     case TODAS
 }
 
-typealias HomeViewModelProtocol = ViewModelHandleInfoTableViewProtocol & ViewModelHandleApiMoviesProtocol & ViewModelHandleTextFieldProtocol & ViewModelHandleTableViewDataSourceProtocol
+typealias HomeViewModelProtocol = ViewModelHandleInfoTableViewProtocol & ViewModelHandleApiMoviesProtocol & ViewModelHandleTextFieldProtocol & ViewModelHandleTableViewDataSourceProtocol & ViewModelHandleSubscribedMovies
 
 class HomeViewModel: BasicViewModel, HomeViewModelProtocol {
-    var sections: Int = FilmsSections.allCases.count 
     private(set) var genders: Genre?
     private var getGendersPossibleRetries: Int = 3
     private(set) var allowedCells: [AllowedCells] =  [.movieCover, .centerTitleTableViewCell, .movieSubscribed]
@@ -28,6 +27,18 @@ class HomeViewModel: BasicViewModel, HomeViewModelProtocol {
     var startPage: Int = 1
     var persistence: PersistenceController?
     var movieList: [Movie] = []
+    var subscribedMovies: [Movie] = []
+    var _sections: Int = FilmsSections.TODAS.rawValue
+    var sections: Int {
+        get {
+            reloadSubscribedMovies()
+            return _sections
+        }
+        
+        set(newValue) {
+            _sections = newValue
+        }
+    }
     
     required init(repository: TheMovieRepositoryProtocol, context: NSManagedObjectContext? = nil) {
         self.context = context
@@ -39,7 +50,7 @@ class HomeViewModel: BasicViewModel, HomeViewModelProtocol {
     }
 
     func getDetailInfo(from index: Int) -> BasicViewController? {
-        guard let movie = movieList[safe: index] else { return nil}
+        guard let movie = movieList[safe: index] else { return nil }
         let viewModel = DetailViewModel(movieInfo: movie, gendersList: genders?.genres, repository: self.repository)
         return getDetailViewController(with: viewModel)
     }
@@ -59,9 +70,8 @@ class HomeViewModel: BasicViewModel, HomeViewModelProtocol {
         prefetch = [:]
     }
     
-    func getSubscribedMovies() -> [Movie] {
-        var movies: [Movie] = []
-        
+    func updateSubscribedMovies() {
+        subscribedMovies = []
         persistence?.fetchMovieDetails()?.forEach({
             var movie = Movie()
             movie.id = Int($0.id)
@@ -75,10 +85,13 @@ class HomeViewModel: BasicViewModel, HomeViewModelProtocol {
             movie.releaseDate = $0.releaseDate
             movie.voteAverage = $0.voteAverage
             movie.voteCount = Int($0.voteCount)
-            movies.append(movie)
+            subscribedMovies.append(movie)
         })
-        
-        return movies
+    }
+    
+    func reloadSubscribedMovies() {
+        updateSubscribedMovies()
+        sections = subscribedMovies.isEmpty ? FilmsSections.TODAS.rawValue : FilmsSections.allCases.count
     }
         
     @MainActor func setMovieList() {
@@ -114,7 +127,7 @@ extension HomeViewModel {
     
     //MARK: - Number Of Rows
     func getNumberOfRows(for section: Int) -> Int {
-        if section == FilmsSections.SUSCRIPTAS.rawValue {
+        if section == FilmsSections.SUSCRIPTAS.rawValue && sections == FilmsSections.allCases.count {
             return 1
         } else {
             return movieList.count
@@ -123,10 +136,10 @@ extension HomeViewModel {
     
     //MARK: GetCell
     func getCell(for tableView: UITableView, in row: Int, for section: Int) -> UITableViewCell? {
-        
-        if section == FilmsSections.SUSCRIPTAS.rawValue {
+        reloadSubscribedMovies()
+        if section == FilmsSections.SUSCRIPTAS.rawValue && sections == FilmsSections.allCases.count {
             let cell = tableView.dequeueReusableCell(withIdentifier: AllowedCells.movieSubscribed.rawValue) as? MovieSubscribedTableViewCell
-            cell?.populate(movies: getSubscribedMovies())
+            cell?.populate(movies: subscribedMovies)
             return cell
         } else {
             return getMovieCoverCell(for: row, in: tableView)
@@ -184,7 +197,6 @@ extension HomeViewModel {
                 self.genders = try await data.decodedObject()
             case .failure(_):
                 break
-//                loadCoreDataList()
             }
         } catch {
             await doGenreListCatch()
@@ -221,8 +233,6 @@ extension HomeViewModel {
         if getGendersPossibleRetries > 0 {
             getGendersPossibleRetries -= 1
             await getGenreList()
-        } else {
-//            loadCoreDataList()
         }
     }
 }

@@ -14,3 +14,7 @@ protocol ViewModelHandleInfoTableViewProtocol: BasicViewModel {
     func getCell(for tableView: UITableView, in row: Int, for section: Int) -> UITableViewCell?
     func getNumberOfRows(for section: Int) -> Int
 }
+
+protocol ViewModelHandleSubscribedMovies {
+    func reloadSubscribedMovies()
+}

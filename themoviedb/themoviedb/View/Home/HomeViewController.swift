@@ -63,7 +63,8 @@ class HomeViewController: BasicViewController {
     }
     
     func getMoviesAndReload(for path: ApiUrlHelper.PathForMovies,for searchType: SearchMovie) {
-        let currentNumbersOfRows = viewModel.getNumberOfRows(for: 0)
+        let currentNumbersOfRows = viewModel.getNumberOfRows(for: FilmsSections.TODAS.rawValue)
+        
         Task.detached { [weak self] in
             await self?.viewModel.getMovies(for: path, with: searchType)
             let newNumbersofRows = await self?.viewModel.getNumberOfRows(for: FilmsSections.TODAS.rawValue) ?? 0
@@ -95,7 +96,10 @@ class HomeViewController: BasicViewController {
     }
     
     @objc func reloadMoviesSubscribed() {
-        tableView?.reloadTableView()
+        DispatchQueue.main.async {
+            self.viewModel.reloadSubscribedMovies()
+            self.tableView?.reloadTableView()
+        }
     }
 }
 
