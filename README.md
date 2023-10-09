@@ -1,12 +1,7 @@
 # themoviedb
 
 Hi! I hope you enjoy the project as I did programming it.
-Remember that in order to test the code you must create an account [in this link](
-https://developer.themoviedb.org/reference/intro/authentication)
-after that they should go to the class **_TheMovieRepository_**
-and in the static variable key enter your apikey as a string.
-<img width="535" alt="image" src="https://github.com/NicoCaste/themoviedb/assets/56919623/32905c02-c255-40c5-b562-6a538ece1e5b">
-
+To make testing the app easier, I added a test API key in the repository.
 
 The architecture is based on MVVM oriented to protocols.
 The flow of the application is very simple, I leave some screen prints of what you will find.
