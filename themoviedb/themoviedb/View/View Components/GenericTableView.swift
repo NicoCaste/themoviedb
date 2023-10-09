@@ -121,7 +121,7 @@ extension GenericTableView:  UITableViewDelegate, UITableViewDataSource, UITable
     // MARK: - Cell For Row
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let emptyCell = UITableViewCell()
-        if numberOfRows == 0 {
+        if viewModel.getNumberOfRows(for: indexPath.section) == 0 {
             return getEmptyResultCell(for: tableView, in: indexPath.row) ?? emptyCell
         } else {
             let cell =  viewModel.getCell(for: tableView, in: indexPath.row, for: indexPath.section)  ?? emptyCell
