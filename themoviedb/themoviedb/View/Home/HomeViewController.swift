@@ -54,7 +54,7 @@ class HomeViewController: BasicViewController {
         setSearchTextFieldLayout()
     }
     
-    private func setTableView() {
+    func setTableView() {
         tableView = GenericTableView(cellsTypeList: viewModel.allowedCells, delegate: self, viewModel: viewModel)
         guard let tableView  else { return }
         self.view.addSubview(tableView)
@@ -63,11 +63,11 @@ class HomeViewController: BasicViewController {
     }
     
     func getMoviesAndReload(for path: ApiUrlHelper.PathForMovies,for searchType: SearchMovie) {
-        let currentNumbersOfRows = viewModel.getNumberOfRows(for: FilmsSections.TODAS.rawValue)
+        let currentNumbersOfRows = viewModel.getNumberOfRows(for: FilmsSections.MOVIELIST.rawValue)
         
         Task.detached { [weak self] in
             await self?.viewModel.getMovies(for: path, with: searchType)
-            let newNumbersofRows = await self?.viewModel.getNumberOfRows(for: FilmsSections.TODAS.rawValue) ?? 0
+            let newNumbersofRows = await self?.viewModel.getNumberOfRows(for: FilmsSections.MOVIELIST.rawValue) ?? 0
             if currentNumbersOfRows != newNumbersofRows || newNumbersofRows == 0 {
                 await self?.tableView?.reloadTableView()
             }
@@ -80,9 +80,7 @@ class HomeViewController: BasicViewController {
     }
     
     func goToDetailInfo(from movie: Movie?) {
-        guard let movie = movie,
-              let viewController = viewModel.getDetailInfo(from: movie)
-        else { return }
+        guard let viewController = viewModel.getDetailInfo(from: movie) else { return }
         pushTo(viewController: viewController)
     }
     
@@ -115,7 +113,7 @@ extension HomeViewController: GenericTableViewDelegate {
     }
     
     func willDisplay(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        if indexPath.row == viewModel.getNumberOfRows(for: FilmsSections.TODAS.rawValue) - 3 {
+        if indexPath.row == viewModel.getNumberOfRows(for: FilmsSections.MOVIELIST.rawValue) - 3 {
             let page = viewModel.nextPage()
             getMoviesAndReload(for: .discover, for: .forPage(page))
         }

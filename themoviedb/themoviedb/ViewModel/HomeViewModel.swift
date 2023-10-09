@@ -10,8 +10,8 @@ import UIKit
 import CoreData
 
 enum FilmsSections: Int, CaseIterable {
-    case SUSCRIPTAS
-    case TODAS
+    case SUBSCRIBED
+    case MOVIELIST
 }
 
 typealias HomeViewModelProtocol = ViewModelHandleInfoTableViewProtocol & ViewModelHandleApiMoviesProtocol & ViewModelHandleTextFieldProtocol & ViewModelHandleTableViewDataSourceProtocol & ViewModelHandleSubscribedMovies
@@ -28,7 +28,7 @@ class HomeViewModel: BasicViewModel, HomeViewModelProtocol {
     var persistence: PersistenceController?
     var movieList: [Movie] = []
     var subscribedMovies: [Movie] = []
-    var _sections: Int = FilmsSections.TODAS.rawValue
+    var _sections: Int = FilmsSections.MOVIELIST.rawValue
     var sections: Int {
         get {
             reloadSubscribedMovies()
@@ -55,7 +55,8 @@ class HomeViewModel: BasicViewModel, HomeViewModelProtocol {
         return getDetailViewController(with: viewModel)
     }
     
-    func getDetailInfo(from movie: Movie) -> BasicViewController? {
+    func getDetailInfo(from movie: Movie?) -> BasicViewController? {
+        guard let movie = movie else { return nil }
         let viewModel = DetailViewModel(movieInfo: movie, gendersList: genders?.genres, repository: self.repository)
         return getDetailViewController(with: viewModel)
     }
@@ -91,7 +92,11 @@ class HomeViewModel: BasicViewModel, HomeViewModelProtocol {
     
     func reloadSubscribedMovies() {
         updateSubscribedMovies()
-        sections = subscribedMovies.isEmpty ? FilmsSections.TODAS.rawValue : FilmsSections.allCases.count
+        updateSections()
+    }
+    
+    func updateSections() {
+        sections = subscribedMovies.isEmpty ? FilmsSections.MOVIELIST.rawValue : FilmsSections.allCases.count
     }
         
     @MainActor func setMovieList() {
@@ -127,7 +132,7 @@ extension HomeViewModel {
     
     //MARK: - Number Of Rows
     func getNumberOfRows(for section: Int) -> Int {
-        if section == FilmsSections.SUSCRIPTAS.rawValue && sections == FilmsSections.allCases.count {
+        if section == FilmsSections.SUBSCRIBED.rawValue && sections == FilmsSections.allCases.count {
             return 1
         } else {
             return movieList.count
@@ -137,7 +142,7 @@ extension HomeViewModel {
     //MARK: GetCell
     func getCell(for tableView: UITableView, in row: Int, for section: Int) -> UITableViewCell? {
         reloadSubscribedMovies()
-        if section == FilmsSections.SUSCRIPTAS.rawValue && sections == FilmsSections.allCases.count {
+        if section == FilmsSections.SUBSCRIBED.rawValue && sections == FilmsSections.allCases.count {
             let cell = tableView.dequeueReusableCell(withIdentifier: AllowedCells.movieSubscribed.rawValue) as? MovieSubscribedTableViewCell
             cell?.populate(movies: subscribedMovies)
             return cell
@@ -149,18 +154,26 @@ extension HomeViewModel {
     func getMovieCoverCell(for row: Int, in tableView: UITableView) -> UITableViewCell? {
         let existPrefetch = prefetch.contains(where: {$0.key == row})
         if existPrefetch {
-            let cell = prefetch[row]
-            prefetch[row] = nil
-            return cell
+            return getPrefetchCell(from: row)
         } else {
-            guard let movie = movieList[safe: row] else { return nil }
-            let cell = tableView.dequeueReusableCell(withIdentifier: AllowedCells.movieCover.rawValue) as? MovieCoverTableViewCell
-            let height: CGFloat? = 200
-            let imageSetting = ImageSetting(imagePath: movie.backdropPath, width: nil, height: height, corner: 10)
-            
-            cell?.populate(movieTitle: movie.originalTitle, imageSetting: imageSetting)
-            return cell
+            return getMovieCell(from: row, in: tableView)
         }
+    }
+    
+    func getPrefetchCell(from row: Int) -> UITableViewCell? {
+        let cell = prefetch[row]
+        prefetch[row] = nil
+        return cell
+    }
+    
+    func getMovieCell(from row: Int, in tableView: UITableView) -> UITableViewCell? {
+        guard let movie = movieList[safe: row] else { return nil }
+        let cell = tableView.dequeueReusableCell(withIdentifier: AllowedCells.movieCover.rawValue) as? MovieCoverTableViewCell
+        let height: CGFloat? = 200
+        let imageSetting = ImageSetting(imagePath: movie.backdropPath, width: nil, height: height, corner: 10)
+        
+        cell?.populate(movieTitle: movie.originalTitle, imageSetting: imageSetting)
+        return cell
     }
     
     //MARK: Prefetch
