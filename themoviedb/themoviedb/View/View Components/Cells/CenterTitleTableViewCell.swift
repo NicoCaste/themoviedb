@@ -41,7 +41,8 @@ class CenterTitleTableViewCell: UITableViewCell {
     func setTitleLabel(title: String?) {
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
         contentView.addSubview(titleLabel)
-        let textValues = UILabel.TextValues(text: title ?? "", fontSize: 25, font: .NotoSansMyanmarBold, numberOfLines: 2, aligment: .left, textColor: .black)
+        let aligment: NSTextAlignment = renderLikeButton ? .left : .center
+        let textValues = UILabel.TextValues(text: title ?? "", fontSize: 25, font: .NotoSansMyanmarBold, numberOfLines: 2, aligment: aligment, textColor: .black)
         titleLabel.set(with: textValues)
         titleLableLayout()
     }
