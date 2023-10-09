@@ -68,5 +68,7 @@ extension MovieSubscribedTableViewCell: UICollectionViewDelegate, UICollectionVi
     
     // MARK: - did Select Item
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        guard let movie: Movie = movies?[indexPath.row] else { return }
+        NotificationCenter.default.post(name: NSNotification.Name.movieSubscribedSelected, object: nil,userInfo: ["movie": movie])
     }
 }

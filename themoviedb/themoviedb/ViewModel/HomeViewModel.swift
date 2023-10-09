@@ -38,10 +38,19 @@ class HomeViewModel: BasicViewModel, HomeViewModelProtocol {
         }
     }
 
-    func getDetailInfo(movie index: Int) -> BasicViewController? {
+    func getDetailInfo(from index: Int) -> BasicViewController? {
         guard let movie = movieList[safe: index] else { return nil}
-        let vieWModel = DetailViewModel(movieInfo: movie, gendersList: genders?.genres, repository: self.repository)
-        return DetailViewController(viewModel: vieWModel)
+        let viewModel = DetailViewModel(movieInfo: movie, gendersList: genders?.genres, repository: self.repository)
+        return getDetailViewController(with: viewModel)
+    }
+    
+    func getDetailInfo(from movie: Movie) -> BasicViewController? {
+        let viewModel = DetailViewModel(movieInfo: movie, gendersList: genders?.genres, repository: self.repository)
+        return getDetailViewController(with: viewModel)
+    }
+    
+    func getDetailViewController(with viewModel: DetailViewModel) -> DetailViewController {
+        DetailViewController(viewModel: viewModel)
     }
     
     func restarMovieList() {

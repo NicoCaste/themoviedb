@@ -22,12 +22,17 @@ class HomeViewController: BasicViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
+    deinit {
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name.movieSubscribedSelected, object: nil)
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         configDismissBoard()
         setSearchTextField()
         setTableView()
         getMoviesAndReload(for: .discover, for: .forPage(viewModel.getCurrentPage()))
+        NotificationCenter.default.addObserver(self, selector: #selector(movieSubscribedSelected), name: NSNotification.Name.movieSubscribedSelected, object: nil)
     }
     
     private func setSearchTextField() {
@@ -57,14 +62,34 @@ class HomeViewController: BasicViewController {
             }
         }
     }
+    
+    func goToDetailInfo(from row: Int) {
+        guard let viewController = viewModel.getDetailInfo(from: row) else { return }
+        pushTo(viewController: viewController)
+    }
+    
+    func goToDetailInfo(from movie: Movie?) {
+        guard let movie = movie,
+              let viewController = viewModel.getDetailInfo(from: movie)
+        else { return }
+        pushTo(viewController: viewController)
+    }
+    
+    func pushTo(viewController: UIViewController) {
+        navigationController?.pushViewController(viewController, animated: true)
+    }
+    
+    @objc func movieSubscribedSelected(notification: Notification) {
+        let movie = notification.userInfo?["movie"] as? Movie
+        goToDetailInfo(from: movie)
+    }
 }
 
 //MARK: - TableView Delegate
 extension HomeViewController: GenericTableViewDelegate {
     //MARK: Action Delegate
     func didSelectRow(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        guard let viewController = viewModel.getDetailInfo(movie: indexPath.row) else { return }
-        navigationController?.pushViewController(viewController, animated: true)
+        goToDetailInfo(from: indexPath.row)
     }
     
     func prefetchRowsAt(tableView: UITableView, prefetchRowsAt indexPaths: [IndexPath]) {
