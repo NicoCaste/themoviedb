@@ -12,6 +12,10 @@ extension NSNotification.Name {
         return .init(rawValue: "movieSubscribedSelected")
     }
     
+    static var reloadMoviesSubscribed: NSNotification.Name {
+        return .init("reloadMoviesSubscribed")
+    }
+    
     static var showErrorView: NSNotification.Name {
         return .init(rawValue: "showErrorView")
     }

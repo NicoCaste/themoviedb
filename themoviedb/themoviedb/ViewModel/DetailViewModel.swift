@@ -145,6 +145,7 @@ class DetailViewModel: BasicViewModel, DetailViewModelProtocol {
 extension DetailViewModel: CenterTitleLikeButtonDelegate {
     func heartButton(isLiked: Bool) {
         isLiked ? saveMovie(with: persistenceController) : removeMovie(with: persistenceController)
+        NotificationCenter.default.post(name: NSNotification.Name.reloadMoviesSubscribed, object: nil)
     }
     
     func saveMovie(with controller: PersistenceController) {

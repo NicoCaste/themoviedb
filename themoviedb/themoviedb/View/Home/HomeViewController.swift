@@ -23,7 +23,7 @@ class HomeViewController: BasicViewController {
     }
     
     deinit {
-        NotificationCenter.default.removeObserver(self, name: NSNotification.Name.movieSubscribedSelected, object: nil)
+        removeNotificacionCenter()
     }
     
     override func viewDidLoad() {
@@ -32,7 +32,17 @@ class HomeViewController: BasicViewController {
         setSearchTextField()
         setTableView()
         getMoviesAndReload(for: .discover, for: .forPage(viewModel.getCurrentPage()))
+        setNotificationCenter()
+    }
+    
+    func setNotificationCenter() {
         NotificationCenter.default.addObserver(self, selector: #selector(movieSubscribedSelected), name: NSNotification.Name.movieSubscribedSelected, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(reloadMoviesSubscribed), name: NSNotification.Name.reloadMoviesSubscribed, object: nil)
+    }
+    
+    func removeNotificacionCenter() {
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name.movieSubscribedSelected, object: nil)
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name.reloadMoviesSubscribed, object: nil)
     }
     
     private func setSearchTextField() {
@@ -82,6 +92,10 @@ class HomeViewController: BasicViewController {
     @objc func movieSubscribedSelected(notification: Notification) {
         let movie = notification.userInfo?["movie"] as? Movie
         goToDetailInfo(from: movie)
+    }
+    
+    @objc func reloadMoviesSubscribed() {
+        tableView?.reloadTableView()
     }
 }
 
