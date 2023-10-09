@@ -28,7 +28,6 @@ class HomeViewModel: BasicViewModel, HomeViewModelProtocol {
     var startPage: Int = 1
     var persistence: PersistenceController?
     var movieList: [Movie] = []
-    var subscribedMovies: [Movie] = []
     
     required init(repository: TheMovieRepositoryProtocol, context: NSManagedObjectContext? = nil) {
         self.context = context
@@ -36,7 +35,6 @@ class HomeViewModel: BasicViewModel, HomeViewModelProtocol {
         Task.detached { [weak self] in
             await self?.getGenreList()
             await self?.setPersistence()
-            self?.setSubscribedMovies()
         }
     }
 
@@ -52,8 +50,26 @@ class HomeViewModel: BasicViewModel, HomeViewModelProtocol {
         prefetch = [:]
     }
     
-    func setSubscribedMovies() {
-        subscribedMovies = persistence?.fetchMovieDetails() as? [Movie] ?? []
+    func getSubscribedMovies() -> [Movie] {
+        var movies: [Movie] = []
+        
+        persistence?.fetchMovieDetails()?.forEach({
+            var movie = Movie()
+            movie.id = Int($0.id)
+            movie.adult = $0.adult
+            movie.backdropPath = $0.backdropPath
+            movie.genreIds = $0.genreIds
+            movie.originalLanguage = $0.originalLanguage
+            movie.originalTitle = $0.originalTitle
+            movie.overview = $0.overview
+            movie.posterPath = $0.posterPath
+            movie.releaseDate = $0.releaseDate
+            movie.voteAverage = $0.voteAverage
+            movie.voteCount = Int($0.voteCount)
+            movies.append(movie)
+        })
+        
+        return movies
     }
         
     @MainActor func setMovieList() {
@@ -98,26 +114,30 @@ extension HomeViewModel {
     
     //MARK: GetCell
     func getCell(for tableView: UITableView, in row: Int, for section: Int) -> UITableViewCell? {
-        let existPrefetch = prefetch.contains(where: {$0.key == row})
         
         if section == FilmsSections.SUSCRIPTAS.rawValue {
             let cell = tableView.dequeueReusableCell(withIdentifier: AllowedCells.movieSubscribed.rawValue) as? MovieSubscribedTableViewCell
-            cell?.populate(movies: subscribedMovies)
+            cell?.populate(movies: getSubscribedMovies())
             return cell
         } else {
-            if existPrefetch {
-                let cell = prefetch[row]
-                prefetch[row] = nil
-                return cell
-            } else {
-                guard let movie = movieList[safe: row] else { return nil }
-                let cell = tableView.dequeueReusableCell(withIdentifier: AllowedCells.movieCover.rawValue) as? MovieCoverTableViewCell
-                let height: CGFloat? = 200
-                let imageSetting = ImageSetting(imagePath: movie.backdropPath, width: nil, height: height, corner: 10)
-                
-                cell?.populate(movieTitle: movie.originalTitle, imageSetting: imageSetting)
-                return cell
-            }
+            return getMovieCoverCell(for: row, in: tableView)
+        }
+    }
+    
+    func getMovieCoverCell(for row: Int, in tableView: UITableView) -> UITableViewCell? {
+        let existPrefetch = prefetch.contains(where: {$0.key == row})
+        if existPrefetch {
+            let cell = prefetch[row]
+            prefetch[row] = nil
+            return cell
+        } else {
+            guard let movie = movieList[safe: row] else { return nil }
+            let cell = tableView.dequeueReusableCell(withIdentifier: AllowedCells.movieCover.rawValue) as? MovieCoverTableViewCell
+            let height: CGFloat? = 200
+            let imageSetting = ImageSetting(imagePath: movie.backdropPath, width: nil, height: height, corner: 10)
+            
+            cell?.populate(movieTitle: movie.originalTitle, imageSetting: imageSetting)
+            return cell
         }
     }
     

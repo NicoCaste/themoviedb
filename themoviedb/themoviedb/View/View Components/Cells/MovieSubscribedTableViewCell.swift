@@ -49,16 +49,7 @@ class MovieSubscribedTableViewCell: UITableViewCell {
     }
 }
 
-extension MovieSubscribedTableViewCell: UICollectionViewDelegate, UICollectionViewDataSource, ImageFromPathExtensionProtocol {
-    var movieImageView: UIImageView? {
-        get {
-            UIImageView()
-        }
-        set {
-            UIImageView()
-        }
-    }
-    
+extension MovieSubscribedTableViewCell: UICollectionViewDelegate, UICollectionViewDataSource {
     
     // MARK: - Number Of Items
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -69,13 +60,9 @@ extension MovieSubscribedTableViewCell: UICollectionViewDelegate, UICollectionVi
     // MARK: - Cell For Item
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "MovieSubscribedCollectionViewCell", for: indexPath) as? MovieSubscribedCollectionViewCell
-//        let path = movies?[indexPath.row].posterPath
-//        let imageLoader = LoaderImageHelper()
-//        let url = ApiUrlHelper.makeURL(for: .getImage, url: .image(path: path))
-//        imageLoader.loadImage(with: url, completion: { movieImage in
-//            cell?.populate(image: movieImage)
-//            cell?.reloadInputViews()
-//        })
+        let path = movies?[indexPath.row].posterPath
+        let imageSetting = ImageSetting(imagePath: path, width: 100, height: 150, corner: 10)
+        cell?.populate(image: imageSetting)
         return cell ?? UICollectionViewCell()
     }
     
