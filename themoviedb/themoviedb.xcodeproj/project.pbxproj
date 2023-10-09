@@ -41,10 +41,7 @@
 		0E39A0702A555CA500B4193C /* GenreModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E39A06F2A555CA500B4193C /* GenreModel.swift */; };
 		0E39A0802A55748200B4193C /* PersistenceController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E39A07F2A55748200B4193C /* PersistenceController.swift */; };
 		0E4E0D7F2A5A2679002065FC /* ExtensionArraySafe.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E4E0D7E2A5A2679002065FC /* ExtensionArraySafe.swift */; };
-		0E4E0D802A5A2ECE002065FC /* CoreDataTestStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E4EDB582A58CDAB0027BFD0 /* CoreDataTestStack.swift */; };
 		0E4EDB562A58C6660027BFD0 /* CoreDataStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E4EDB552A58C6660027BFD0 /* CoreDataStack.swift */; };
-		0E4EDB592A58CDAB0027BFD0 /* CoreDataTestStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E4EDB582A58CDAB0027BFD0 /* CoreDataTestStack.swift */; };
-		0E4EDB5B2A58CDFE0027BFD0 /* PersistenceControllerTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E4EDB5A2A58CDFE0027BFD0 /* PersistenceControllerTest.swift */; };
 		0EC3308F2A5A463A002D2177 /* TabBarViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EC3308E2A5A463A002D2177 /* TabBarViewModel.swift */; };
 		0EC330912A5A4791002D2177 /* TabBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EC330902A5A4791002D2177 /* TabBarViewController.swift */; };
 		0EC330932A5A4F0F002D2177 /* ExtensionViewController+KeyboardHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EC330922A5A4F0F002D2177 /* ExtensionViewController+KeyboardHandler.swift */; };
@@ -56,13 +53,6 @@
 		0EF7F9DE2A578C3400DB998E /* ViewModelHandleNextStepProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EF7F9DD2A578C3400DB998E /* ViewModelHandleNextStepProtocol.swift */; };
 		0EF7F9E22A578E5E00DB998E /* GenericTableViewProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EF7F9E12A578E5E00DB998E /* GenericTableViewProtocol.swift */; };
 		0EF7F9E42A578E8B00DB998E /* GenericTableViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EF7F9E32A578E8B00DB998E /* GenericTableViewDelegate.swift */; };
-		0EF7F9E72A579EA300DB998E /* HomeViewControllerTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EF7F9E62A579EA300DB998E /* HomeViewControllerTest.swift */; };
-		0EF7F9EA2A57E33900DB998E /* HomeViewModelMocks.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EF7F9E92A57E33900DB998E /* HomeViewModelMocks.swift */; };
-		0EF7F9EC2A57E38C00DB998E /* GenericTableViewMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EF7F9EB2A57E38C00DB998E /* GenericTableViewMock.swift */; };
-		0EF7F9EF2A57E3BD00DB998E /* DetailViewModelMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EF7F9EE2A57E3BD00DB998E /* DetailViewModelMock.swift */; };
-		0EF7F9F22A57EB4400DB998E /* HomeViewModelTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EF7F9F12A57EB4400DB998E /* HomeViewModelTest.swift */; };
-		0EF7F9F52A5813C200DB998E /* WebServiceMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EF7F9F42A5813C200DB998E /* WebServiceMock.swift */; };
-		0EF7F9F72A5813FD00DB998E /* MovieRepositoryMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EF7F9F62A5813FD00DB998E /* MovieRepositoryMock.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -122,8 +112,6 @@
 		0E39A07F2A55748200B4193C /* PersistenceController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersistenceController.swift; sourceTree = "<group>"; };
 		0E4E0D7E2A5A2679002065FC /* ExtensionArraySafe.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtensionArraySafe.swift; sourceTree = "<group>"; };
 		0E4EDB552A58C6660027BFD0 /* CoreDataStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = CoreDataStack.swift; path = ../../../../../.Trash/themoviedb/themoviedb/themoviedb/CoreData/CoreDataStack.swift; sourceTree = "<group>"; };
-		0E4EDB582A58CDAB0027BFD0 /* CoreDataTestStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = CoreDataTestStack.swift; path = ../../../../../CoreDataTestStack.swift; sourceTree = "<group>"; };
-		0E4EDB5A2A58CDFE0027BFD0 /* PersistenceControllerTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = PersistenceControllerTest.swift; path = ../../../../../PersistenceControllerTest.swift; sourceTree = "<group>"; };
 		0EC3308E2A5A463A002D2177 /* TabBarViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarViewModel.swift; sourceTree = "<group>"; };
 		0EC330902A5A4791002D2177 /* TabBarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarViewController.swift; sourceTree = "<group>"; };
 		0EC330922A5A4F0F002D2177 /* ExtensionViewController+KeyboardHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ExtensionViewController+KeyboardHandler.swift"; sourceTree = "<group>"; };
@@ -135,13 +123,6 @@
 		0EF7F9DD2A578C3400DB998E /* ViewModelHandleNextStepProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewModelHandleNextStepProtocol.swift; sourceTree = "<group>"; };
 		0EF7F9E12A578E5E00DB998E /* GenericTableViewProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GenericTableViewProtocol.swift; sourceTree = "<group>"; };
 		0EF7F9E32A578E8B00DB998E /* GenericTableViewDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GenericTableViewDelegate.swift; sourceTree = "<group>"; };
-		0EF7F9E62A579EA300DB998E /* HomeViewControllerTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewControllerTest.swift; sourceTree = "<group>"; };
-		0EF7F9E92A57E33900DB998E /* HomeViewModelMocks.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewModelMocks.swift; sourceTree = "<group>"; };
-		0EF7F9EB2A57E38C00DB998E /* GenericTableViewMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GenericTableViewMock.swift; sourceTree = "<group>"; };
-		0EF7F9EE2A57E3BD00DB998E /* DetailViewModelMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailViewModelMock.swift; sourceTree = "<group>"; };
-		0EF7F9F12A57EB4400DB998E /* HomeViewModelTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewModelTest.swift; sourceTree = "<group>"; };
-		0EF7F9F42A5813C200DB998E /* WebServiceMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebServiceMock.swift; sourceTree = "<group>"; };
-		0EF7F9F62A5813FD00DB998E /* MovieRepositoryMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieRepositoryMock.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -220,10 +201,6 @@
 		0E39A01A2A5290CF00B4193C /* themoviedbTests */ = {
 			isa = PBXGroup;
 			children = (
-				0E4EDB572A58CD150027BFD0 /* CoreData */,
-				0EF7F9F02A57EB2E00DB998E /* ViewModel */,
-				0EF7F9ED2A57E39E00DB998E /* Mocks */,
-				0EF7F9E52A579E6F00DB998E /* ViewController */,
 			);
 			path = themoviedbTests;
 			sourceTree = "<group>";
@@ -369,15 +346,6 @@
 			path = Model;
 			sourceTree = "<group>";
 		};
-		0E4EDB572A58CD150027BFD0 /* CoreData */ = {
-			isa = PBXGroup;
-			children = (
-				0E4EDB582A58CDAB0027BFD0 /* CoreDataTestStack.swift */,
-				0E4EDB5A2A58CDFE0027BFD0 /* PersistenceControllerTest.swift */,
-			);
-			path = CoreData;
-			sourceTree = "<group>";
-		};
 		0EC3308D2A5A4605002D2177 /* TabBar */ = {
 			isa = PBXGroup;
 			children = (
@@ -420,50 +388,6 @@
 				0EF7F9E32A578E8B00DB998E /* GenericTableViewDelegate.swift */,
 			);
 			path = GenericTableView;
-			sourceTree = "<group>";
-		};
-		0EF7F9E52A579E6F00DB998E /* ViewController */ = {
-			isa = PBXGroup;
-			children = (
-				0EF7F9E62A579EA300DB998E /* HomeViewControllerTest.swift */,
-			);
-			path = ViewController;
-			sourceTree = "<group>";
-		};
-		0EF7F9E82A57E31900DB998E /* ViewModelMocks */ = {
-			isa = PBXGroup;
-			children = (
-				0EF7F9EE2A57E3BD00DB998E /* DetailViewModelMock.swift */,
-				0EF7F9E92A57E33900DB998E /* HomeViewModelMocks.swift */,
-			);
-			path = ViewModelMocks;
-			sourceTree = "<group>";
-		};
-		0EF7F9ED2A57E39E00DB998E /* Mocks */ = {
-			isa = PBXGroup;
-			children = (
-				0EF7F9F32A58136600DB998E /* NetWorking */,
-				0EF7F9EB2A57E38C00DB998E /* GenericTableViewMock.swift */,
-				0EF7F9E82A57E31900DB998E /* ViewModelMocks */,
-			);
-			path = Mocks;
-			sourceTree = "<group>";
-		};
-		0EF7F9F02A57EB2E00DB998E /* ViewModel */ = {
-			isa = PBXGroup;
-			children = (
-				0EF7F9F12A57EB4400DB998E /* HomeViewModelTest.swift */,
-			);
-			path = ViewModel;
-			sourceTree = "<group>";
-		};
-		0EF7F9F32A58136600DB998E /* NetWorking */ = {
-			isa = PBXGroup;
-			children = (
-				0EF7F9F42A5813C200DB998E /* WebServiceMock.swift */,
-				0EF7F9F62A5813FD00DB998E /* MovieRepositoryMock.swift */,
-			);
-			path = NetWorking;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -627,7 +551,6 @@
 				0E39A0432A52CD9B00B4193C /* MovieCoverTableViewCell.swift in Sources */,
 				0E0049B82AD3215B00E4065E /* MoviesResult.swift in Sources */,
 				0E0049BC2AD3235900E4065E /* GenreDetail.swift in Sources */,
-				0E4E0D802A5A2ECE002065FC /* CoreDataTestStack.swift in Sources */,
 				0E4EDB562A58C6660027BFD0 /* CoreDataStack.swift in Sources */,
 				0E39A0522A53F63500B4193C /* ExtensionData+PrintJson.swift in Sources */,
 				0E4E0D7F2A5A2679002065FC /* ExtensionArraySafe.swift in Sources */,
@@ -648,15 +571,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				0EF7F9F52A5813C200DB998E /* WebServiceMock.swift in Sources */,
-				0E4EDB592A58CDAB0027BFD0 /* CoreDataTestStack.swift in Sources */,
-				0EF7F9E72A579EA300DB998E /* HomeViewControllerTest.swift in Sources */,
-				0EF7F9EF2A57E3BD00DB998E /* DetailViewModelMock.swift in Sources */,
-				0EF7F9F22A57EB4400DB998E /* HomeViewModelTest.swift in Sources */,
-				0EF7F9EA2A57E33900DB998E /* HomeViewModelMocks.swift in Sources */,
-				0EF7F9F72A5813FD00DB998E /* MovieRepositoryMock.swift in Sources */,
-				0EF7F9EC2A57E38C00DB998E /* GenericTableViewMock.swift in Sources */,
-				0E4EDB5B2A58CDFE0027BFD0 /* PersistenceControllerTest.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
