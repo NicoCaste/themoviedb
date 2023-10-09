@@ -9,114 +9,88 @@ import Foundation
 import UIKit
 import CoreData
 
+enum SearchMovie {
+    case forPage(Int?)
+    case forTitle(String)
+}
+
 class PersistenceController {
     var context: NSManagedObjectContext
-    var backgroundContext: NSManagedObjectContext
     
-    init(context: NSManagedObjectContext = CoreDataStack.shared.mainContext, backgroundContext: NSManagedObjectContext = CoreDataStack.shared.backgroundContext) {
+    init(context: NSManagedObjectContext = CoreDataStack.shared.mainContext) {
         self.context = context
-        self.backgroundContext = backgroundContext
     }
-    
-    //MARK: Genre
-    func getGenreList() -> [GenreDetail]? {
-        var genreList: [GenreDetail] = []
-        let request = NSFetchRequest<NSFetchRequestResult>(entityName: "GenreDetail")
-        request.returnsObjectsAsFaults = false
-        let result = try? context.fetch(request)
-        
-        if let resultManaged = result as? [NSManagedObject] {
-            for data in resultManaged{
-                if let detail = data as? GenreDetail {
-                    genreList.append(detail)
-                }
-            }
-        }
-
-        return genreList
-    }
-    
-    func saveGenreDetail(genreDetail: GenreDetail) {
-        do {
-            let request : NSFetchRequest<GenreDetail> = GenreDetail.fetchRequest()
-            request.predicate = NSPredicate(format: "id == %d AND name == %@", genreDetail.id, genreDetail.name ?? "")
-            let numberOfRecords = try context.count(for: request)
-            if numberOfRecords == 1 {
-                try context.save()
-            }
-        } catch {
-            print("Error saving context \(error)")
-        }
-    }
-    
-    //MARK: Movie
-    @MainActor func save(movieResult: MoviesResult, page: Int32, results: NSOrderedSet) {
-        movieResult.page = page
-        movieResult.results = results
-        let newResults: [MovieDetail] = MovieDetail.filterByNewMovies(in: results, with: self.context)
-        DispatchQueue.global(qos: .background).async {
-            self.backgroundContext.perform {
-                do {
-                    if !newResults.isEmpty {
-                        movieResult.page = page
-                        movieResult.results = NSOrderedSet(array: newResults)
-                        try self.backgroundContext.save()
-                    }
-                } catch {
-                    print("Error saving context \(error)")
-                }
-            }
-        }
-    }
-
-    enum SearchMovie {
-        case forPage(Int?)
-        case forTitle(String)
-    }
-    
-    @MainActor func getMovieResult(for searchCase: SearchMovie, currentPage: Int?) -> MoviesResult? {
-        var movies: MoviesResult?
-        switch searchCase {
-        case .forTitle(let title):
-            movies = filter(by: title, currentPage: currentPage)
-        case .forPage(let page):
-            movies = filter(by: page)
-        }
-        
-        return movies
-    }
-    
-    //MARK: - Movie Filter by Page
-    private func filter(by page: Int?) -> MoviesResult? {
-        var movies: MoviesResult?
-        let result = try? MoviesResult.findForPage(in: context, page: page ?? 1)
-        
-        if movies == nil {
-            movies = result?.first
-        }
-        
-        if let movies = movies {
-            let currentMovies = NSMutableOrderedSet()
-            for pageMovie in result ?? [] {
-                guard let results = pageMovie.results else { continue }
-                currentMovies.addObjects(from: results.array)
-            }
+//MARK: - Save
+    func save(favMovie: Movie){
+        context.performAndWait {
+            guard let movieDetail = NSEntityDescription.insertNewObject(forEntityName: "MovieDetail", into: context) as? MovieDetail
+            else { return }
+            movieDetail.adult = favMovie.adult ?? false
+            movieDetail.backdropPath = favMovie.backdropPath
+            movieDetail.id = Int64(favMovie.id ?? 0)
+            movieDetail.genreIds = favMovie.genreIds
+            movieDetail.originalLanguage = favMovie.originalLanguage
+            movieDetail.originalTitle = favMovie.originalTitle
+            movieDetail.overview = favMovie.overview
+            movieDetail.posterPath = favMovie.posterPath
+            movieDetail.releaseDate = favMovie.releaseDate
+            movieDetail.voteAverage = favMovie.voteAverage ?? 0
+            movieDetail.voteCount = Int32(favMovie.voteCount ?? 0)
             
-            movies.results = currentMovies
+            try? context.save()
         }
-        
-        return movies
     }
     
-    //MARK: - Movie Filter by title
-    private func filter(by title: String?, currentPage: Int?) -> MoviesResult? {
-        var movies: MoviesResult?
-        guard let title = title else { return nil }
-        let result = try? MovieDetail.findForTitle(in: context, text: title)
-        movies = MoviesResult(context: context)
-        movies?.results = NSOrderedSet(array: result ?? [])
-        movies?.page = Int32(currentPage ?? 1)
+//MARK: - Delete
+    func deleteMovie(from id: Int) {
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else { return }
+            let movieDetail = self.fetchMovieDetail(id: id)
+            guard let objectID = movieDetail?.objectID else { return }
+            self.context.performAndWait {
+                if let movieInContext = try? self.context.existingObject(with: objectID) {
+                    self.context.delete(movieInContext)
+                    try? self.context.save()
+                }
+            }
+        }
+    }
+    
+//MARK: - FetchMovie
+    @MainActor
+    func fetchMovieDetail(id: Int) -> MovieDetail? {
+        let fetchRequest = NSFetchRequest<MovieDetail>(entityName: "MovieDetail")
+        fetchRequest.fetchLimit = 1
+        fetchRequest.predicate = NSPredicate(format: "id == %i", id)
 
-        return movies
+        var movieDetail: MovieDetail?
+
+        context.performAndWait {
+            do {
+                let movies = try context.fetch(fetchRequest)
+                movieDetail = movies.first
+            } catch let error {
+                print("Failed to fetch: \(error)")
+            }
+        }
+
+        return movieDetail
+    }
+    
+//MARK: - Fetch Movies
+    func fetchMovieDetails() -> [MovieDetail]? {
+        let fetchRequest = NSFetchRequest<MovieDetail>(entityName: "MovieDetail")
+        
+        var moviesDetail: [MovieDetail]?
+        
+        context.performAndWait {
+            do {
+                moviesDetail = try context.fetch(fetchRequest)
+            } catch let error {
+                print("Failed to fetch: \(error)")
+            }
+        }
+        
+        return moviesDetail
     }
 }

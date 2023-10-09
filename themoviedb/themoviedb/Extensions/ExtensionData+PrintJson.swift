@@ -9,8 +9,7 @@ import Foundation
 
 extension Data {
     @MainActor func decodedObject<T: Decodable>() throws -> T {
-        let context = PersistenceController().backgroundContext
-        let decoder = JSONDecoder(context: context)
+        let decoder = JSONDecoder()
         decoder.keyDecodingStrategy = .convertFromSnakeCase
         return try decoder.decode(T.self, from: self)
     }

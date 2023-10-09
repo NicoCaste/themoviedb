@@ -22,12 +22,27 @@ class HomeViewController: BasicViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
+    deinit {
+        removeNotificacionCenter()
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         configDismissBoard()
         setSearchTextField()
         setTableView()
         getMoviesAndReload(for: .discover, for: .forPage(viewModel.getCurrentPage()))
+        setNotificationCenter()
+    }
+    
+    func setNotificationCenter() {
+        NotificationCenter.default.addObserver(self, selector: #selector(movieSubscribedSelected), name: NSNotification.Name.movieSubscribedSelected, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(reloadMoviesSubscribed), name: NSNotification.Name.reloadMoviesSubscribed, object: nil)
+    }
+    
+    func removeNotificacionCenter() {
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name.movieSubscribedSelected, object: nil)
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name.reloadMoviesSubscribed, object: nil)
     }
     
     private func setSearchTextField() {
@@ -47,14 +62,43 @@ class HomeViewController: BasicViewController {
         setTableViewLayout()
     }
     
-    func getMoviesAndReload(for path: ApiUrlHelper.PathForMovies,for searchType: PersistenceController.SearchMovie) {
-        let currentNumbersOfRows = viewModel.getNumberOfRows()
+    func getMoviesAndReload(for path: ApiUrlHelper.PathForMovies,for searchType: SearchMovie) {
+        let currentNumbersOfRows = viewModel.getNumberOfRows(for: FilmsSections.TODAS.rawValue)
+        
         Task.detached { [weak self] in
             await self?.viewModel.getMovies(for: path, with: searchType)
-            let newNumbersofRows = await self?.viewModel.getNumberOfRows() ?? 0
+            let newNumbersofRows = await self?.viewModel.getNumberOfRows(for: FilmsSections.TODAS.rawValue) ?? 0
             if currentNumbersOfRows != newNumbersofRows || newNumbersofRows == 0 {
                 await self?.tableView?.reloadTableView()
             }
+        }
+    }
+    
+    func goToDetailInfo(from row: Int) {
+        guard let viewController = viewModel.getDetailInfo(from: row) else { return }
+        pushTo(viewController: viewController)
+    }
+    
+    func goToDetailInfo(from movie: Movie?) {
+        guard let movie = movie,
+              let viewController = viewModel.getDetailInfo(from: movie)
+        else { return }
+        pushTo(viewController: viewController)
+    }
+    
+    func pushTo(viewController: UIViewController) {
+        navigationController?.pushViewController(viewController, animated: true)
+    }
+    
+    @objc func movieSubscribedSelected(notification: Notification) {
+        let movie = notification.userInfo?["movie"] as? Movie
+        goToDetailInfo(from: movie)
+    }
+    
+    @objc func reloadMoviesSubscribed() {
+        DispatchQueue.main.async {
+            self.viewModel.reloadSubscribedMovies()
+            self.tableView?.reloadTableView()
         }
     }
 }
@@ -63,8 +107,7 @@ class HomeViewController: BasicViewController {
 extension HomeViewController: GenericTableViewDelegate {
     //MARK: Action Delegate
     func didSelectRow(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        guard let viewController = viewModel.getDetailInfo(movie: indexPath.row) else { return }
-        navigationController?.pushViewController(viewController, animated: true)
+        goToDetailInfo(from: indexPath.row)
     }
     
     func prefetchRowsAt(tableView: UITableView, prefetchRowsAt indexPaths: [IndexPath]) {
@@ -72,7 +115,7 @@ extension HomeViewController: GenericTableViewDelegate {
     }
     
     func willDisplay(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        if indexPath.row == viewModel.getNumberOfRows() - 3 {
+        if indexPath.row == viewModel.getNumberOfRows(for: FilmsSections.TODAS.rawValue) - 3 {
             let page = viewModel.nextPage()
             getMoviesAndReload(for: .discover, for: .forPage(page))
         }

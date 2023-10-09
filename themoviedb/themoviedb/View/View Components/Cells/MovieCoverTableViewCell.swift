@@ -7,18 +7,18 @@
 
 import UIKit
 
+struct ImageSetting {
+    var imagePath: String?
+    var width: CGFloat?
+    var height: CGFloat?
+    var corner: CGFloat?
+    var image: UIImage?
+}
+
 class MovieCoverTableViewCell: UITableViewCell, ImageFromPathExtensionProtocol {
     var movieImageView: UIImageView?
     private lazy var movieTitleLabel: UILabel = UILabel()
     private lazy var blurview: UIView = UIView()
-    
-    struct ImageSetting {
-        var imagePath: String?
-        var width: CGFloat?
-        var height: CGFloat?
-        var corner: CGFloat?
-        var image: UIImage?
-    }
     
     func populate(movieTitle: String?, imageSetting: ImageSetting) {
         movieImageView = UIImageView()

@@ -20,6 +20,8 @@ protocol InfoViewModelDelegate {
 }
 
 class InfoViewModel: BasicViewModel,InfoViewModelProtocol {
+    var sections: Int = 1
+
     var allowedCells: [AllowedCells] = [.titleAndDescriptionTableViewCell]
     let persistence: PersistenceController
     var delegate: InfoViewModelDelegate?
@@ -34,11 +36,11 @@ class InfoViewModel: BasicViewModel,InfoViewModelProtocol {
         case aboutMovieDb
     }
     
-    func getNumberOfRows() -> Int {
+    func getNumberOfRows(for section: Int) -> Int {
         return SettingsRows.allCases.count
     }
     
-    func getCell(for tableView: UITableView, in row: Int) -> UITableViewCell? {
+    func getCell(for tableView: UITableView, in row: Int, for section: Int) -> UITableViewCell? {
         switch SettingsRows(rawValue: row) {
         case .aboutMovieDb:
             let title = UILabel.TextValues(text: "About MovieDB", fontSize: 17, font: .NotoSansMyanmarBold, numberOfLines: 1, aligment: .left, textColor: .darkGray)

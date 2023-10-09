@@ -11,9 +11,11 @@ import UIKit
 typealias DetailViewModelProtocol = ViewModelHandleInfoTableViewProtocol
 
 class DetailViewModel: BasicViewModel, DetailViewModelProtocol {
-    private let movieInfo: MovieDetail
+    var sections: Int = 1
+    private let movieInfo: Movie
     private var movieGenders: String = ""
     private var basicFontSize: CGFloat = 16
+    let persistenceController = PersistenceController()
     let allowedCells: [AllowedCells] =  [.movieCover, .centerTitleTableViewCell,  .titleAndDescriptionTableViewCell]
     
     enum DetailTableCases: Int, CaseIterable {
@@ -24,13 +26,13 @@ class DetailViewModel: BasicViewModel, DetailViewModelProtocol {
         case overview
     }
     
-    init(movieInfo: MovieDetail, gendersList: [GenreDetail]?, repository: TheMovieRepositoryProtocol) {
+    init(movieInfo: Movie, gendersList: [GenreDetail]?, repository: TheMovieRepositoryProtocol) {
         self.movieInfo = movieInfo
         super.init(repository: repository)
         self.setMovieGenders(genderList: gendersList)
     }
     
-    func getNumberOfRows() -> Int {
+    func getNumberOfRows(for section: Int) -> Int {
         DetailTableCases.allCases.count
     }
     
@@ -38,7 +40,7 @@ class DetailViewModel: BasicViewModel, DetailViewModelProtocol {
         guard let genderList else { return }
         var newMovieGendersList: [GenreDetail] = []
         
-        for genre in movieInfo.genreIds as? [Int] ?? [] {
+        for genre in movieInfo.genreIds ?? [] {
             newMovieGendersList += genderList.filter({$0.id == genre})
         }
         
@@ -61,7 +63,8 @@ class DetailViewModel: BasicViewModel, DetailViewModelProtocol {
         movieInfo.posterPath
     }
     
-    func getCell(for tableView: UITableView, in row: Int) -> UITableViewCell? {
+    @MainActor
+    func getCell(for tableView: UITableView, in row: Int, for section: Int) -> UITableViewCell? {
         let rowCase = DetailViewModel.DetailTableCases(rawValue: row)
         var cell: UITableViewCell?
         switch rowCase {
@@ -85,16 +88,27 @@ class DetailViewModel: BasicViewModel, DetailViewModelProtocol {
     func getPosterImageCell(for tableView: UITableView) -> UITableViewCell? {
         let cell = tableView.dequeueReusableCell(withIdentifier: AllowedCells.movieCover.rawValue) as? MovieCoverTableViewCell
         let imagePath = getMovieImagePath()
-        let imageSetting = MovieCoverTableViewCell.ImageSetting(imagePath: imagePath, width: 220, height: 300, corner: 18)
+        let imageSetting = ImageSetting(imagePath: imagePath, width: 220, height: 300, corner: 18)
         cell?.populate(movieTitle: nil, imageSetting: imageSetting)
         return cell
     }
     
     //MARK: - Title
+    @MainActor
     func getMovieNameCell(for tableView: UITableView) -> UITableViewCell? {
         let cell = tableView.dequeueReusableCell(withIdentifier: AllowedCells.centerTitleTableViewCell.rawValue) as? CenterTitleTableViewCell
-        cell?.populate(title: movieInfo.originalTitle)
+        cell?.delegate = self
+        cell?.populate(title: movieInfo.originalTitle, withLikeButton: true, startLiked: getMovieIsLiked())
         return cell
+    }
+    
+    @MainActor
+    func getMovieIsLiked() -> Bool {
+        var isLiked = false
+        guard let id = movieInfo.id else { return isLiked }
+        let currentMovie = persistenceController.fetchMovieDetail(id: id)
+        isLiked = currentMovie != nil
+        return isLiked
     }
     
     //MARK: - Category
@@ -107,7 +121,7 @@ class DetailViewModel: BasicViewModel, DetailViewModelProtocol {
     //MARK: Average
     private func getVoteAverageCell(for tableView: UITableView) -> UITableViewCell? {
         let title = UILabel.TextValues(text: "Vote average: ", fontSize: basicFontSize, font: .NotoSansMyanmarBold, numberOfLines: 1, aligment: .left, textColor: .black)
-        let voteAverage = movieInfo.voteAverage 
+        let voteAverage = movieInfo.voteAverage ?? 0
         let description = UILabel.TextValues(text: String(voteAverage), fontSize: basicFontSize, font: .NotoSansMyanmar, numberOfLines: 1, aligment: .left, textColor: .black)
         return getTitleAndDescriptionRow(for: tableView, title: title, description: description, position: .next)
     }
@@ -124,5 +138,24 @@ class DetailViewModel: BasicViewModel, DetailViewModelProtocol {
         let cell = tableView.dequeueReusableCell(withIdentifier: AllowedCells.titleAndDescriptionTableViewCell.rawValue) as? TitleAndDescriptionTableViewCell
         cell?.populate(title: title, description: description, descriptionPosition: position)
         return cell
+    }
+}
+
+//MARK: - LikedButton Delegate
+extension DetailViewModel: CenterTitleLikeButtonDelegate {
+    func heartButton(isLiked: Bool) {
+        isLiked ? saveMovie(with: persistenceController) : removeMovie(with: persistenceController)
+        NotificationCenter.default.post(name: NSNotification.Name.reloadMoviesSubscribed, object: nil)
+    }
+    
+    func saveMovie(with controller: PersistenceController) {
+        controller.save(favMovie: movieInfo)
+    }
+    
+    func removeMovie(with controller: PersistenceController) {
+        DispatchQueue.main.async { [weak self] in
+            guard let id = self?.movieInfo.id else { return }
+            controller.deleteMovie(from: id)
+        }
     }
 }

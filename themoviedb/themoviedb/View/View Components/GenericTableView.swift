@@ -12,6 +12,7 @@ enum AllowedCells: String {
     case movieCover
     case centerTitleTableViewCell
     case titleAndDescriptionTableViewCell
+    case movieSubscribed
 }
 
 class GenericTableView: UIView, GenericTableViewProtocol {
@@ -39,7 +40,6 @@ class GenericTableView: UIView, GenericTableViewProtocol {
         tableView.dataSource = self
         tableView.prefetchDataSource = self
         tableView.separatorStyle = .none
-        tableView.allowsSelection =  delegate?.didSelectRow != nil ? true : false
         cellsNeeded(with: cellsTypeList)
         tableView.translatesAutoresizingMaskIntoConstraints = false
         self.addSubview(tableView)
@@ -60,6 +60,8 @@ class GenericTableView: UIView, GenericTableViewProtocol {
         switch cell {
         case .titleAndDescriptionTableViewCell:
             tableView.register(TitleAndDescriptionTableViewCell.self, forCellReuseIdentifier: cell.rawValue)
+        case .movieSubscribed:
+            tableView.register(MovieSubscribedTableViewCell.self, forCellReuseIdentifier: cell.rawValue)
         default:
             break
         }
@@ -86,14 +88,14 @@ class GenericTableView: UIView, GenericTableViewProtocol {
             let cell = tableView.dequeueReusableCell(withIdentifier: AllowedCells.movieCover.rawValue) as? MovieCoverTableViewCell
             let height: CGFloat? = 200
             let image = UIImage(named: "sadLogo")
-            let imageSetting = MovieCoverTableViewCell.ImageSetting(imagePath: nil, width: nil, height: height, corner: 10, image: image)
+            let imageSetting = ImageSetting(imagePath: nil, width: nil, height: height, corner: 10, image: image)
             
             cell?.populate(movieTitle: nil, imageSetting: imageSetting)
             return cell
         case .title:
             let cell = tableView.dequeueReusableCell(withIdentifier: AllowedCells.centerTitleTableViewCell.rawValue) as? CenterTitleTableViewCell
             
-            cell?.populate(title: "Sorry, no results found")
+            cell?.populate(title: "Sorry, no results found", withLikeButton: false)
             return cell
         default:
             return nil
@@ -103,9 +105,14 @@ class GenericTableView: UIView, GenericTableViewProtocol {
 }
 
 extension GenericTableView:  UITableViewDelegate, UITableViewDataSource, UITableViewDataSourcePrefetching {
+    //Sections
+    func numberOfSections(in tableView: UITableView) -> Int {
+        viewModel.sections
+    }
+    
     // MARK: - Number Of Rows
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        numberOfRows = viewModel.getNumberOfRows()
+        numberOfRows = viewModel.getNumberOfRows(for: section)
         let showRows = numberOfRows == 0 ? EmptyCaseCells.allCases.count : numberOfRows
         tableView.allowsSelection = !(numberOfRows == 0)
         return showRows
@@ -117,7 +124,9 @@ extension GenericTableView:  UITableViewDelegate, UITableViewDataSource, UITable
         if numberOfRows == 0 {
             return getEmptyResultCell(for: tableView, in: indexPath.row) ?? emptyCell
         } else {
-            return viewModel.getCell(for: tableView, in: indexPath.row)  ?? emptyCell
+            let cell =  viewModel.getCell(for: tableView, in: indexPath.row, for: indexPath.section)  ?? emptyCell
+            cell.selectionStyle = .none
+            return cell
         }
     }
     

@@ -10,6 +10,11 @@ import UIKit
 
 protocol ViewModelHandleInfoTableViewProtocol: BasicViewModel {
     var allowedCells: [AllowedCells] { get }
-    func getCell(for tableView: UITableView, in row: Int) -> UITableViewCell?
-    func getNumberOfRows() -> Int
+    var sections: Int { get }
+    func getCell(for tableView: UITableView, in row: Int, for section: Int) -> UITableViewCell?
+    func getNumberOfRows(for section: Int) -> Int
+}
+
+protocol ViewModelHandleSubscribedMovies {
+    func reloadSubscribedMovies()
 }
