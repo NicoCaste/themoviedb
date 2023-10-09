@@ -16,7 +16,7 @@ class CenterTitleTableViewCell: UITableViewCell {
     lazy var likeHeartImageView: UIImageView = UIImageView()
     private var isLiked: Bool = false
     private var renderLikeButton: Bool = false
-    var delegate: CenterTitleLikeButtonDelegate?
+    weak var delegate: CenterTitleLikeButtonDelegate?
     
     func populate(title: String?, withLikeButton: Bool, startLiked: Bool = false) {
         self.renderLikeButton = withLikeButton

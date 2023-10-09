@@ -17,7 +17,7 @@ class GenericSearchTextField: UIView {
     
     private var searchTimer: Timer?
     private var timeInterval = 0.8
-    private var delegate: GenericSearchTextFieldDelegate
+    private weak var delegate: GenericSearchTextFieldDelegate?
     private var placeholderText: String
     required init(delegate: GenericSearchTextFieldDelegate, placeholderText: String) {
         self.placeholderText = placeholderText
@@ -64,7 +64,7 @@ class GenericSearchTextField: UIView {
 
     @objc private func searchForKeyword(_ timer: Timer) {
         guard let text: String = timer.userInfo as? String else { return }
-        delegate.userInput(text: text)
+        delegate?.userInput(text: text)
     }
     
     private func setSearchCharacterIcon() {

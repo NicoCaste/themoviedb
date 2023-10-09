@@ -17,7 +17,7 @@ enum AllowedCells: String {
 
 class GenericTableView: UIView, GenericTableViewProtocol {
     private(set) lazy var tableView: UITableView = UITableView()
-    private(set) var delegate: GenericTableViewDelegate?
+    private(set) weak var delegate: GenericTableViewDelegate?
     private(set) var viewModel: ViewModelHandleInfoTableViewProtocol
     private var numberOfRows: Int = 0
     
