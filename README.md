@@ -1,6 +1,6 @@
 # themoviedb
 
-Hi! I hope you enjoy the project as I did programming it.
+Hi! I hope you enjoy the project as I did programming it and designing all the error or wait images..
 To make testing the app easier, I added a test API key in the repository.
 
 The architecture is based on MVVM oriented to protocols.
